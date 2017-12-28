@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class WatchListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -133,7 +134,7 @@ public class WatchListActivity extends AppCompatActivity
         }
 
         cryptoCoins      = new HashMap<String,CryptoCoin>();
-        cryptoCurrencies = new Hashtable<Long,CryptoCurrency>();
+        cryptoCurrencies = new HashMap<Long,CryptoCurrency>();
 
         getCryptoCoinsCallback();
         getCryptoCurrenciesCallback();
@@ -183,8 +184,6 @@ public class WatchListActivity extends AppCompatActivity
     private void updateActivityData(){
         if ((cryptoCurrencies.size() != watchedItems.size()) || (cryptoCoins.size() == 0))
             return;
-
-        Log.d("TAG","updateActivityData()");
 
         for (WatchedItem item:watchedItems) {
 
@@ -246,6 +245,8 @@ public class WatchListActivity extends AppCompatActivity
         watchedItems.add(newItem);
         watchListAdapter.notifyDataSetChanged();
 
+        ListView listView = (ListView) findViewById(R.id.lv_watchlist);
+        listView.smoothScrollToPosition(watchListAdapter.getCount() - 1);
         updateActivity();
     }
 
@@ -279,7 +280,8 @@ public class WatchListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            updateActivity();
             return true;
         }
 

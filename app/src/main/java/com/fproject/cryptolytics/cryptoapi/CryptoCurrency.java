@@ -21,6 +21,10 @@ public class CryptoCurrency {
     private String volume;
     private String marketCap;
 
+    public CryptoCurrency(){
+
+    }
+
     public CryptoCurrency(String fromSymbol,
                           String toSymbol,
                           String market,

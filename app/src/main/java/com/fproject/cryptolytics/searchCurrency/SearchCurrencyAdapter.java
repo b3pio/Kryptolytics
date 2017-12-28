@@ -66,7 +66,7 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.tvName.setText(currencies.get(position));
+        viewHolder.tvName.setText((String) getItem(position));
 
         return view;
     }
@@ -87,8 +87,8 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
             FilterResults results = new FilterResults();
 
             if (constraint != null && constraint.length() > 0) {
-                String constraintStr = constraint.toString().toUpperCase();
-                List filteredCurrencies = new ArrayList<String>();
+                String constraintStr    = constraint.toString().toUpperCase();
+                List   filteredCurrencies = new ArrayList<String>();
 
                 for (int index = 0; index < currencies.size(); index++) {
                     String currency = currencies.get(index);

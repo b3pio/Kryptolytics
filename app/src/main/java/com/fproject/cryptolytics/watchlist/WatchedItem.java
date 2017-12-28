@@ -68,6 +68,9 @@ public class WatchedItem {
         return cryptoCurrency;
     }
 
+    public  String toString(){
+        return String.valueOf(itemId) + " - " + fromSymbol + " - " + toSymbol;
+    }
 
     public boolean isLoaded(){
         if ((cryptoCoin == null) || (cryptoCurrency == null))

@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.watchlist;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,14 @@ import java.util.List;
 
 public class WatchListAdapter extends BaseAdapter {
 
-    private class ViewHolder {
+    private static class ViewHolder {
         ImageView ivImage;
         TextView  tvSymbol;
         TextView  tvName;
         TextView  tvPrice;
         TextView  tvChange;
+
+        ImageDownloader imageDownloader;
     }
 
     private List<WatchedItem> watchedItems;
@@ -86,31 +89,36 @@ public class WatchListAdapter extends BaseAdapter {
     }
 
     private void updateViewHolder(ViewHolder viewHolder, WatchedItem watchedItem){
+        clearViewHolder(viewHolder,watchedItem);
 
-        if (!watchedItem.isLoaded()) {
-            clearViewHolder(viewHolder,watchedItem);
-        }
-        else {
+        if (watchedItem.isLoaded()) {
             loadViewHolder(viewHolder,watchedItem);
         }
     }
 
     private void clearViewHolder(ViewHolder viewHolder, WatchedItem watchedItem) {
 
-        viewHolder.ivImage.setImageDrawable(null);
+        if (viewHolder.imageDownloader != null) {
+            viewHolder.imageDownloader.cancel(true);
+        }
 
+        viewHolder.ivImage.setImageDrawable(null);
         viewHolder.tvSymbol.setText(watchedItem.getFromSymbol());
         viewHolder.tvName.setText(" - ");
         viewHolder.tvPrice.setText(" - ");
         viewHolder.tvChange.setText("");
-
     }
 
     private void loadViewHolder(ViewHolder viewHolder, WatchedItem watchedItem) {
         CryptoCoin     cryptoCoin     = watchedItem.getCryptoCoin();
         CryptoCurrency cryptoCurrency = watchedItem.getCryptoCurrency();
 
-        new ImageDownloader(viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
+        if (viewHolder.imageDownloader != null) {
+            viewHolder.imageDownloader.cancel(true);
+        }
+
+        viewHolder.imageDownloader = new ImageDownloader(viewHolder.ivImage);
+        viewHolder.imageDownloader.execute(cryptoCoin.getImageUrl());
 
         viewHolder.tvSymbol.setText(cryptoCoin.getSymbol());
         viewHolder.tvName.setText(cryptoCurrency.getToSymbol());
@@ -123,5 +131,6 @@ public class WatchListAdapter extends BaseAdapter {
         else {
             viewHolder.tvChange.setTextColor(Color.RED);
         }
+
     }
 }

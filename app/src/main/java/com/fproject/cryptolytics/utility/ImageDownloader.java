@@ -37,11 +37,14 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
         String fileName = Uri.encode(url[0]);
         Bitmap bitmap   = null;
 
+        if (isCancelled()){
+            return null;
+        }
+
         if (bitmapOnDisk(fileName)) {
             bitmap = bitmapFromFile(fileName);
         }
         else {
-
             bitmap = bitmapFromUrl(url[0]);
             bitmapToFile(bitmap,fileName);
         }
@@ -53,8 +56,15 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap bitmap) {
         ImageView imageView = this.imageView.get();
 
+        if (isCancelled()) {
+            imageView.setImageDrawable(null);
+            return;
+        }
+
         if (imageView != null) {
             imageView.setImageBitmap(bitmap);
+        } else  {
+            imageView.setImageDrawable(null);
         }
     }
 
