@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-
+ *
  */
 public class SearchCoinAdapter extends BaseAdapter implements Filterable {
 
@@ -69,8 +69,7 @@ public class SearchCoinAdapter extends BaseAdapter implements Filterable {
         }
 
         CryptoCoin cryptoCoin = (CryptoCoin) getItem(position);
-        viewHolder.tvName.setText(cryptoCoin.getFullName());
-
+        viewHolder.tvName.setText(cryptoCoin.getSymbol() + " - " + cryptoCoin.getCoinName());
 
         return view;
     }

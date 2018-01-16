@@ -93,7 +93,7 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
                 for (int index = 0; index < currencies.size(); index++) {
                     String currency = currencies.get(index);
 
-                    if (currency.contains(constraintStr)) {
+                    if (currency.toUpperCase().contains(constraintStr.toUpperCase())) {
                         filteredCurrencies.add(currency);
                     }
                 }

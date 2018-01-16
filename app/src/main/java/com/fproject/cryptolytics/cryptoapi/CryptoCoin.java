@@ -11,7 +11,6 @@ public class CryptoCoin {
     private String proofType;
     private String totalCoinSupply;
 
-
     public CryptoCoin(String name,
                       String imageUrl,
                       String symbol,

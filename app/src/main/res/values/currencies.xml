@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array  name="currencies">
+        <item>EUR|Euro</item>
+        <item>USD|United States Dollar</item>
+        <item>JPY|Japanese Yen</item>
+        <item>GBP|British Pound</item>
+        <item>CHF|Swiss Franc</item>
+        <item>CAD|Canadian Dollar</item>
+        <item>AUD|Australian Dollar</item>
+        <item>CNY|Chinese Yuan</item>
+        <item>HKD|Hong Kong Dollar</item>
+        <item>NOK|Norwegian Krone</item>
+        <item>SGD|Singapore Dollar</item>
+        <item>RON|Romanian Leu</item>
+    </string-array>
+</resources>
