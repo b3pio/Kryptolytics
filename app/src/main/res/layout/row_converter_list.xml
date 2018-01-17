@@ -13,9 +13,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
+        android:textColor="@color/colorText"
         android:text="BTC - BitCoin"
-
-        android:textSize="18sp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/tv_name"
@@ -25,14 +25,11 @@
         android:layout_marginTop="5dp"
         android:layout_marginStart="35dp"
         android:text="BitCoin"
-
+        android:textColor="@color/colorText"
         android:textSize="14sp"/>
 
-
-    <!--
     <EditText
-
-        android:id="@+id/value"
+        android:id="@+id/et_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -44,5 +41,5 @@
         android:textColor="@color/colorText"
         android:background="@android:color/transparent"
         android:textSize="16sp"/>
-        -->
+
 </RelativeLayout>

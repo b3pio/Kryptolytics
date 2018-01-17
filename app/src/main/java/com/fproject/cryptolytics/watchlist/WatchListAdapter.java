@@ -121,7 +121,7 @@ public class WatchListAdapter extends BaseAdapter {
         viewHolder.imageDownloader.execute(cryptoCoin.getImageUrl());
 
         viewHolder.tvSymbol.setText(cryptoCoin.getSymbol());
-        viewHolder.tvName.setText(cryptoCurrency.getToSymbol());
+        viewHolder.tvName.setText(cryptoCoin.getCoinName());
         viewHolder.tvPrice.setText(cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol());
         viewHolder.tvChange.setText(cryptoCurrency.getChangePercent() + "%");
 

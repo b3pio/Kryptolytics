@@ -3,7 +3,6 @@ package com.fproject.cryptolytics.watchlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -18,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fproject.cryptolytics.AboutActivity;
-import com.fproject.cryptolytics.ConverterActivity;
+import com.fproject.cryptolytics.converter.ConverterActivity;
 import com.fproject.cryptolytics.HomeActivity;
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.cryptoapi.CryptoClient;
@@ -32,10 +31,8 @@ import com.fproject.cryptolytics.searchCoin.SearchCoinActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class WatchListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

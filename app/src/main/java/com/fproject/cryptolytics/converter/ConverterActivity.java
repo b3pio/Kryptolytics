@@ -1,23 +1,43 @@
-package com.fproject.cryptolytics;
+package com.fproject.cryptolytics.converter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.fproject.cryptolytics.AboutActivity;
+import com.fproject.cryptolytics.HomeActivity;
+import com.fproject.cryptolytics.R;
+import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
+import com.fproject.cryptolytics.cryptoapi.CryptoClient;
+import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
+import com.fproject.cryptolytics.cryptoapi.CryptoData;
+import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConverterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // These provide data about the watched items.
+    private CryptoClient cryptoClient       = null;
+    private DatabaseManager databaseManager = null;
+
+    // List of converter items.
+    private List<ConverterItem> converterItems = null;
+
+    private ConverterItem       newConverterItem    = null;
+    private ConvertListAdapter  convertListAdapter  = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,22 +45,71 @@ public class ConverterActivity extends AppCompatActivity
         setContentView(R.layout.activity_converter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //
+        // Components
+        //
+        cryptoClient = new CryptoClient(this);
+        databaseManager = new DatabaseManager(this);
+        //
+        //
+        //
+        setupListeners();
+        //
+        //
+        updateActivity();;
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+    private void initDummyData(){
+        converterItems = new ArrayList<>();
+        converterItems.add(new ConverterItem(0,"BTC", "100"));
+        converterItems.add(new ConverterItem(1,"ETH", "100"));
+    }
 
+    /**
+     * Populate the activity with data.
+     */
+    private void updateActivity(){
+        initDummyData();
+        convertListAdapter = new ConvertListAdapter(this, converterItems);
+        ListView listView = (ListView) findViewById(R.id.lv_converter);
+        listView.setAdapter(convertListAdapter);
+
+        getCryptoCurrenciesCallback();
+    }
+
+    /**
+     * Obtain the {@link CryptoCurrency} data.
+     */
+    private void getCryptoCurrenciesCallback() {
+        for(ConverterItem item: converterItems) {
+            cryptoClient.getCrytpoCurrency(item.getSymbol(), "EUR", new CryptoCallback() {
+                @Override
+                public void onSuccess(CryptoData cryptoData) {
+                    item.setCryptoCurrency(cryptoData.getAsCryptoCurrency());
+
+                }
+
+                @Override
+                public void onFailure(String cryptoError) {
+
+                }
+            });
+        }
+    }
+
+    private void setupListeners(){
+        //
+        // DrawerLayout
+        //
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        //
+        // NavigationView
+        //
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }

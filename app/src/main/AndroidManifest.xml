@@ -34,7 +34,7 @@
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".ConverterActivity"
+            android:name=".converter.ConverterActivity"
             android:label="@string/title_activity_converter"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

@@ -5,15 +5,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Responsable for downloading a Bitmap from the specified URL
@@ -46,7 +52,12 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
         }
         else {
             bitmap = bitmapFromUrl(url[0]);
-            bitmapToFile(bitmap,fileName);
+
+            if (bitmap != null){
+                bitmapToFile(bitmap, fileName);
+            }
+
+
         }
 
         return bitmap;
@@ -85,11 +96,11 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
 
         try {
 
-            InputStream inputStream = (InputStream) new URL(url).getContent();
-            bitmap = BitmapFactory.decodeStream(inputStream);
+             InputStream inputStream = (InputStream) new URL(url).getContent();
+             bitmap = BitmapFactory.decodeStream(inputStream);
 
         }catch (Exception exception) {
-            Log.d(getClass().getName(), exception.toString());
+            Log.d(getClass().getName(), " bitmapFromUrl(): " + exception.toString() );
         }
 
         return bitmap;

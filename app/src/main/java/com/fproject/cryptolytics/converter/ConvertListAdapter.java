@@ -1,6 +1,8 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,6 @@ public class ConvertListAdapter extends BaseAdapter {
         TextView tvName;
         EditText etValue;
     }
-
 
     private List<ConverterItem> converterItems = new ArrayList<>();
 
@@ -51,15 +52,19 @@ public class ConvertListAdapter extends BaseAdapter {
         return position;
     }
 
+    public ConverterItem getConveterItem(int position) {
+        return (ConverterItem) converterItems.get(position);
+    }
+
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        view = createView(view);
+        view = createView(view,position);
 
         ConverterItem item  = (ConverterItem) getItem(position);
         ViewHolder viewHolder  = (ViewHolder) view.getTag();
 
         viewHolder.tvName.setText(item.getSymbol());
-      //  viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
+        viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
 
         return view;
     }
@@ -67,7 +72,7 @@ public class ConvertListAdapter extends BaseAdapter {
     /**
      * Returns the ViewHolder of the current view.
      */
-    private View createView(View view){
+    private View createView(View view, int position){
         if (view != null) return  view;
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -75,11 +80,14 @@ public class ConvertListAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvName =  (TextView) view.findViewById(R.id.tv_name);
-    //    viewHolder.etValue = (EditText) view.findViewById(R.id.value);
+        viewHolder.tvName =  (TextView) view.findViewById(R.id.tv_symbol);
+        viewHolder.etValue = (EditText) view.findViewById(R.id.et_value);
+
+        viewHolder.etValue.addTextChangedListener(new ConverterTextWatcher(this, position));
 
         view.setTag(viewHolder);
 
         return  view;
     }
+
 }
