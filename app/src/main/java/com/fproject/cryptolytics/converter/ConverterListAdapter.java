@@ -1,13 +1,12 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
@@ -19,21 +18,25 @@ import java.util.List;
  * Created by chamu on 1/1/2018.
  */
 
-public class ConvertListAdapter extends BaseAdapter {
+public class ConverterListAdapter extends BaseAdapter {
 
-    private static class ViewHolder {
+    public static class ViewHolder {
+        TextView tvSymbol;
         TextView tvName;
         EditText etValue;
+        ConverterTextWatcher twValue;
     }
 
     private List<ConverterItem> converterItems = new ArrayList<>();
 
     // Context of current state of the application.
-    private Context context = null;
+    private Context  context  = null;
+    private ListView listView = null;
 
 
-    public ConvertListAdapter(Context context, List<ConverterItem> converterItems){
-        this.context = context;
+    public ConverterListAdapter(Context context, ListView listView, List<ConverterItem> converterItems){
+        this.context  = context;
+        this.listView = listView;
         this.converterItems = converterItems;
     }
 
@@ -56,6 +59,10 @@ public class ConvertListAdapter extends BaseAdapter {
         return (ConverterItem) converterItems.get(position);
     }
 
+    public List<ConverterItem> getConverterItems(){
+        return converterItems;
+    }
+
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         view = createView(view,position);
@@ -63,8 +70,13 @@ public class ConvertListAdapter extends BaseAdapter {
         ConverterItem item  = (ConverterItem) getItem(position);
         ViewHolder viewHolder  = (ViewHolder) view.getTag();
 
-        viewHolder.tvName.setText(item.getSymbol());
+        viewHolder.tvSymbol.setText(item.getSymbol());
         viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
+        viewHolder.twValue.setItemIndex(position);
+
+        if (item.isLoaded()) {
+            viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
+        }
 
         return view;
     }
@@ -80,10 +92,14 @@ public class ConvertListAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvName =  (TextView) view.findViewById(R.id.tv_symbol);
-        viewHolder.etValue = (EditText) view.findViewById(R.id.et_value);
+        viewHolder.tvSymbol = (TextView) view.findViewById(R.id.tv_symbol);
+        viewHolder.tvName   = (TextView) view.findViewById(R.id.tv_name);
+        viewHolder.etValue  = (EditText) view.findViewById(R.id.et_value);
 
-        viewHolder.etValue.addTextChangedListener(new ConverterTextWatcher(this, position));
+        viewHolder.twValue  = new ConverterTextWatcher(listView,
+                viewHolder.etValue);
+
+        viewHolder.etValue.addTextChangedListener(viewHolder.twValue);
 
         view.setTag(viewHolder);
 

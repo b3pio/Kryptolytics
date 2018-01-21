@@ -13,11 +13,19 @@ import java.util.Map;
  *
  */
 public class CryptoData {
-    private static final String TAG = "CryptoData";
+    private static final String MODULE_TAG = "CryptoData";
     private JSONObject cryptoData;
+    private String fromSymbol;
+    private String toSymbol;
 
     public CryptoData(JSONObject cryptoData){
         this.cryptoData = cryptoData;
+    }
+
+    public CryptoData(JSONObject cryptoData, String fromSymbol, String toSymbol){
+        this.cryptoData = cryptoData;
+        this.fromSymbol = fromSymbol;
+        this.toSymbol   = toSymbol;
     }
 
     public Map<String,CryptoCoin> getAsCryptoCoins() {
@@ -49,13 +57,33 @@ public class CryptoData {
             }
         }
         catch (JSONException exception) {
-            Log.d(TAG, "getAsCryptoCoins(): " +  exception.toString());
+            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  exception.toString());
         }
 
         return cryptoCoinList;
     }
 
+    public CryptoRate getAsCryptoRate(){
+        CryptoRate cryptoRate = null;
 
+        if ((fromSymbol == null) || (toSymbol == null)) {
+            Log.d(MODULE_TAG,"getAsCryptoRate() - null");
+            return cryptoRate;
+        }
+
+        try {
+
+            String rateStr = cryptoData.getString(toSymbol);
+            Double rate = Double.valueOf(rateStr);
+
+            cryptoRate = new CryptoRate(fromSymbol, toSymbol, rate);
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getAsCryptoRate(): " +  exception.toString());
+        }
+
+        return cryptoRate;
+    }
 
     public CryptoCurrency getAsCryptoCurrency() {
         CryptoCurrency cryptoCurrency = null;
@@ -104,7 +132,7 @@ public class CryptoData {
                     lastUpdate, open, high, low, change, changePct,supply, volume, marketCap);
         }
         catch (JSONException exception) {
-            Log.d(TAG, "getCryptoCurrencyFromJson: " +  exception.toString());
+            Log.d(MODULE_TAG, "getAsCryptoCurrency(): " +  exception.toString());
         }
 
         return cryptoCurrency;

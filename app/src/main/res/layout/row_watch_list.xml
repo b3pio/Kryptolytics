@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
+    android:layout_height="100dp"
     android:paddingBottom="10dp">
 
 
@@ -14,7 +14,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"/>
-
 
     <TextView
         android:id="@+id/symbol"
@@ -29,7 +28,6 @@
         android:textSize="18sp"
         android:text="TextView" />
 
-    <!--android:fontFamily="sans-serif-thin"-->
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"

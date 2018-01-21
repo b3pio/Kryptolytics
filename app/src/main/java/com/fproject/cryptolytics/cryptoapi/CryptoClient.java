@@ -7,7 +7,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.fproject.cryptolytics.utility.GsonUtility;
 
@@ -15,10 +14,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Responsable for fethcing information about the crypto currencies from: www.cryptocompare.com
@@ -26,7 +21,7 @@ import java.util.concurrent.TimeoutException;
  * @author lszathmary
  */
 public class CryptoClient {
-    private final static String TAG         = "[CryptoClient]";
+    private final static String MODULE_TAG = "[CryptoClient]";
     private final static String DATA_SERVER = "https://min-api.cryptocompare.com/data";
     private final static String IMG_SERVER  = "https://www.cryptocompare.com";
 
@@ -44,7 +39,7 @@ public class CryptoClient {
     }
 
     /**
-     * Requests available {@link CryptoCoin} list.
+     * Requests the available {@link CryptoCoin} list.
      */
     public void getCryptoCoins(CryptoCallback callback) {
         String url  = DATA_SERVER + "/all/coinlist";
@@ -53,11 +48,11 @@ public class CryptoClient {
         // The list does not change very often so we can afford to cache it.
 
         if (isFileCached(file)) {
-            Log.d(TAG, "Loading Coins from Cache.");
+            Log.d(MODULE_TAG, "getCryptoCoinsFromCache()");
             getCryptoCoinsFromCache(file, url, callback);
         }
         else {
-            Log.d(TAG, "Loading Coins from Server.");
+            Log.d(MODULE_TAG, "Loading Coins from Server.");
             getCryptoCoinsFromServer(file, url, callback);
         }
 
@@ -105,10 +100,24 @@ public class CryptoClient {
     public void getCrytpoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
 
-        Log.d(TAG, url);
+        Log.d(MODULE_TAG, url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> callback.onSuccess(new CryptoData(response)),
+                (VolleyError error)   -> callback.onFailure(error.getMessage())
+        );
+
+        requestQueue.add(request);
+
+    }
+
+    public void getCrytpoRate(String fromSymbol, String toSymbol, CryptoCallback callback) {
+        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms=" + toSymbol;
+
+        Log.d(MODULE_TAG, url);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                (JSONObject response) -> callback.onSuccess(new CryptoData(response,fromSymbol,toSymbol)),
                 (VolleyError error)   -> callback.onFailure(error.getMessage())
         );
 
@@ -146,32 +155,5 @@ public class CryptoClient {
 
         return false;
     }
-
-
-    /*
-    public Map<String,CryptoCoin> getCryptoCoins(){
-        JSONObject response = null;
-        String url = DATA_SERVER + "/all/coinlist";
-        RequestFuture<JSONObject> requestFuture = RequestFuture.newFuture();
-
-        JsonObjectRequest request = new JsonObjectRequest(url,null,requestFuture,requestFuture);
-        requestQueue.add(request);
-
-
-        try {
-            response = requestFuture.get(5, TimeUnit.SECONDS); // Blocks for at most 10 seconds.
-        } catch (InterruptedException e) {
-            Log.d(TAG,"interrupted");
-        } catch (ExecutionException e) {
-            Log.d(TAG,"execution");
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(TAG,response.toString());
-
-        return new CryptoData(response).getAsCryptoCoins();
-    }
-     */
 
 }

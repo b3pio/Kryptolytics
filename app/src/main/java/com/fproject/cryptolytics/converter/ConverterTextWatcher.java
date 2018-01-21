@@ -3,54 +3,164 @@ package com.fproject.cryptolytics.converter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
- * Created by chamu on 1/16/2018.
+ * TextWatcher for a {@link ConverterItem}.
  */
-
 public class ConverterTextWatcher implements TextWatcher {
 
-    private ConvertListAdapter adapter = null;
+    private EditText editText = null;
+    private ListView listView = null;
 
-    private int itemIndex;
+    private int itemIndex = -1;
 
-    public ConverterTextWatcher (ConvertListAdapter adapter, int itemIndex){
+    // The list of item in the list view.
+    private List<ConverterItem> converterItems = null;
+
+    public ConverterTextWatcher (ListView listView, EditText editText){
         super();
-        this.adapter = adapter;
+
+        this.listView = listView;
+        this.editText = editText;
+    }
+
+    public void setItemIndex(int itemIndex) {
         this.itemIndex = itemIndex;
     }
 
     public void onTextChanged(CharSequence text, int start, int before, int count) {
-
+        // Do nothing.
     }
 
     public void beforeTextChanged(CharSequence text, int start, int count,int after) {
-
+        // Do nothing.
     }
 
     public void afterTextChanged(Editable text) {
+        if (itemIndex == -1) return;
 
-        if (!text.equals("")) {
+        converterItems = ((ConverterListAdapter) listView.getAdapter()).getConverterItems();
 
-            adapter.getConveterItem(1).setValue("555");
-            adapter.notifyDataSetChanged();
+        // Only update the values if this EditText has focus, because calling setText()
+        // method triggers the TextWatcher and causing in infinite loop.
+        if (editText.hasFocus()) {
+            String valueStr = text.toString();
 
-//            update(text.toString(), itemIndex);
+            if (valueStr.equals("")) {
+                clearValues();
+            }
+            else {
+                updateValues(valueStr);
+            }
         }
-
     }
 
-    private  void update(String value,int position){
+    /**
+     * Clear the values of the {@link ConverterItem} list.
+     */
+    private void clearValues() {
 
-        for (int index = 0; index < adapter.getCount(); index++ ){
+        for (int index = 0; index < converterItems.size(); index++) {
 
-            if (index == position)
-                continue;;
+            // Don`t update this one, it was changed manually by the user.
+            if (index == itemIndex)
+                continue;
 
+            updateValue(index, "");
+        }
+    }
 
+    /**
+     * Update the values of the {@link ConverterItem} list.
+     */
+    private void updateValues(String valueStr) {
+
+        // Convert the value to universal currency.
+        Double ueRateValue = valueStrToUERate(valueStr);
+
+        for (int index = 0; index < converterItems.size(); index++) {
+
+            // Don`t update this one, it was changed manually by the user.
+            if (index == itemIndex)
+                continue;
+
+            // Convert the value to the currency of the item.
+            ConverterItem converterItem = converterItems.get(index);
+            String itemRateValue = ueRateToValueStr(converterItem, ueRateValue);
+            updateValue(index, itemRateValue);
+        }
+    }
+
+    /**
+     * Updates the value of the {@link ConverterItem} located at the
+     * specified index of the listview.
+     */
+    private void updateValue(int index, String value){
+        View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
+
+        if ((view != null)  && (view.getTag() != null)) {
+            ((ConverterListAdapter.ViewHolder) view.getTag()).etValue.setText(value);
+        }
+    }
+
+    /**
+     * Convert the value string to universal exchange rate.
+     */
+    private Double valueStrToUERate(String valueStr){
+        Double value = Double.valueOf(valueStr.toString());
+        return valueToUERate(value);
+    }
+
+    /**
+     * Convert value to universal exchange rate.
+     */
+    private Double valueToUERate(Double value){
+        ConverterItem item = converterItems.get(itemIndex);
+
+        if (item.isLoaded()) {
+
+            Log.d("TAG", "Symbol: " + item.getSymbol());
+            Log.d("TAG", "Rate: " + item.getToCryptoRate().getExRate().toString());
+
+            return item.getToCryptoRate().getExRate() * value;
         }
 
-        adapter.getConveterItem(1).setValue("100");
-        adapter.notifyDataSetChanged();
+        return 0.0D;
+    }
+
+    /**
+     * Converts universal exchange rate to the rate of the item.
+     */
+    private Double ueRateToValue(ConverterItem item, Double value){
+
+        if (item.isLoaded()) {
+
+            Log.d("TAG", "Symbol: " + item.getSymbol());
+            Log.d("TAG", "Rate: " + item.getFromCryptoRate().getExRate().toString());
+
+           return item.getFromCryptoRate().getExRate() * value;
+        }
+
+        return 0.0D;
+    }
+
+    /**
+     * Converts universal exchange rate to the rate of the item as string.
+     */
+    private String ueRateToValueStr(ConverterItem item, Double value) {
+
+        Double toValue = ueRateToValue(item, value);
+
+
+        //BigDecimal bigDecimal = new BigDecimal(String.valueOf(value)).setScale(4, BigDecimal.ROUND_FLOOR);
+        toValue = (double)Math.round(toValue * 100000d) / 100000d;
+
+        return String.valueOf(toValue);
     }
 }
