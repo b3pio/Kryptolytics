@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -105,7 +104,7 @@ public class ConverterTextWatcher implements TextWatcher {
         View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
 
         if ((view != null)  && (view.getTag() != null)) {
-            ((ConverterListAdapter.ViewHolder) view.getTag()).etValue.setText(value);
+            //((ConverterListAdapter.ViewHolder) view.getTag()).etValue.setText(value);
         }
     }
 
@@ -159,8 +158,8 @@ public class ConverterTextWatcher implements TextWatcher {
 
 
         //BigDecimal bigDecimal = new BigDecimal(String.valueOf(value)).setScale(4, BigDecimal.ROUND_FLOOR);
-        toValue = (double)Math.round(toValue * 100000d) / 100000d;
-
+        toValue = (double)Math.round(toValue * 10000000d) / 10000000d;
+        //return bigDecimal.toString();
         return String.valueOf(toValue);
     }
 }

@@ -1,7 +1,6 @@
 package com.fproject.cryptolytics.converter;
 
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
-import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoRate;
 
 /**

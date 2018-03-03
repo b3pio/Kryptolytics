@@ -23,7 +23,7 @@ public class ConverterListAdapter extends BaseAdapter {
     public static class ViewHolder {
         TextView tvSymbol;
         TextView tvName;
-        EditText etValue;
+        //EditText etValue;
         ConverterTextWatcher twValue;
     }
 
@@ -71,8 +71,8 @@ public class ConverterListAdapter extends BaseAdapter {
         ViewHolder viewHolder  = (ViewHolder) view.getTag();
 
         viewHolder.tvSymbol.setText(item.getSymbol());
-        viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
-        viewHolder.twValue.setItemIndex(position);
+      //  viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
+        //viewHolder.twValue.setItemIndex(position);
 
         if (item.isLoaded()) {
             viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
@@ -94,12 +94,15 @@ public class ConverterListAdapter extends BaseAdapter {
 
         viewHolder.tvSymbol = (TextView) view.findViewById(R.id.tv_symbol);
         viewHolder.tvName   = (TextView) view.findViewById(R.id.tv_name);
-        viewHolder.etValue  = (EditText) view.findViewById(R.id.et_value);
 
+        // viewHolder.etValue  = (EditText) view.findViewById(R.id.et_value);
+
+        /*
         viewHolder.twValue  = new ConverterTextWatcher(listView,
                 viewHolder.etValue);
+                */
 
-        viewHolder.etValue.addTextChangedListener(viewHolder.twValue);
+        //viewHolder.etValue.addTextChangedListener(viewHolder.twValue);
 
         view.setTag(viewHolder);
 

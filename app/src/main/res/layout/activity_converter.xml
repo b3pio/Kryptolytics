@@ -22,4 +22,10 @@
         app:headerLayout="@layout/nav_header_converter"
         app:menu="@menu/activity_home_drawer" />
 
+    <!--
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="com.fproject.cryptolytics.converter.KeyboardFragment"/>
+    -->
 </android.support.v4.widget.DrawerLayout>

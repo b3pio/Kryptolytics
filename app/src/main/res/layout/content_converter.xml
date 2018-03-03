@@ -8,16 +8,25 @@
     tools:context="com.fproject.cryptolytics.converter.ConverterActivity"
     tools:showIn="@layout/app_bar_converter">
 
-    <ListView
-        android:id="@+id/lv_converter"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:scrollingCache="false"
-        android:animationCache="false"/>
+        android:orientation="vertical">
+
+        <fragment
+            android:layout_weight="2.5"
+            android:id="@+id/fgt_convertlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.fproject.cryptolytics.converter.ConvertListFragment"/>
+
+        <fragment
+            android:layout_weight="1.5"
+            android:id="@+id/fgt_keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.fproject.cryptolytics.converter.KeyboardFragment"/>
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
