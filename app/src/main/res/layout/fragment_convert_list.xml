@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary"
+
     tools:context="com.fproject.cryptolytics.converter.ConvertListFragment">
 
     <ListView
+        android:choiceMode="singleChoice"
+        android:background="@color/colorPrimary"
         android:id="@+id/lv_converter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,6 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:scrollingCache="false"
-        android:animationCache="false"/>
+        android:animationCache="false"
+        android:listSelector="@color/colorAccentLight"/>
 
 </FrameLayout>

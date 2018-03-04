@@ -1,6 +1,7 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,13 @@ import java.util.List;
  * Created by chamu on 1/1/2018.
  */
 
-public class ConverterListAdapter extends BaseAdapter {
+public class ConverterListAdapter extends BaseAdapter  {
 
     public static class ViewHolder {
         TextView tvSymbol;
         TextView tvName;
-        //EditText etValue;
+        TextView tvValue;
+
         ConverterTextWatcher twValue;
     }
 
@@ -71,8 +73,8 @@ public class ConverterListAdapter extends BaseAdapter {
         ViewHolder viewHolder  = (ViewHolder) view.getTag();
 
         viewHolder.tvSymbol.setText(item.getSymbol());
-      //  viewHolder.etValue.setText(item.getValue(), TextView.BufferType.NORMAL);
-        //viewHolder.twValue.setItemIndex(position);
+        viewHolder.tvValue.setText(item.getValue());
+        viewHolder.twValue.setItemIndex(position);
 
         if (item.isLoaded()) {
             viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
@@ -92,21 +94,25 @@ public class ConverterListAdapter extends BaseAdapter {
 
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvSymbol = (TextView) view.findViewById(R.id.tv_symbol);
-        viewHolder.tvName   = (TextView) view.findViewById(R.id.tv_name);
+        viewHolder.tvSymbol = view.findViewById(R.id.tv_symbol);
+        viewHolder.tvName   = view.findViewById(R.id.tv_name);
+        viewHolder.tvValue  = view.findViewById(R.id.tv_value);
 
+      //  viewHolder.tvValue.addTextChangedListener();
         // viewHolder.etValue  = (EditText) view.findViewById(R.id.et_value);
 
-        /*
-        viewHolder.twValue  = new ConverterTextWatcher(listView,
-                viewHolder.etValue);
-                */
 
-        //viewHolder.etValue.addTextChangedListener(viewHolder.twValue);
+        viewHolder.twValue  = new ConverterTextWatcher(listView,
+                viewHolder.tvValue);
+
+
+       viewHolder.tvValue.addTextChangedListener(viewHolder.twValue);
 
         view.setTag(viewHolder);
 
         return  view;
     }
+
+
 
 }

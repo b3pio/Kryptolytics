@@ -183,6 +183,7 @@
 
         <Button
             android:id="@+id/btn_seven"
+            android:tag="7"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textColor="@color/colorText"
@@ -193,6 +194,7 @@
 
         <Button
             android:id="@+id/btn_eight"
+            android:tag="8"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textColor="@color/colorText"
@@ -203,6 +205,7 @@
 
         <Button
             android:id="@+id/btn_nine"
+            android:tag="9"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:textColor="@color/colorText"

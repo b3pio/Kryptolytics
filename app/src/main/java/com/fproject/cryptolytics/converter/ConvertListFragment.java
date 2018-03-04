@@ -1,14 +1,16 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
@@ -26,13 +28,13 @@ import java.util.Map;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ConvertListFragment.OnFragmentInteractionListener} interface
+ * {@link OnConvertItemClickListener} interface
  * to handle interaction events.
  * Use the {@link ConvertListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ConvertListFragment extends Fragment {
-
+    private final static String MODULE_TAG = "[ConvertListFragment]";
 
     // The universal exchange to use for converting/to different currencies.
     private final static String UEX_RATE = "EUR";
@@ -44,54 +46,18 @@ public class ConvertListFragment extends Fragment {
     // List of converter items.
     private List<ConverterItem> converterItems = null;
 
-    private ConverterItem       newConverterItem    = null;
+    private ConverterItem        newConverterItem     = null;
     private ConverterListAdapter converterListAdapter = null;
 
-    private Map<String,CryptoCoin> cryptoCoins     = null;
+    private Map<String,CryptoCoin>  cryptoCoins     = null;
     private Map<Long, CryptoRate>   fromCryptoRates = null;
     private Map<Long, CryptoRate>   toCryptoRates   = null;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    // Listener that need to be notified
+    private OnConvertItemClickListener convertItemClickListener;
 
     public ConvertListFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ConvertListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ConvertListFragment newInstance(String param1, String param2) {
-        ConvertListFragment fragment = new ConvertListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -101,32 +67,23 @@ public class ConvertListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_convert_list, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+
+        if (context instanceof OnConvertItemClickListener) {
+            convertItemClickListener = (OnConvertItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnConvertItemClickListener");
         }
-        */
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        convertItemClickListener = null;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -137,20 +94,49 @@ public class ConvertListFragment extends Fragment {
         cryptoClient = new CryptoClient(this.getContext());
         databaseManager = new DatabaseManager(this.getContext());
         //
+        // Listeners
         //
+        setupListeners();
         //
-        updateActivity();
+        // Update
+        //
+        updateFragment();
     }
 
-    private void updateActivity(){
+    /**
+     * Hook up the event listeners.
+     */
+    private void setupListeners(){
+        //
+        // ListView
+        //
+        ListView listView = getView().findViewById(R.id.lv_converter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                //listView.getSelectedItemPosition();
+                //view.setSelected(true);
+                listView.setSelection(i);
+                if (convertItemClickListener != null) {
+                    convertItemClickListener.onConvertItemClicked(view.findViewById(R.id.tv_value));
+                }
+                Log.d(MODULE_TAG, String.valueOf(listView.getSelectedItemPosition()));
+            }
+        });
+    }
+
+    /**
+     * Populate the fragment with data.
+     */
+    private void updateFragment(){
         if (converterItems == null) {
 
             converterItems = new ArrayList<>();
             converterItems.add(new ConverterItem(0, "BTC", "0"));
-            converterItems.add(new ConverterItem(1, "ETH", "0"));
-            converterItems.add(new ConverterItem(2, "XRP", "0"));
-            converterItems.add(new ConverterItem(3, "ETL", "0"));
-
+            converterItems.add(new ConverterItem(1, "ETH", "1"));
+            converterItems.add(new ConverterItem(2, "XRP", "2"));
+            converterItems.add(new ConverterItem(3, "ETL", "3"));
 
             ListView listView = getView().findViewById(R.id.lv_converter);
             converterListAdapter = new ConverterListAdapter(getContext(), listView, converterItems);
@@ -165,7 +151,6 @@ public class ConvertListFragment extends Fragment {
         getCryptoRatesCallback();
     }
 
-
     /**
      * Obtain the {@link CryptoCoin} data.
      */
@@ -176,7 +161,6 @@ public class ConvertListFragment extends Fragment {
 
                 cryptoCoins = cryptoData.getAsCryptoCoins();
                 onCryptoDataRecevied();
-
             }
 
             @Override
@@ -226,6 +210,9 @@ public class ConvertListFragment extends Fragment {
         }
     }
 
+    /**
+     * Determines weather all the requested data has arrived and updates the ConvertList.
+     */
     private void onCryptoDataRecevied(){
         if (converterItems.size() != toCryptoRates.size())    return;
         if (converterItems.size() != fromCryptoRates.size())  return;
@@ -256,8 +243,8 @@ public class ConvertListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnConvertItemClickListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onConvertItemClicked(TextView textView);
     }
 }

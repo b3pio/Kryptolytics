@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
 
@@ -20,7 +21,7 @@ import com.fproject.cryptolytics.R;
  * Use the {@link KeyboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class KeyboardFragment extends Fragment {
+public class KeyboardFragment extends Fragment implements View.OnClickListener {
     private final static String MODULE_TAG = "[KeyboardFragment]";
 
     // TODO: Rename parameter arguments, choose names that match
@@ -32,6 +33,7 @@ public class KeyboardFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextView textView = null;
     private OnFragmentInteractionListener mListener;
 
     public KeyboardFragment() {
@@ -84,15 +86,19 @@ public class KeyboardFragment extends Fragment {
         }
     }
 
+    public  void setTextView(TextView textView){
+        this.textView = textView;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
       /*
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnConvertItemClickListener) {
+            mListener = (OnConvertItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnConvertItemClickListener");
         }
         */
     }
@@ -105,12 +111,34 @@ public class KeyboardFragment extends Fragment {
 
     private void setupListeners(View view) {
         Button btnOne = view.findViewById(R.id.btn_one);
-        btnOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(MODULE_TAG,"one");
-            }
-        });
+        btnOne.setOnClickListener(this);
+
+        Button btnSeven = view.findViewById(R.id.btn_seven);
+        btnSeven.setOnClickListener(this);
+
+        Button btnEight = view.findViewById(R.id.btn_eight);
+        btnEight.setOnClickListener(this);
+
+        Button btnNine  = view.findViewById(R.id.btn_nine);
+        btnNine.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (textView == null)
+            return;
+
+        if (view.getTag().equals("7")) {
+            textView.setText("7");
+        }
+
+        if (view.getTag().equals("8")) {
+            textView.setText("8");
+        }
+
+        if (view.getTag().equals("9")) {
+            textView.setText("9");
+        }
     }
 
     /**

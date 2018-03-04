@@ -4,8 +4,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ConverterTextWatcher implements TextWatcher {
 
-    private EditText editText = null;
+    private TextView textView = null;
     private ListView listView = null;
 
     private int itemIndex = -1;
@@ -22,11 +22,11 @@ public class ConverterTextWatcher implements TextWatcher {
     // The list of item in the list view.
     private List<ConverterItem> converterItems = null;
 
-    public ConverterTextWatcher (ListView listView, EditText editText){
+    public ConverterTextWatcher (ListView listView, TextView editText){
         super();
 
         this.listView = listView;
-        this.editText = editText;
+        this.textView = editText;
     }
 
     public void setItemIndex(int itemIndex) {
@@ -46,9 +46,15 @@ public class ConverterTextWatcher implements TextWatcher {
 
         converterItems = ((ConverterListAdapter) listView.getAdapter()).getConverterItems();
 
+
+        //Log.d("TextWatcher", "changed man " + text);
+
+        Log.d("TextWatcher", String.valueOf(listView.getSelectedItemPosition()) + " " + String.valueOf(itemIndex) );
         // Only update the values if this EditText has focus, because calling setText()
         // method triggers the TextWatcher and causing in infinite loop.
-        if (editText.hasFocus()) {
+        if (listView.getSelectedItemPosition() == itemIndex) {
+        //if (textView.hasFocus()) {
+            Log.d("TextWatcher", "has focus " + text);
             String valueStr = text.toString();
 
             if (valueStr.equals("")) {
@@ -104,7 +110,7 @@ public class ConverterTextWatcher implements TextWatcher {
         View view = listView.getChildAt(index - listView.getFirstVisiblePosition());
 
         if ((view != null)  && (view.getTag() != null)) {
-            //((ConverterListAdapter.ViewHolder) view.getTag()).etValue.setText(value);
+            ((ConverterListAdapter.ViewHolder) view.getTag()).tvValue.setText(value);
         }
     }
 

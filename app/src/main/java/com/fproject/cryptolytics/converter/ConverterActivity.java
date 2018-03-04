@@ -10,44 +10,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fproject.cryptolytics.AboutActivity;
 import com.fproject.cryptolytics.HomeActivity;
 import com.fproject.cryptolytics.R;
-import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
 import com.fproject.cryptolytics.cryptoapi.CryptoClient;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
-import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.cryptoapi.CryptoRate;
 import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ConverterActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
-    // The universal exchange to use for converting/to different currencies.
-    private final static String UEX_RATE = "EUR";
-
-    // These provide data about the watched items.
-    private CryptoClient cryptoClient       = null;
-    private DatabaseManager databaseManager = null;
-
-    // List of converter items.
-    private List<ConverterItem> converterItems = null;
-
-    private ConverterItem       newConverterItem    = null;
-    private ConverterListAdapter converterListAdapter = null;
-
-    private Map<String,CryptoCoin>  cryptoCoins     = null;
-    private Map<Long, CryptoRate>   fromCryptoRates = null;
-    private Map<Long, CryptoRate>   toCryptoRates   = null;
-
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ConvertListFragment.OnConvertItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,130 +34,19 @@ public class ConverterActivity extends AppCompatActivity
         setContentView(R.layout.activity_converter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        /*
         //
-        // Components
+        // Listeners
         //
-        cryptoClient = new CryptoClient(this);
-        databaseManager = new DatabaseManager(this);
-        */
-        //
-        //
-        //
-
         setupListeners();
-        /*
-        //
-        //
-        updateActivity();
-        */
     }
 
+    public void onConvertItemClicked(TextView textView){
+        KeyboardFragment keyboardFragment = (KeyboardFragment) getSupportFragmentManager().
+                                        findFragmentById(R.id.fgt_keyboard);
 
-    /**
-     * Populate the activity with data.
-
-    private void updateActivity(){
-        if (converterItems == null) {
-
-            converterItems = new ArrayList<>();
-            converterItems.add(new ConverterItem(0, "BTC", "0"));
-            converterItems.add(new ConverterItem(1, "ETH", "0"));
-            converterItems.add(new ConverterItem(2, "XRP", "0"));
-            converterItems.add(new ConverterItem(3, "ETL", "0"));
-
-
-            ListView listView = findViewById(R.id.lv_converter);
-            converterListAdapter = new ConverterListAdapter(this, listView, converterItems);
-            listView.setAdapter(converterListAdapter);
+        if (keyboardFragment != null) {
+            keyboardFragment.setTextView(textView);
         }
-
-        cryptoCoins     = new HashMap<String,CryptoCoin>();
-        fromCryptoRates = new HashMap<Long, CryptoRate>();
-        toCryptoRates   = new HashMap<Long, CryptoRate>();
-
-        getCryptoCoinsCallback();
-        getCryptoRatesCallback();
-    }
-    */
-    /**
-     * Obtain the {@link CryptoCoin} data.
-     */
-    private void getCryptoCoinsCallback(){
-        cryptoClient.getCryptoCoins(new CryptoCallback() {
-            @Override
-            public void onSuccess(CryptoData cryptoData) {
-
-                cryptoCoins = cryptoData.getAsCryptoCoins();
-                onCryptoDataRecevied();
-
-            }
-
-            @Override
-            public void onFailure(String cryptoError) {
-
-            }
-        });
-    }
-
-    /**
-     * Obtain the {@link CryptoRate} data.
-     */
-    private void getCryptoRatesCallback(){
-        for(ConverterItem convertItem : converterItems) {
-            //
-            // toCryptoRates
-            //
-            cryptoClient.getCrytpoRate(convertItem.getSymbol(), UEX_RATE, new CryptoCallback() {
-                @Override
-                public void onSuccess(CryptoData cryptoData) {
-
-                    toCryptoRates.put(convertItem.getItemId(), cryptoData.getAsCryptoRate());
-                    onCryptoDataRecevied();
-                }
-
-                @Override
-                public void onFailure(String cryptoError) {
-
-                }
-            });
-            //
-            // fromCryptoRates
-            //
-            cryptoClient.getCrytpoRate(UEX_RATE, convertItem.getSymbol(), new CryptoCallback() {
-                @Override
-                public void onSuccess(CryptoData cryptoData) {
-
-                    fromCryptoRates.put(convertItem.getItemId(), cryptoData.getAsCryptoRate());
-                    onCryptoDataRecevied();
-                }
-
-                @Override
-                public void onFailure(String cryptoError) {
-
-                }
-            });
-        }
-    }
-
-    private void onCryptoDataRecevied(){
-        if (converterItems.size() != toCryptoRates.size())    return;
-        if (converterItems.size() != fromCryptoRates.size())  return;
-        if (cryptoCoins.size() == 0) return;
-
-        for (ConverterItem item:converterItems) {
-
-            CryptoCoin cryptoCoin = cryptoCoins.get(item.getSymbol());
-            item.setCrpytoCoin(cryptoCoin);
-
-            CryptoRate toCryptoRate = toCryptoRates.get(item.getItemId());
-            item.setToCryptoRate(toCryptoRate);
-
-            CryptoRate fromCryptoRate = fromCryptoRates.get(item.getItemId());
-            item.setFromCryptoRate(fromCryptoRate);
-        }
-
-        converterListAdapter.notifyDataSetChanged();
     }
 
     private void setupListeners(){

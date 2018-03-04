@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorPrimary"
+
+
+
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:paddingBottom="10dp">
 
+    <!-- android:descendantFocusability="blocksDescendants" android:background="@color/colorPrimary"-->
+
     <TextView
+        android:focusable="false"
         android:id="@+id/tv_symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,6 +25,7 @@
     <!--android:textStyle="bold"-->
 
     <TextView
+        android:focusable="false"
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,8 +36,10 @@
         android:textColor="@color/colorTextLight"
         android:textSize="14sp"/>
 
+
     <TextView
-        android:id="@+id/et_value"
+        android:focusable="false"
+        android:id="@+id/tv_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
