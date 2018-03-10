@@ -7,7 +7,6 @@
     tools:context="com.fproject.cryptolytics.converter.ConvertListFragment">
 
     <ListView
-        android:choiceMode="singleChoice"
         android:background="@color/colorPrimary"
         android:id="@+id/lv_converter"
         android:layout_width="match_parent"

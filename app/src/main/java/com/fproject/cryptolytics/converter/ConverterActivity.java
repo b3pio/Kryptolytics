@@ -1,5 +1,6 @@
 package com.fproject.cryptolytics.converter;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,51 +11,52 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.fproject.cryptolytics.AboutActivity;
 import com.fproject.cryptolytics.HomeActivity;
 import com.fproject.cryptolytics.R;
-import com.fproject.cryptolytics.cryptoapi.CryptoClient;
-import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
-import com.fproject.cryptolytics.cryptoapi.CryptoRate;
-import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
-
-import java.util.List;
-import java.util.Map;
 
 public class ConverterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ConvertListFragment.OnConvertItemClickListener {
+        ConvertListFragment.OnConvertItemClickListener,
+        KeyboardFragment.OnTextChangedListener {
+
+    // Meet our child fragments
+    private KeyboardFragment    keyboardFragment    = null;
+    private ConvertListFragment convertListFragment = null;
+
+    // The item that was clicked in the convert list fragment.
+    private ConverterItem selectedItem = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_converter);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //
+        //
+        //
+        keyboardFragment = (KeyboardFragment) getSupportFragmentManager().findFragmentById(R.id.fgt_keyboard);
+        convertListFragment = (ConvertListFragment) getSupportFragmentManager().findFragmentById(R.id.fgt_convertlist);
         //
         // Listeners
         //
         setupListeners();
     }
 
-    public void onConvertItemClicked(TextView textView){
-        KeyboardFragment keyboardFragment = (KeyboardFragment) getSupportFragmentManager().
-                                        findFragmentById(R.id.fgt_keyboard);
 
-        if (keyboardFragment != null) {
-            keyboardFragment.setTextView(textView);
-        }
-    }
-
+    /**
+     * Hook up the event listeners.
+     */
     private void setupListeners(){
         //
         // DrawerLayout
         //
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -62,13 +64,13 @@ public class ConverterActivity extends AppCompatActivity
         //
         // NavigationView
         //
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -128,8 +130,30 @@ public class ConverterActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Hooked up to the {@link ConvertListFragment}.
+     */
+    @Override
+    public void onConvertItemClicked(ConverterItem converterItem){
+
+        selectedItem = converterItem;
+        keyboardFragment.setText(converterItem.getValue());
+    }
+
+    /**
+     * Hooked up to the {@link KeyboardFragment}.
+     */
+    @Override
+    public void onTextChanged(String str) {
+        if (selectedItem == null)
+            return;
+
+        selectedItem.setValue(str);
+        convertListFragment.notifySetDataChanged();
     }
 }

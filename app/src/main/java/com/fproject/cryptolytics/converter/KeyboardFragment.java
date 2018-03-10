@@ -1,70 +1,31 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link KeyboardFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link KeyboardFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A custom {@link Fragment} used for editing numerical values.
  */
 public class KeyboardFragment extends Fragment implements View.OnClickListener {
-    private final static String MODULE_TAG = "[KeyboardFragment]";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // The text is being modified using the keyboard.
+    private String text = null;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private TextView textView = null;
-    private OnFragmentInteractionListener mListener;
-
-    public KeyboardFragment() {
-        // Required empty public constructor
-    }
+    // The listener to notify when the text changes.
+    private OnTextChangedListener textChangedListener;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment KeyboardFragment.
+     * Required empty public constructor
      */
-    // TODO: Rename and change types and number of parameters
-    public static KeyboardFragment newInstance(String param1, String param2) {
-        KeyboardFragment fragment = new KeyboardFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public KeyboardFragment() {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -73,45 +34,40 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_keyboard, container, false);
-
+        //
+        //
+        //
         setupListeners(view);
-
+        //
+        //
+        //
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    public  void setTextView(TextView textView){
-        this.textView = textView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-      /*
-        if (context instanceof OnConvertItemClickListener) {
-            mListener = (OnConvertItemClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnConvertItemClickListener");
-        }
-        */
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
+    /**
+     * Hook up the event listeners.
+     */
     private void setupListeners(View view) {
-        Button btnOne = view.findViewById(R.id.btn_one);
+        Button btnZero  = view.findViewById(R.id.btn_zero);
+        btnZero.setOnClickListener(this);
+
+        Button btnOne   = view.findViewById(R.id.btn_one);
         btnOne.setOnClickListener(this);
+
+        Button btnTwo   = view.findViewById(R.id.btn_two);
+        btnTwo.setOnClickListener(this);
+
+        Button btnThree = view.findViewById(R.id.btn_three);
+        btnThree.setOnClickListener(this);
+
+        Button btnFour  = view.findViewById(R.id.btn_four);
+        btnFour.setOnClickListener(this);
+
+        Button btnFive  = view.findViewById(R.id.btn_five);
+        btnFive.setOnClickListener(this);
+
+        Button btnSix   = view.findViewById(R.id.btn_six);
+        btnSix.setOnClickListener(this);
 
         Button btnSeven = view.findViewById(R.id.btn_seven);
         btnSeven.setOnClickListener(this);
@@ -121,23 +77,93 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
 
         Button btnNine  = view.findViewById(R.id.btn_nine);
         btnNine.setOnClickListener(this);
+
+        Button btnDot = view.findViewById(R.id.btn_dot);
+        btnDot.setOnClickListener(this);
+
+        Button btnDel = view.findViewById(R.id.btn_del);
+        btnDel.setOnClickListener(this);
+    }
+
+    /**
+     * Set the text that will be modified using the keyboard.
+     * @param text - the string that will be modified by the Fragment.
+     */
+    public void setText(String text){
+        this.text = text;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnTextChangedListener) {
+            textChangedListener = (OnTextChangedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnTextChangedListener");
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        textChangedListener = null;
     }
 
     @Override
     public void onClick(View view) {
-        if (textView == null)
+        if ((text == null) || (view.getTag() == null))
             return;
 
-        if (view.getTag().equals("7")) {
-            textView.setText("7");
+        String charStr = String.valueOf(view.getTag());
+
+        switch (charStr) {
+            case "ZERO":
+                onZeroClicked();
+                break;
+            case "DOT":
+                onDotClicked();
+                break;
+            case "DEL":
+                onDeleteClicked();
+                break;
+            default:
+                onNumberClicked(charStr);
+                break;
         }
 
-        if (view.getTag().equals("8")) {
-            textView.setText("8");
+        if (textChangedListener != null) {
+            textChangedListener.onTextChanged(text);
         }
+    }
 
-        if (view.getTag().equals("9")) {
-            textView.setText("9");
+    public void onDeleteClicked() {
+        text = text.substring(0, text.length() - 1);
+        text = text.isEmpty() ? "0" : text;
+    }
+
+    public void onDotClicked() {
+        if (text.contains("."))
+            return;
+
+        text += ".";
+    }
+
+    public void onZeroClicked(){
+        if (text.equals("0"))
+            return;
+
+        text +="0";
+    }
+
+    public void onNumberClicked(String number){
+        if (!text.equals("0")){
+            text += String.valueOf(number);
+        }
+        else {
+            text = String.valueOf(number);
         }
     }
 
@@ -146,13 +172,13 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnTextChangedListener {
+
+        /**
+         * This method is executed when the text is modified using the {@link KeyboardFragment}
+         * @param str - the text after modification.
+         */
+        void onTextChanged(String  str);
     }
 }

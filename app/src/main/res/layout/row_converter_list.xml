@@ -37,7 +37,7 @@
         android:textSize="14sp"/>
 
 
-    <TextView
+    <com.fproject.cryptolytics.utility.ExtTextView
         android:focusable="false"
         android:id="@+id/tv_value"
         android:layout_width="wrap_content"
