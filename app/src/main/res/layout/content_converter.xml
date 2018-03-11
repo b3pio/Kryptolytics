@@ -18,7 +18,7 @@
             android:id="@+id/fgt_convertlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.fproject.cryptolytics.converter.ConvertListFragment"/>
+            android:name="com.fproject.cryptolytics.converter.ConverterListFragment"/>
 
         <fragment
             android:layout_weight="1.5"

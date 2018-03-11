@@ -1,6 +1,5 @@
 package com.fproject.cryptolytics.converter;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,18 +12,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fproject.cryptolytics.AboutActivity;
-import com.fproject.cryptolytics.HomeActivity;
+import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
 public class ConverterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ConvertListFragment.OnConvertItemClickListener,
+        ConverterListFragment.OnConvertItemClickListener,
         KeyboardFragment.OnTextChangedListener {
 
     // Meet our child fragments
     private KeyboardFragment    keyboardFragment    = null;
-    private ConvertListFragment convertListFragment = null;
+    private ConverterListFragment converterListFragment = null;
 
     // The item that was clicked in the convert list fragment.
     private ConverterItem selectedItem = null;
@@ -40,7 +39,7 @@ public class ConverterActivity extends AppCompatActivity
         //
         //
         keyboardFragment = (KeyboardFragment) getSupportFragmentManager().findFragmentById(R.id.fgt_keyboard);
-        convertListFragment = (ConvertListFragment) getSupportFragmentManager().findFragmentById(R.id.fgt_convertlist);
+        converterListFragment = (ConverterListFragment) getSupportFragmentManager().findFragmentById(R.id.fgt_convertlist);
         //
         // Listeners
         //
@@ -108,7 +107,7 @@ public class ConverterActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, TopCoinsActivity.class);
             finish();
             startActivity(intent);
 
@@ -136,7 +135,7 @@ public class ConverterActivity extends AppCompatActivity
     }
 
     /**
-     * Hooked up to the {@link ConvertListFragment}.
+     * Hooked up to the {@link ConverterListFragment}.
      */
     @Override
     public void onConvertItemClicked(ConverterItem converterItem){
@@ -154,6 +153,6 @@ public class ConverterActivity extends AppCompatActivity
             return;
 
         selectedItem.setValue(str);
-        convertListFragment.notifySetDataChanged();
+        converterListFragment.notifySetDataChanged();
     }
 }

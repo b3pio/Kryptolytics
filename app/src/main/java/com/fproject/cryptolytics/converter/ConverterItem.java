@@ -13,10 +13,7 @@ public class ConverterItem {
     private String value;
 
     private CryptoCoin crpytoCoin;
-
-    private CryptoRate fromCryptoRate;
-    private CryptoRate toCryptoRate;
-
+    private CryptoRate cryptoRate;
 
     public ConverterItem(long itemId, String symbol, String value) {
         this.itemId = itemId;
@@ -32,7 +29,6 @@ public class ConverterItem {
         return symbol;
     }
 
-
     public String getValue() {
         return value;
     }
@@ -41,21 +37,12 @@ public class ConverterItem {
         this.value = value;
     }
 
-
-    public CryptoRate getFromCryptoRate() {
-        return fromCryptoRate;
+    public CryptoRate getCryptoRate() {
+        return cryptoRate;
     }
 
-    public void setFromCryptoRate(CryptoRate fromCryptoRate) {
-        this.fromCryptoRate = fromCryptoRate;
-    }
-
-    public CryptoRate getToCryptoRate() {
-        return toCryptoRate;
-    }
-
-    public void setToCryptoRate(CryptoRate toCryptoRate) {
-        this.toCryptoRate = toCryptoRate;
+    public void setCryptoRate(CryptoRate cryptoRate) {
+        this.cryptoRate = cryptoRate;
     }
 
     public CryptoCoin getCrpytoCoin() {
@@ -67,11 +54,10 @@ public class ConverterItem {
     }
 
     public boolean isLoaded(){
-        if (toCryptoRate == null || fromCryptoRate == null || crpytoCoin == null)
+        if (cryptoRate == null || crpytoCoin == null)
             return false;
 
         return true;
     }
-
 
 }

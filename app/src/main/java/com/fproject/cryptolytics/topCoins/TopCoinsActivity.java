@@ -1,9 +1,9 @@
-package com.fproject.cryptolytics.watchlist;
+package com.fproject.cryptolytics.topCoins;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.ContextMenu;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,80 +17,57 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fproject.cryptolytics.AboutActivity;
-import com.fproject.cryptolytics.converter.ConverterActivity;
-import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.R;
+import com.fproject.cryptolytics.converter.ConverterActivity;
+import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
 import com.fproject.cryptolytics.cryptoapi.CryptoClient;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
-import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
 import com.fproject.cryptolytics.database.DatabaseManager;
-import com.fproject.cryptolytics.details.DetailsActivity;
-import com.fproject.cryptolytics.searchCoin.SearchCoinActivity;
-import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
+import com.fproject.cryptolytics.watchlist.WatchListActivity;
+import com.fproject.cryptolytics.watchlist.WatchListAdapter;
+import com.fproject.cryptolytics.watchlist.WatchedItem;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WatchListActivity extends AppCompatActivity
+public class TopCoinsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final static int SEARCH_COIN_REQUEST      = 1;
-    private final static int SEARCH_CURRENCY_REQUEST  = 2;
-
     // These provide data about the watched items.
-    private CryptoClient     cryptoClient   = null;
-    private DatabaseManager  databaseManager = null;
+    private CryptoClient cryptoClient   = null;
+
 
     // List of items that are being watched.
-    private List<WatchedItem>       watchedItems     = null;
+    private List<WatchedItem> watchedItems     = null;
 
-    private Map<String,CryptoCoin>    cryptoCoins      = null;
+    private Map<String,CryptoCoin> cryptoCoins      = null;
     private Map<Long,CryptoCurrency>  cryptoCurrencies = null;
 
-    private WatchedItem       newItem          = null;
-    private WatchListAdapter  watchListAdapter = null;
+    private WatchListAdapter watchListAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_watch_list);
-        //
-        // Toolbar
-        //
+        setContentView(R.layout.activity_top_coins);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //
-        // Components
+        // Component
         //
         cryptoClient = new CryptoClient(this);
-        databaseManager = new DatabaseManager(this);
         //
         // Listeners
         //
         setupListeners();
-        //
-        //
-        //
-        updateActivity();
     }
 
     /**
      * Hook up the event listeners.
      */
-    private void setupListeners(){
-        //
-        // FloatingActionButton
-        //
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openSearchCoinsActivity();
-            }
-        });
+    private void setupListeners() {
         //
         // DrawerLayout
         //
@@ -101,21 +78,10 @@ public class WatchListActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         //
-        // NavigationView
+        // Navigation View
         //
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //
-        // ListView
-        //
-        ListView listView = (ListView) findViewById(R.id.lv_watchlist);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openDetailsActivity(watchListAdapter.getWatchedItem(i));
-            }
-        });
-        registerForContextMenu(listView);
     }
 
     /**
@@ -123,7 +89,6 @@ public class WatchListActivity extends AppCompatActivity
      */
     private void updateActivity(){
         if (watchedItems == null) {
-            watchedItems = databaseManager.getWatchListTable().getItems();
             watchListAdapter = new WatchListAdapter(this, watchedItems);
 
             ListView listView = (ListView) findViewById(R.id.lv_watchlist);
@@ -205,67 +170,9 @@ public class WatchListActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo
-            menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.watch_list_cab,menu);
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-
-        WatchedItem item = watchListAdapter.getWatchedItem(info.position);
-        menu.setHeaderTitle(item.getFromSymbol() + " - " + item.getToSymbol());
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.action_remove:
-                    removeWatchedItem(watchListAdapter.getWatchedItem(info.position));
-                    break;
-
-            case R.id.action_details:
-                    openWatchedItemDetails(watchListAdapter.getWatchedItem(info.position));
-                    break;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    /**
-     * Add the item to the WatchList.
-     */
-    private void addWatchedItem(WatchedItem item){
-        long itemId = databaseManager.getWatchListTable().add(item.getFromSymbol(), item.getToSymbol());
-
-        newItem = new WatchedItem(itemId, item.getFromSymbol(), item.getToSymbol());
-        watchedItems.add(newItem);
-        watchListAdapter.notifyDataSetChanged();
-
-        ListView listView = (ListView) findViewById(R.id.lv_watchlist);
-        listView.smoothScrollToPosition(watchListAdapter.getCount() - 1);
-        updateActivity();
-    }
-
-    /**
-     * Remove the item from the WatchList.
-     */
-    private void removeWatchedItem(WatchedItem item){
-        databaseManager.getWatchListTable().remove(item.getItemId());
-
-        watchedItems.remove(item);
-        watchListAdapter.notifyDataSetChanged();
-    }
-
-    private void openWatchedItemDetails(WatchedItem item){
-        openDetailsActivity(item);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.watch_list, menu);
-
+        getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
 
@@ -277,8 +184,7 @@ public class WatchListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            updateActivity();
+        if (id == R.id.action_settings) {
             return true;
         }
 
@@ -293,13 +199,13 @@ public class WatchListActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, TopCoinsActivity.class);
-            finish();
-            startActivity(intent);
+            // already there
 
         } else if (id == R.id.nav_watchlist) {
 
-            // already there
+            Intent intent = new Intent(this, WatchListActivity.class);
+            finish();
+            startActivity(intent);
 
         } else if (id == R.id.nav_converter) {
 
@@ -312,66 +218,10 @@ public class WatchListActivity extends AppCompatActivity
             Intent intent = new Intent(this, AboutActivity.class);
             finish();
             startActivity(intent);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * Open Activity where the user can select the FromSymbol.
-     */
-    public void openSearchCoinsActivity() {
-        Intent intent = new Intent(getApplicationContext(), SearchCoinActivity.class);
-        startActivityForResult(intent, SEARCH_COIN_REQUEST);
-    }
-
-    /**
-     * Open Activity where the user can select the ToSymbol.
-     */
-    public void openSearchCurrencyActivity() {
-        Intent intent = new Intent(getApplicationContext(), SearchCurrencyActivity.class);
-        startActivityForResult(intent, SEARCH_CURRENCY_REQUEST);
-    }
-
-    /**
-     * Open activity with item details.
-     */
-    public void openDetailsActivity(WatchedItem watchedItem) {
-
-        Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-
-        intent.putExtra("fromSymbol",watchedItem.getFromSymbol());
-        intent.putExtra("toSymbol",watchedItem.getToSymbol());
-
-        startActivityForResult(intent, 3);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if ((requestCode == SEARCH_COIN_REQUEST) && resultCode == (RESULT_OK)){
-            String coinName = data.getStringExtra("CoinName");
-
-            if (coinName != null) {
-                newItem = new WatchedItem();
-                newItem.setFromSymbol(coinName);
-
-                openSearchCurrencyActivity();
-            }
-        }
-
-        if ((requestCode == SEARCH_CURRENCY_REQUEST) && resultCode == (RESULT_OK)){
-            String currencyName = data.getStringExtra("CurrencyName");
-
-            if (currencyName != null) {
-                newItem.setToSymbol(currencyName);
-
-                addWatchedItem(newItem);
-            }
-        }
     }
 }

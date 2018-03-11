@@ -74,7 +74,7 @@ public class ConverterListAdapter extends BaseAdapter  {
         viewHolder.tvSymbol.setText(item.getSymbol());
         viewHolder.tvValue.setText(item.getValue());
 
-        if (item.isLoaded()) {
+        if (item.getCrpytoCoin() != null) {
             viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
         }
 

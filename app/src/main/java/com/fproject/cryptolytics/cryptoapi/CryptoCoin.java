@@ -10,6 +10,7 @@ public class CryptoCoin {
     private String algorithm;
     private String proofType;
     private String totalCoinSupply;
+    private Integer sortOrder;
 
     public CryptoCoin(String name,
                       String imageUrl,
@@ -18,7 +19,8 @@ public class CryptoCoin {
                       String fullName,
                       String algorithm,
                       String proofType,
-                      String totalCoinSupply) {
+                      String totalCoinSupply,
+                        Integer sortOrder) {
 
         this.name       = name;
         this.imageUrl   = imageUrl;
@@ -28,6 +30,7 @@ public class CryptoCoin {
         this.algorithm  = algorithm;
         this.proofType  = proofType;
         this.totalCoinSupply = totalCoinSupply;
+        this.sortOrder = sortOrder;
     }
 
     public String getName() {

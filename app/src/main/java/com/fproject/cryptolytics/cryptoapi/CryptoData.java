@@ -5,8 +5,10 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,15 +19,51 @@ public class CryptoData {
     private JSONObject cryptoData;
     private String fromSymbol;
     private String toSymbol;
+    private List<String> toSymbols;
 
     public CryptoData(JSONObject cryptoData){
         this.cryptoData = cryptoData;
+    }
+
+    public CryptoData(JSONObject cryptoData, String fromSymbol, List<String> toSymbols){
+        this.cryptoData = cryptoData;
+        this.fromSymbol = fromSymbol;
+        this.toSymbols   = toSymbols;
     }
 
     public CryptoData(JSONObject cryptoData, String fromSymbol, String toSymbol){
         this.cryptoData = cryptoData;
         this.fromSymbol = fromSymbol;
         this.toSymbol   = toSymbol;
+    }
+
+    public List<CryptoCoin> getAsTopCoins(){
+        List<CryptoCoin> topCoins = new ArrayList<>();
+
+        try {
+
+            JSONObject jsonCoins = cryptoData.getJSONObject("Data");
+            Iterator<String> keys = jsonCoins.keys();
+
+            while (keys.hasNext()) {
+                JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
+
+                String  name      = jsonCoin.getString("Name");
+                String  symbol    = jsonCoin.getString("Symbol");
+                String  coinName  = jsonCoin.getString("CoinName");
+                String  fullName  = jsonCoin.getString("FullName");
+                String  algorithm = jsonCoin.getString("Algorithm");
+                String  proofType = jsonCoin.getString("ProofType");
+                String  totalCoinSupply = jsonCoin.getString("TotalCoinSupply");
+                Integer sortOrder = Integer.valueOf(jsonCoin.getString("SortOrder"));
+            }
+
+        }
+        catch (JSONException ex) {
+            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  ex.toString());
+        }
+
+        return topCoins;
     }
 
     public Map<String,CryptoCoin> getAsCryptoCoins() {
@@ -39,20 +77,22 @@ public class CryptoData {
             while (keys.hasNext()) {
                 JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
 
-                String name      = jsonCoin.getString("Name");
-                String symbol    = jsonCoin.getString("Symbol");
-                String coinName  = jsonCoin.getString("CoinName");
-                String fullName  = jsonCoin.getString("FullName");
-                String algorithm = jsonCoin.getString("Algorithm");
-                String proofType = jsonCoin.getString("ProofType");
-                String totalCoinSupply = jsonCoin.getString("TotalCoinSupply");
-                String imageUrl  = null;
+                String  name      = jsonCoin.getString("Name");
+                String  symbol    = jsonCoin.getString("Symbol");
+                String  coinName  = jsonCoin.getString("CoinName");
+                String  fullName  = jsonCoin.getString("FullName");
+                String  algorithm = jsonCoin.getString("Algorithm");
+                String  proofType = jsonCoin.getString("ProofType");
+                String  totalCoinSupply = jsonCoin.getString("TotalCoinSupply");
+
+                Integer sortOrder = Integer.valueOf(jsonCoin.getString("SortOrder"));
+                String  imageUrl  = null;
 
                 if (jsonCoin.has("ImageUrl")) {
                     imageUrl = "https://www.cryptocompare.com" + jsonCoin.getString("ImageUrl");
                 }
 
-                CryptoCoin cryptoCoin = new CryptoCoin(name,imageUrl,symbol,coinName,fullName,algorithm,proofType,totalCoinSupply);
+                CryptoCoin cryptoCoin = new CryptoCoin(name, imageUrl,symbol,coinName,fullName,algorithm,proofType,totalCoinSupply, sortOrder);
                 cryptoCoinList.put(symbol,cryptoCoin);
             }
         }
@@ -76,6 +116,8 @@ public class CryptoData {
             String rateStr = cryptoData.getString(toSymbol);
             Double rate = Double.valueOf(rateStr);
 
+            Log.d(MODULE_TAG, toSymbol + " - "  + rateStr);
+
             cryptoRate = new CryptoRate(fromSymbol, toSymbol, rate);
         }
         catch (JSONException exception) {
@@ -83,6 +125,31 @@ public class CryptoData {
         }
 
         return cryptoRate;
+    }
+
+    public Map<String,CryptoRate> getAsCryptoRates(){
+        Map<String,CryptoRate> cryptoRates = new HashMap();
+
+        if ((fromSymbol == null) || (toSymbols == null)) {
+
+            Log.d(MODULE_TAG,"getAsCryptoRates(): empty");
+            return cryptoRates;
+        }
+
+        for (String toSymbol:toSymbols) {
+            try {
+
+                String rateStr = cryptoData.getString(toSymbol);
+                Double rate = Double.valueOf(rateStr);
+
+                cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, rate));
+
+            } catch (JSONException exception) {
+                Log.d(MODULE_TAG, "getAsCryptoRate(): " + exception.toString());
+            }
+        }
+
+        return cryptoRates;
     }
 
     public CryptoCurrency getAsCryptoCurrency() {

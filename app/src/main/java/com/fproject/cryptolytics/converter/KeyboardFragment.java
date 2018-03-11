@@ -91,6 +91,7 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
      */
     public void setText(String text){
         this.text = text;
+        this.text = "0";
     }
 
     @Override
@@ -118,6 +119,7 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
             return;
 
         String charStr = String.valueOf(view.getTag());
+
 
         switch (charStr) {
             case "ZERO":

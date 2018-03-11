@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fproject.cryptolytics.converter.ConverterActivity;
+import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
 public class AboutActivity extends AppCompatActivity
@@ -87,7 +88,7 @@ public class AboutActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, TopCoinsActivity.class);
             finish();
             startActivity(intent);
 

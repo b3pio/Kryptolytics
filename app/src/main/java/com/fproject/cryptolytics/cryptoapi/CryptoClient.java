@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.cryptoapi;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Responsable for fethcing information about the crypto currencies from: www.cryptocompare.com
@@ -122,7 +124,19 @@ public class CryptoClient {
         );
 
         requestQueue.add(request);
+    }
 
+    public void getCrytpoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
+        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms=" + TextUtils.join(",", toSymbols);
+
+        Log.d(MODULE_TAG, url);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                (JSONObject response) -> callback.onSuccess(new CryptoData(response,fromSymbol,toSymbols)),
+                (VolleyError error)   -> callback.onFailure(error.getMessage())
+        );
+
+        requestQueue.add(request);
     }
 
     /**

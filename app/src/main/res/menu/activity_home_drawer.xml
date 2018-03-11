@@ -5,21 +5,24 @@
 
     <group android:checkableBehavior="single">
 
+
         <item
             android:id="@+id/nav_watchlist"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="WatchList" />
+            android:icon="@drawable/ic_menu_watch_list"
+            android:title="@string/title_activity_watch_list" />
+
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Alarms" />
+            android:icon="@drawable/ic_menu_top_coins"
+            android:title="@string/title_activity_top_coins" />
+
         <item
             android:id="@+id/nav_converter"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Converter" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_about"
             android:title="About" />
     </group>
 

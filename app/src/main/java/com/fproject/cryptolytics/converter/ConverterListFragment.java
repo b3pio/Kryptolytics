@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,36 +30,33 @@ import java.util.Map;
  * Activities that contain this fragment must implement the
  * {@link OnConvertItemClickListener} interface
  * to handle interaction events.
- * Use the {@link ConvertListFragment#newInstance} factory method to
+ * Use the {@link ConverterListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConvertListFragment extends Fragment {
-    private final static String MODULE_TAG = "[ConvertListFragment]";
-
-    // The universal exchange to use for converting/to different currencies.
-    private final static String UEX_RATE = "EUR";
+public class ConverterListFragment extends Fragment {
+    private final static String MODULE_TAG = "[ConverterListFragment]";
 
     // These provide data about the watched items.
-    private CryptoClient    cryptoClient       = null;
-    private DatabaseManager databaseManager     = null;
+    private CryptoClient    cryptoClient    = null;
+    private DatabaseManager databaseManager = null;
+
+    private String fromSymbol = new String();
+    private List<String> toSymbols = new ArrayList<>();
 
     // List of converter items.
-    private List<ConverterItem> converterItems = null;
-
-    private ConverterItem   newConverterItem     = null;
-    private ConverterItem   selectedItem = null;
-    private ConverterListAdapter converterListAdapter = null;
+    private List<ConverterItem> converterItems  = null;
+    private ConverterItem       selectedItem    = null;
 
     private Map<String,CryptoCoin>  cryptoCoins     = null;
-    private Map<Long, CryptoRate>   fromCryptoRates = null;
-    private Map<Long, CryptoRate>   toCryptoRates   = null;
+    private Map<String,CryptoRate>  cryptoRates     = null;
+
+    private ConverterListAdapter  converterListAdapter  = null;
 
     // Listener that need to be notified
     private OnConvertItemClickListener convertItemClickListener;
 
-    private ConverterValueUpdater converterValueUpdater = null;
 
-    public ConvertListFragment() {
+    public ConverterListFragment() {
         // Required empty public constructor
     }
 
@@ -103,6 +101,7 @@ public class ConvertListFragment extends Fragment {
         // Update
         //
         updateFragment();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(" Updating...");
     }
 
     /**
@@ -116,15 +115,12 @@ public class ConvertListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                selectedItem = converterListAdapter.getConveterItem(position);
+
+                clearValues();
+                updateValues();
+
                 if (convertItemClickListener != null) {
-
-                    selectedItem = converterListAdapter.getConveterItem(position);
-                    selectedItem.setValue("1.0");
-                    converterValueUpdater.setSelectedItem(selectedItem);
-
-                    notifySetDataChanged();
-
-
                     convertItemClickListener.onConvertItemClicked(selectedItem);
                 }
             }
@@ -138,26 +134,42 @@ public class ConvertListFragment extends Fragment {
         if (converterItems == null) {
 
             converterItems = new ArrayList<>();
-
-            converterItems.add(new ConverterItem(0, "BTC", "0"));
-            //converterItems.add(new ConverterItem(1, "ETH", "1"));
-            //converterItems.add(new ConverterItem(2, "XRP", "2"));
-            //converterItems.add(new ConverterItem(3, "ETL", "3"));
-            converterItems.add(new ConverterItem(4, "BTC", "0"));
+            converterItems.add(new ConverterItem(0, "BTC", "1.00"));
+            converterItems.add(new ConverterItem(1, "ETH", " - "));
+            converterItems.add(new ConverterItem(2, "XRP", " - "));
+            converterItems.add(new ConverterItem(3, "ETL", " - "));
+            converterItems.add(new ConverterItem(4, "BTC", " - "));
 
             ListView listView = getView().findViewById(R.id.lv_converter);
-            converterListAdapter = new ConverterListAdapter(getContext(), converterItems);
+            converterListAdapter  = new ConverterListAdapter(getContext(), converterItems);
             listView.setAdapter(converterListAdapter);
-
-            converterValueUpdater = new ConverterValueUpdater(converterItems);
         }
 
-        cryptoCoins     = new HashMap<String,CryptoCoin>();
-        fromCryptoRates = new HashMap<Long, CryptoRate>();
-        toCryptoRates   = new HashMap<Long, CryptoRate>();
+        updateFromSymbol();
+        updateToSymbols();
+
+        cryptoCoins = new HashMap<>();
+        cryptoRates = new HashMap<>();
 
         getCryptoCoinsCallback();
-        getCryptoRatesCallback();
+        //getCryptoRatesCallback();
+    }
+
+    private void updateFromSymbol(){
+        if (selectedItem != null) {
+            fromSymbol = selectedItem.getSymbol();
+        }
+        else {
+            fromSymbol = converterItems.get(0).getSymbol();
+        }
+    }
+
+    private void updateToSymbols(){
+        toSymbols = new ArrayList<>();
+
+        for(ConverterItem convertItem : converterItems) {
+            toSymbols.add(convertItem.getSymbol());
+        }
     }
 
     /**
@@ -170,11 +182,13 @@ public class ConvertListFragment extends Fragment {
 
                 cryptoCoins = cryptoData.getAsCryptoCoins();
                 onCryptoDataRecevied();
+
+                Log.d(MODULE_TAG, "getCryptoCoinsCallback() - onSuccess()");
             }
 
             @Override
             public void onFailure(String cryptoError) {
-
+                Log.d(MODULE_TAG, "getCryptoCoinsCallback() - onFailure()");
             }
         });
     }
@@ -183,80 +197,111 @@ public class ConvertListFragment extends Fragment {
      * Obtain the {@link CryptoRate} data.
      */
     private void getCryptoRatesCallback(){
-        for(ConverterItem convertItem : converterItems) {
-            //
-            // toCryptoRates
-            //
-            cryptoClient.getCrytpoRate(convertItem.getSymbol(), UEX_RATE, new CryptoCallback() {
-                @Override
-                public void onSuccess(CryptoData cryptoData) {
+        if (fromSymbol.isEmpty() || toSymbols.isEmpty())
+            return;
 
-                    toCryptoRates.put(convertItem.getItemId(), cryptoData.getAsCryptoRate());
-                    onCryptoDataRecevied();
+        cryptoClient.getCrytpoRates(fromSymbol, toSymbols, new CryptoCallback() {
+            @Override
+            public void onSuccess(CryptoData cryptoData) {
+
+                cryptoRates = cryptoData.getAsCryptoRates();
+
+                // Earlier request
+                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onSuccess()" + String.valueOf(cryptoRates.size()));
+
+
+                if (!cryptoRates.isEmpty()) {
+                    if (cryptoRates.entrySet().iterator().next().getValue().getFromSymbol().equals(fromSymbol)) {
+                        onCryptoDataRecevied();
+                    }
                 }
 
-                @Override
-                public void onFailure(String cryptoError) {
 
-                }
-            });
-            //
-            // fromCryptoRates
-            //
-            cryptoClient.getCrytpoRate(UEX_RATE, convertItem.getSymbol(), new CryptoCallback() {
-                @Override
-                public void onSuccess(CryptoData cryptoData) {
+                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onSuccess()");
+            }
 
-                    fromCryptoRates.put(convertItem.getItemId(), cryptoData.getAsCryptoRate());
-                    onCryptoDataRecevied();
-                }
-
-                @Override
-                public void onFailure(String cryptoError) {
-
-                }
-            });
-        }
+            @Override
+            public void onFailure(String cryptoError) {
+                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onFailure()");
+            }
+        });
     }
 
     /**
      * Determines weather all the requested data has arrived and updates the ConvertList.
      */
     private void onCryptoDataRecevied(){
-        if (converterItems.size() != toCryptoRates.size())    return;
-        if (converterItems.size() != fromCryptoRates.size())  return;
         if (cryptoCoins.size() == 0) return;
+        if (cryptoRates.size() == 0) return;
 
         for (ConverterItem item:converterItems) {
 
             CryptoCoin cryptoCoin = cryptoCoins.get(item.getSymbol());
             item.setCrpytoCoin(cryptoCoin);
 
-            CryptoRate toCryptoRate = toCryptoRates.get(item.getItemId());
-            item.setToCryptoRate(toCryptoRate);
+            CryptoRate cryptoRate = cryptoRates.get(item.getSymbol());
+            item.setCryptoRate(cryptoRate);
 
-            CryptoRate fromCryptoRate = fromCryptoRates.get(item.getItemId());
-            item.setFromCryptoRate(fromCryptoRate);
-
-            Log.d(MODULE_TAG, "[" + item.getSymbol() + "]" +
-                " [FROM: " +
-
-                fromCryptoRate.getFromSymbol() +  " -> " +
-                fromCryptoRate.getToSymbol()   +  " - " +
-                String.valueOf(fromCryptoRate.getExRate()) + "]" +
-
-                " [TO: " +
-                toCryptoRate.getFromSymbol() + " -> " +
-                toCryptoRate.getToSymbol() + " - "  +
-                 String.valueOf(toCryptoRate.getExRate()) + "]");
+            /*
+            Log.d(MODULE_TAG, "[" + item.getSymbol() + "][" +
+                cryptoRate.getFromSymbol() +  " -> " +
+                cryptoRate.getToSymbol()   +  " : " +
+                String.valueOf(cryptoRate.getExRate()) + "]");
+            */
         }
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("");
+
+        if (selectedItem == null)
+            selectedItem = converterItems.get(0);
+
+        computeValues();
         converterListAdapter.notifyDataSetChanged();
     }
 
     public void notifySetDataChanged(){
 
-        converterValueUpdater.updateValues();
+        computeValues();
+        converterListAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * Update the values of the {@link ConverterItem} list.
+     */
+    public void computeValues() {
+        if (cryptoRates.isEmpty())
+            return;
+
+        // Convert the value to universal currency.
+        String valueStr  =   selectedItem.getValue();
+        Double selectedValue  = Double.valueOf(valueStr);
+
+        for (ConverterItem converterItem:converterItems) {
+
+            Double newValue =selectedValue * converterItem.getCryptoRate().getExRate();
+            newValue = Math.round(newValue * 100000000D)/100000000D;
+
+            converterItem.setValue(String.valueOf(newValue));
+        }
+    }
+
+    public void updateValues(){
+        updateToSymbols();
+        updateFromSymbol();
+
+        getCryptoRatesCallback();
+    }
+
+    public void clearValues() {
+        cryptoRates.clear();
+
+        for (ConverterItem converterItem:converterItems) {
+            converterItem.setValue(" - ");
+            converterItem.setCryptoRate(null);
+        }
+
+        selectedItem.setValue("1.0");
         converterListAdapter.notifyDataSetChanged();
     }
 
