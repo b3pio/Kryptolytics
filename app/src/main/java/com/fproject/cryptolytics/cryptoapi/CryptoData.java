@@ -6,29 +6,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Wrapper class for the JSON Object received form CryptoCompare.com, also provides
+ * methods for parsing the data.
  */
 public class CryptoData {
     private static final String MODULE_TAG = "CryptoData";
-    private JSONObject cryptoData;
-    private String fromSymbol;
-    private String toSymbol;
-    private List<String> toSymbols;
+    private static final String IMAGE_URL  = "https://www.cryptocompare.com";
 
-    public CryptoData(JSONObject cryptoData){
-        this.cryptoData = cryptoData;
-    }
+    // The JSON that contains the actual data; that will be parsed.
+    private JSONObject   cryptoData;
 
-    public CryptoData(JSONObject cryptoData, String fromSymbol, List<String> toSymbols){
+    // Info about the data contained in the JSON
+    private String       fromSymbol = null;
+    private String       toSymbol   = null;
+    private List<String> toSymbols  = null;
+
+    // --------------------------------------------------------------------------------------------
+    //region  Constructor
+    // --------------------------------------------------------------------------------------------
+    public CryptoData(JSONObject cryptoData) {
         this.cryptoData = cryptoData;
-        this.fromSymbol = fromSymbol;
-        this.toSymbols   = toSymbols;
     }
 
     public CryptoData(JSONObject cryptoData, String fromSymbol, String toSymbol){
@@ -37,63 +41,66 @@ public class CryptoData {
         this.toSymbol   = toSymbol;
     }
 
+    public CryptoData(JSONObject cryptoData, String fromSymbol, List<String> toSymbols) {
+        this.cryptoData  = cryptoData;
+        this.fromSymbol  = fromSymbol;
+        this.toSymbols   = toSymbols;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region  Parsing Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
+     */
     public List<CryptoCoin> getAsTopCoins(){
         List<CryptoCoin> topCoins = new ArrayList<>();
 
         try {
-
             JSONObject jsonCoins = cryptoData.getJSONObject("Data");
             Iterator<String> keys = jsonCoins.keys();
 
             while (keys.hasNext()) {
                 JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
 
-                String  name      = jsonCoin.getString("Name");
-                String  symbol    = jsonCoin.getString("Symbol");
-                String  coinName  = jsonCoin.getString("CoinName");
-                String  fullName  = jsonCoin.getString("FullName");
-                String  algorithm = jsonCoin.getString("Algorithm");
-                String  proofType = jsonCoin.getString("ProofType");
-                String  totalCoinSupply = jsonCoin.getString("TotalCoinSupply");
-                Integer sortOrder = Integer.valueOf(jsonCoin.getString("SortOrder"));
-            }
+                CryptoCoin cryptoCoin = getCryptoCoin(jsonCoin);
 
+                // We only need the Top 10 coins; ignore the rest of them.
+                if (cryptoCoin.getSortOrder() < 20){
+                    topCoins.add(cryptoCoin);
+                }
+           }
         }
         catch (JSONException ex) {
-            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  ex.toString());
+            Log.d(MODULE_TAG, "getAsTopCoins(): " +  ex.toString());
         }
+
+        Collections.sort(topCoins,CryptoCoin.SortOrderComparator);
 
         return topCoins;
     }
 
+    /**
+     * Parses the {@link CryptoData} as {@link CryptoCoin} collection.
+     */
     public Map<String,CryptoCoin> getAsCryptoCoins() {
         Map<String,CryptoCoin> cryptoCoinList = new HashMap<String,CryptoCoin>();
 
         try {
-
             JSONObject jsonCoins  = cryptoData.getJSONObject("Data");
             Iterator<String> keys = jsonCoins.keys();
 
+            // Parse each coin.
             while (keys.hasNext()) {
                 JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
 
-                String  name      = jsonCoin.getString("Name");
-                String  symbol    = jsonCoin.getString("Symbol");
-                String  coinName  = jsonCoin.getString("CoinName");
-                String  fullName  = jsonCoin.getString("FullName");
-                String  algorithm = jsonCoin.getString("Algorithm");
-                String  proofType = jsonCoin.getString("ProofType");
-                String  totalCoinSupply = jsonCoin.getString("TotalCoinSupply");
-
-                Integer sortOrder = Integer.valueOf(jsonCoin.getString("SortOrder"));
-                String  imageUrl  = null;
-
-                if (jsonCoin.has("ImageUrl")) {
-                    imageUrl = "https://www.cryptocompare.com" + jsonCoin.getString("ImageUrl");
-                }
-
-                CryptoCoin cryptoCoin = new CryptoCoin(name, imageUrl,symbol,coinName,fullName,algorithm,proofType,totalCoinSupply, sortOrder);
-                cryptoCoinList.put(symbol,cryptoCoin);
+                CryptoCoin cryptoCoin = getCryptoCoin(jsonCoin);
+                cryptoCoinList.put(cryptoCoin.getSymbol(), cryptoCoin);
             }
         }
         catch (JSONException exception) {
@@ -103,22 +110,21 @@ public class CryptoData {
         return cryptoCoinList;
     }
 
+    /**
+     * Parses the {@link CryptoData} as a {@link CryptoRate}.
+     */
     public CryptoRate getAsCryptoRate(){
         CryptoRate cryptoRate = null;
 
         if ((fromSymbol == null) || (toSymbol == null)) {
-            Log.d(MODULE_TAG,"getAsCryptoRate() - null");
             return cryptoRate;
         }
 
         try {
-
             String rateStr = cryptoData.getString(toSymbol);
-            Double rate = Double.valueOf(rateStr);
+            Double exRate = Double.valueOf(rateStr);
 
-            Log.d(MODULE_TAG, toSymbol + " - "  + rateStr);
-
-            cryptoRate = new CryptoRate(fromSymbol, toSymbol, rate);
+            cryptoRate = new CryptoRate(fromSymbol, toSymbol, exRate);
         }
         catch (JSONException exception) {
             Log.d(MODULE_TAG, "getAsCryptoRate(): " +  exception.toString());
@@ -127,31 +133,34 @@ public class CryptoData {
         return cryptoRate;
     }
 
+    /**
+     * Parses the {@link CryptoData} as {@link CryptoRate} collection.
+     */
     public Map<String,CryptoRate> getAsCryptoRates(){
         Map<String,CryptoRate> cryptoRates = new HashMap();
 
         if ((fromSymbol == null) || (toSymbols == null)) {
-
-            Log.d(MODULE_TAG,"getAsCryptoRates(): empty");
             return cryptoRates;
         }
 
         for (String toSymbol:toSymbols) {
             try {
-
                 String rateStr = cryptoData.getString(toSymbol);
-                Double rate = Double.valueOf(rateStr);
+                Double exRate = Double.valueOf(rateStr);
 
-                cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, rate));
+                cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, exRate));
 
             } catch (JSONException exception) {
-                Log.d(MODULE_TAG, "getAsCryptoRate(): " + exception.toString());
+                Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
             }
         }
 
         return cryptoRates;
     }
 
+    /**
+     * Parses the {@link CryptoData} as a  {@link CryptoCurrency}.
+     */
     public CryptoCurrency getAsCryptoCurrency() {
         CryptoCurrency cryptoCurrency = null;
 
@@ -204,4 +213,47 @@ public class CryptoData {
 
         return cryptoCurrency;
     }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region  Private Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Parses a {@link CryptoCoin} from the specified {@link JSONObject}.
+     */
+    private CryptoCoin getCryptoCoin(JSONObject jsonCoin) {
+        CryptoCoin cryptoCoin = null;
+
+        try {
+
+            String name         = jsonCoin.getString("Name");
+            String symbol       = jsonCoin.getString("Symbol");
+            String coinName     = jsonCoin.getString("CoinName");
+            String fullName     = jsonCoin.getString("FullName");
+            String algorithm    = jsonCoin.getString("Algorithm");
+            String proofType    = jsonCoin.getString("ProofType");
+            String coinSupply   = jsonCoin.getString("TotalCoinSupply");
+            Integer sortOrder   = Integer.valueOf(jsonCoin.getString("SortOrder"));
+            String imageUrl     = null;
+
+            if (jsonCoin.has("ImageUrl")) {
+                imageUrl = IMAGE_URL + jsonCoin.getString("ImageUrl");
+            }
+
+            cryptoCoin = new CryptoCoin(name, imageUrl, symbol, coinName, fullName,
+                    algorithm, proofType, coinSupply, sortOrder);
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  exception.toString());
+        }
+
+        return cryptoCoin;
+    }
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 }

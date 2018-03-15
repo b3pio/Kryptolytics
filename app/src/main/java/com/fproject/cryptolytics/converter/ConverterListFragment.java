@@ -135,10 +135,12 @@ public class ConverterListFragment extends Fragment {
 
             converterItems = new ArrayList<>();
             converterItems.add(new ConverterItem(0, "BTC", "1.00"));
-            converterItems.add(new ConverterItem(1, "ETH", " - "));
+            converterItems.add(new ConverterItem(1, "LTC", " - "));
             converterItems.add(new ConverterItem(2, "XRP", " - "));
-            converterItems.add(new ConverterItem(3, "ETL", " - "));
-            converterItems.add(new ConverterItem(4, "BTC", " - "));
+            converterItems.add(new ConverterItem(3, "XMR", " - "));
+
+            //converterItems.add(new ConverterItem(3, "ETL", " - "));
+            //converterItems.add(new ConverterItem(4, "BTC", " - "));
 
             ListView listView = getView().findViewById(R.id.lv_converter);
             converterListAdapter  = new ConverterListAdapter(getContext(), converterItems);
@@ -282,7 +284,7 @@ public class ConverterListFragment extends Fragment {
             Double newValue =selectedValue * converterItem.getCryptoRate().getExRate();
             newValue = Math.round(newValue * 100000000D)/100000000D;
 
-            converterItem.setValue(String.valueOf(newValue));
+            converterItem.setValue(String.valueOf(newValue) + " " +  converterItem.getCryptoRate().getToSymbol());
         }
     }
 

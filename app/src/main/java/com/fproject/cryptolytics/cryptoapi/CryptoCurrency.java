@@ -1,6 +1,8 @@
 package com.fproject.cryptolytics.cryptoapi;
 
 
+import java.util.Comparator;
+
 public class CryptoCurrency {
 
     private String fromSymbol;
@@ -124,5 +126,16 @@ public class CryptoCurrency {
     public String getMarketCap() {
         return marketCap;
     }
+
+    public static Comparator<CryptoCurrency> PriceComparator = new Comparator<CryptoCurrency>() {
+
+        public int compare(CryptoCurrency cryptoCurrency1, CryptoCurrency cryptoCurrency2) {
+            Double price1 = Double.valueOf(cryptoCurrency1.getPrice());
+            Double price2 = Double.valueOf(cryptoCurrency2.getPrice());
+
+            //descending order
+            return price2.compareTo(price1);
+        }
+    };
 
 }

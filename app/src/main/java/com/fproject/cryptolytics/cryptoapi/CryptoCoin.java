@@ -1,6 +1,8 @@
 package com.fproject.cryptolytics.cryptoapi;
 
 
+import java.util.Comparator;
+
 public class CryptoCoin {
     private String name;
     private String imageUrl;
@@ -64,5 +66,23 @@ public class CryptoCoin {
     public String getTotalCoinSupply() {
         return totalCoinSupply;
     }
+
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public static Comparator<CryptoCoin> SortOrderComparator = new Comparator<CryptoCoin>() {
+
+        public int compare(CryptoCoin cryptoCoin1, CryptoCoin cryptoCoin2) {
+            Integer sortOrder1 = cryptoCoin1.getSortOrder();
+            Integer sortOrder2 = cryptoCoin2.getSortOrder();
+
+            //ascending order
+            return sortOrder1.compareTo(sortOrder2);
+
+            //descending order
+            //return StudentName2.compareTo(StudentName1);
+        }
+    };
 
 }

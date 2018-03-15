@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.utility.ExtTextView;
+import com.fproject.cryptolytics.utility.ImageDownloader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,9 @@ public class ConverterListAdapter extends BaseAdapter  {
         TextView tvSymbol;
         TextView tvName;
         TextView tvValue;
+        ImageView ivImage;
+
+        ImageDownloader imageDownloader;
     }
 
     private List<ConverterItem> converterItems = new ArrayList<>();
@@ -78,6 +83,11 @@ public class ConverterListAdapter extends BaseAdapter  {
             viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
         }
 
+        if (item.isLoaded()) {
+            viewHolder.imageDownloader = new ImageDownloader(viewHolder.ivImage);
+            viewHolder.imageDownloader.execute(item.getCrpytoCoin().getImageUrl());
+        }
+
         return view;
     }
 
@@ -95,6 +105,7 @@ public class ConverterListAdapter extends BaseAdapter  {
         viewHolder.tvSymbol = view.findViewById(R.id.tv_symbol);
         viewHolder.tvName   = view.findViewById(R.id.tv_name);
         viewHolder.tvValue  = view.findViewById(R.id.tv_value);
+        viewHolder.ivImage   = view.findViewById(R.id.iv_image);
 
         view.setTag(viewHolder);
 

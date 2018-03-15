@@ -8,4 +8,6 @@
     <color name="colorTextLight">#ffffff</color>
     <color name="colorText">#2B547E</color>
     <color name="colorPressed">#bcb8b8</color>
+    <color name="colorBorder">#bcb8b8</color>
+    <color name="colorSelector">#f1f1f1</color>
 </resources>

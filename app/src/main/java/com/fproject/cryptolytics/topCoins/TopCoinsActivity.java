@@ -2,9 +2,6 @@ package com.fproject.cryptolytics.topCoins;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fproject.cryptolytics.AboutActivity;
@@ -24,11 +20,11 @@ import com.fproject.cryptolytics.cryptoapi.CryptoClient;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
-import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 import com.fproject.cryptolytics.watchlist.WatchListAdapter;
 import com.fproject.cryptolytics.watchlist.WatchedItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,14 +35,13 @@ public class TopCoinsActivity extends AppCompatActivity
     // These provide data about the watched items.
     private CryptoClient cryptoClient   = null;
 
-
     // List of items that are being watched.
     private List<WatchedItem> watchedItems     = null;
 
-    private Map<String,CryptoCoin> cryptoCoins      = null;
-    private Map<Long,CryptoCurrency>  cryptoCurrencies = null;
+    private List<CryptoCoin>            cryptoCoins      = null;
+    private Map<Integer,CryptoCurrency> cryptoCurrencies = null;
 
-    private WatchListAdapter watchListAdapter = null;
+    private TopCoinsAdapter watchListAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +57,10 @@ public class TopCoinsActivity extends AppCompatActivity
         // Listeners
         //
         setupListeners();
+        //
+        //
+        //
+        updateActivity();
     }
 
     /**
@@ -89,17 +88,17 @@ public class TopCoinsActivity extends AppCompatActivity
      */
     private void updateActivity(){
         if (watchedItems == null) {
-            watchListAdapter = new WatchListAdapter(this, watchedItems);
+            watchedItems = new ArrayList<>();
+            watchListAdapter = new TopCoinsAdapter(this, watchedItems);
 
-            ListView listView = (ListView) findViewById(R.id.lv_watchlist);
+            ListView listView = (ListView) findViewById(R.id.lv_top_coins);
             listView.setAdapter(watchListAdapter);
         }
 
-        cryptoCoins      = new HashMap<String,CryptoCoin>();
-        cryptoCurrencies = new HashMap<Long,CryptoCurrency>();
+        cryptoCoins      = new ArrayList<>();
+        cryptoCurrencies = new HashMap<>();
 
         getCryptoCoinsCallback();
-        getCryptoCurrenciesCallback();
     }
 
     /**
@@ -109,8 +108,9 @@ public class TopCoinsActivity extends AppCompatActivity
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCoins = cryptoData.getAsCryptoCoins();
-                updateActivityData();
+
+                cryptoCoins = cryptoData.getAsTopCoins();
+                getCryptoCurrenciesCallback();
             }
 
             @Override
@@ -124,11 +124,11 @@ public class TopCoinsActivity extends AppCompatActivity
      * Obtain the {@link CryptoCurrency} data.
      */
     private void getCryptoCurrenciesCallback() {
-        for(WatchedItem item:watchedItems) {
-            cryptoClient.getCrytpoCurrency(item.getFromSymbol(), item.getToSymbol(), new CryptoCallback() {
+        for(CryptoCoin cryptoCoin:cryptoCoins) {
+            cryptoClient.getCrytpoCurrency(cryptoCoin.getSymbol(), "EUR", new CryptoCallback() {
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
-                    cryptoCurrencies.put(item.getItemId(), cryptoData.getAsCryptoCurrency());
+                    cryptoCurrencies.put(cryptoCoin.getSortOrder(), cryptoData.getAsCryptoCurrency());
                     updateActivityData();
                 }
 
@@ -144,16 +144,17 @@ public class TopCoinsActivity extends AppCompatActivity
      * Determines weather all the requested data has arrived and updates the WatchList.
      */
     private void updateActivityData(){
-        if ((cryptoCurrencies.size() != watchedItems.size()) || (cryptoCoins.size() == 0))
+        if (cryptoCurrencies.size() != cryptoCoins.size())
             return;
 
-        for (WatchedItem item:watchedItems) {
+        for(CryptoCoin cryptoCoin:cryptoCoins) {
+            WatchedItem watchedItem = new WatchedItem(cryptoCoin.getSortOrder(),
+                    cryptoCoin.getSymbol(), "EUR");
 
-            CryptoCoin cryptoCoin = cryptoCoins.get(item.getFromSymbol());
-            item.setCryptoCoin(cryptoCoin);
+            watchedItem.setCryptoCoin(cryptoCoin);
+            watchedItem.setCryptoCurrency(cryptoCurrencies.get(cryptoCoin.getSortOrder()));
 
-            CryptoCurrency cryptoCurrency = cryptoCurrencies.get(item.getItemId());
-            item.setCryptoCurrency(cryptoCurrency);
+            watchedItems.add(watchedItem);
         }
 
         watchListAdapter.notifyDataSetChanged();
