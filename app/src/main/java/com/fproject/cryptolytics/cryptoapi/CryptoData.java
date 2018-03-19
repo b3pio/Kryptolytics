@@ -225,14 +225,21 @@ public class CryptoData {
             String coinName     = jsonCoinInfo.getString("FullName");
             String algorithm    = jsonCoinInfo.getString("Algorithm");
             String proofType    = jsonCoinInfo.getString("ProofType");
+            String coinSupply   = null;
             String imageUrl     = null;
+
+            JSONObject jsonConversionInfo = jsonObject.getJSONObject("ConversionInfo");
+
+            if (jsonConversionInfo != null) {
+                coinSupply = jsonConversionInfo.getString("Supply");
+            }
 
             if (jsonCoinInfo.has("ImageUrl")) {
                 imageUrl = CryptoClient.IMAGE_SERVER + jsonCoinInfo.getString("ImageUrl");
             }
 
             cryptoCoin = new CryptoCoin(name, imageUrl, symbol, coinName, null,
-                    algorithm, proofType, null, sortOrder);
+                    algorithm, proofType, coinSupply, sortOrder);
         }
         catch (JSONException exception) {
             Log.d(MODULE_TAG, "getTopCryptoCoin(): " +  exception.toString());

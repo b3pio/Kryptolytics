@@ -30,6 +30,9 @@ public class FileUtility {
         return isFromSpecifiedPeriod(file, period);
     }
 
+    /**
+     * Determines whether the file is from the specified period.
+     */
     public static boolean isFromSpecifiedPeriod(File file, int period) {
 
         switch (period) {

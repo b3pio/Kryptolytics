@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.fproject.cryptolytics.AboutActivity;
 import com.fproject.cryptolytics.R;
@@ -23,9 +22,8 @@ import com.fproject.cryptolytics.cryptoapi.CryptoClient;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
+import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
-import com.fproject.cryptolytics.watchlist.WatchListAdapter;
-import com.fproject.cryptolytics.watchlist.WatchedItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,16 +33,20 @@ import java.util.Map;
 public class TopCoinsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final static int SEARCH_CURRENCY_REQUEST  = 2;
+
     // These provide data about the watched items.
     private CryptoClient cryptoClient   = null;
 
     // List of items that are being watched.
-    private List<WatchedItem> watchedItems     = null;
+    private List<TopCoin>   topCoins        = new ArrayList<>();
+    private TopCoinsAdapter topCoinsAdapter = null;
 
     private List<CryptoCoin>            cryptoCoins      = null;
     private Map<Integer,CryptoCurrency> cryptoCurrencies = null;
 
-    private TopCoinsAdapter watchListAdapter = null;
+    // The currency to which to convert the coins.
+    private String toSymbol = "EUR";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +55,11 @@ public class TopCoinsActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //
-        // Component
+        //
         //
         cryptoClient = new CryptoClient(this);
         //
-        //
+        // Component
         //
         setupComponents();
         //
@@ -90,42 +92,38 @@ public class TopCoinsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Setup the components of the activity.
+     */
     private void setupComponents(){
         RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
         recyclerView.setHasFixedSize(true);
-
+        //
+        // LayoutManager
+        //
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         // Disable auto measure, otherwise the item will not size correctly.
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setAutoMeasureEnabled(false);
-
+        layoutManager.setAutoMeasureEnabled(false);
+        recyclerView.setLayoutManager(layoutManager);
+        //
+        // ItemDecoration
+        //
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                llm.getOrientation());
+                layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-
-
-
-        watchedItems = new ArrayList<>();
-        watchListAdapter = new TopCoinsAdapter(this,watchedItems);
-        recyclerView.setAdapter(watchListAdapter);
-        recyclerView.setLayoutManager( llm);
+        //
+        // Adapter
+        //
+        topCoinsAdapter = new TopCoinsAdapter(this, topCoins);
+        recyclerView.setAdapter(topCoinsAdapter);
     }
+
     /**
      * Populate the activity with data.
      */
     private void updateActivity(){
-        /*
-        if (watchedItems == null) {
-            watchedItems = new ArrayList<>();
-            watchListAdapter = new TopCoinsAdapter(watchedItems);
-
-            RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
-            recyclerView.setHasFixedSize(true);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-            RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
-            recyclerView.setAdapter(watchListAdapter);
-        }
-        */
+        topCoins.clear();
+        topCoinsAdapter.notifyDataSetChanged();
 
         cryptoCoins      = new ArrayList<>();
         cryptoCurrencies = new HashMap<>();
@@ -137,7 +135,7 @@ public class TopCoinsActivity extends AppCompatActivity
      * Obtain the {@link CryptoCoin} data.
      */
     private void getCryptoCoinsCallback(){
-        cryptoClient.getTopCrytpoCoins(20, "EUR", new CryptoCallback() {
+        cryptoClient.getTopCrytpoCoins(20, toSymbol, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
 
@@ -157,11 +155,12 @@ public class TopCoinsActivity extends AppCompatActivity
      */
     private void getCryptoCurrenciesCallback() {
         for(CryptoCoin cryptoCoin:cryptoCoins) {
-            cryptoClient.getCrytpoCurrency(cryptoCoin.getSymbol(), "EUR", new CryptoCallback() {
+            cryptoClient.getCrytpoCurrency(cryptoCoin.getSymbol(), toSymbol, new CryptoCallback() {
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
+
                     cryptoCurrencies.put(cryptoCoin.getSortOrder(), cryptoData.getAsCryptoCurrency());
-                    updateActivityData();
+                    onCryptoCurrencyReceived();
                 }
 
                 @Override
@@ -175,21 +174,29 @@ public class TopCoinsActivity extends AppCompatActivity
     /**
      * Determines weather all the requested data has arrived and updates the WatchList.
      */
-    private void updateActivityData(){
+    private void onCryptoCurrencyReceived(){
         if (cryptoCurrencies.size() != cryptoCoins.size())
             return;
 
         for(CryptoCoin cryptoCoin:cryptoCoins) {
-            WatchedItem watchedItem = new WatchedItem(cryptoCoin.getSortOrder(),
-                    cryptoCoin.getSymbol(), "EUR");
+            int sortOrder   = cryptoCoin.getSortOrder();
+            TopCoin topCoin = new TopCoin(sortOrder, cryptoCoin.getSymbol(), toSymbol);
 
-            watchedItem.setCryptoCoin(cryptoCoin);
-            watchedItem.setCryptoCurrency(cryptoCurrencies.get(cryptoCoin.getSortOrder()));
+            topCoin.setCryptoCoin(cryptoCoin);
+            topCoin.setCryptoCurrency(cryptoCurrencies.get(sortOrder));
 
-            watchedItems.add(watchedItem);
+            topCoins.add(topCoin);
         }
 
-        watchListAdapter.notifyDataSetChanged();
+        topCoinsAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Open Activity where the user can select the ToSymbol.
+     */
+    public void openSearchCurrencyActivity() {
+        Intent intent = new Intent(getApplicationContext(), SearchCurrencyActivity.class);
+        startActivityForResult(intent, SEARCH_CURRENCY_REQUEST);
     }
 
     @Override
@@ -210,6 +217,15 @@ public class TopCoinsActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.action_settings);
+        //menuItem.setTitle(toSymbol);
+        menuItem.setTitle("Currency");
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -218,6 +234,7 @@ public class TopCoinsActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            openSearchCurrencyActivity();
             return true;
         }
 
@@ -256,5 +273,21 @@ public class TopCoinsActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == SEARCH_CURRENCY_REQUEST) && resultCode == (RESULT_OK)){
+            String currencyName = data.getStringExtra("CurrencyName");
+
+            if (currencyName != null) {
+                toSymbol = currencyName;
+
+                invalidateOptionsMenu();
+                updateActivity();
+            }
+        }
     }
 }
