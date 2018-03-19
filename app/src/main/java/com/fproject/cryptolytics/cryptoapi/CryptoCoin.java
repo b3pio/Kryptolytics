@@ -8,7 +8,7 @@ public class CryptoCoin {
     private String imageUrl;
     private String symbol;
     private String coinName;
-    private String fullName;
+    private String fullName; //
     private String algorithm;
     private String proofType;
     private String totalCoinSupply;

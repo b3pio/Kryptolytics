@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:paddingBottom="10dp">
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
 
 
     <ImageView
         android:id="@+id/image"
-        android:background="@color/colorTextLight"
+
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_alignParentStart="true"
@@ -25,39 +24,30 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:textColor="@color/colorTextLight"
+        android:textColor="@color/colorText"
         android:textSize="16sp"
-        android:text="SYM" />
+        android:text=" - " />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/image"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="35dp"
-        android:textColor="@color/colorTextLight"
+        android:textColor="@color/colorText"
         android:textSize="14sp"
         android:text=" - " />
 
     <TextView
-        android:id="@+id/marketCap"
+        android:id="@+id/volume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="COINSUpplY"
+        android:layout_alignParentTop="true"
+        android:text=" - "
         android:paddingTop="15dp"
         android:textSize="12sp"
         android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:id="@+id/coinSupply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/marketCap"
-        android:paddingTop="40dp"
-        android:layout_centerHorizontal="true"
-        android:text=" test "
-        android:textSize="12sp"/>
 
 
     <TextView
@@ -68,7 +58,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="15dp"
-        android:textColor="@color/colorTextLight"
+        android:textColor="@color/colorText"
         android:textSize="14sp"
         android:text=" - " />
 
@@ -80,8 +70,8 @@
         android:layout_alignTop="@+id/price"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="25dp"
-        android:textColor="@color/colorTextLight"
-        android:textSize="12sp"
+        android:textColor="@color/colorText"
+        android:textSize="14sp"
         android:textStyle="bold"
         android:text=""/>
 

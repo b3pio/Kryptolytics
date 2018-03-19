@@ -1,11 +1,14 @@
 package com.fproject.cryptolytics.topCoins;
 
+
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +23,73 @@ import java.util.List;
 /**
  * Created by chamu on 3/11/2018.
  */
+public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHolder>{
+    private List<WatchedItem> watchedItems;
+    private Context context = null;
+    public TopCoinsAdapter(Context context,List<WatchedItem> watchedItems){
+        this.watchedItems = watchedItems;
+        this.context = context;
+    }
 
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view =  LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row_top_coins, parent, false);
+
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        WatchedItem watchedItem = watchedItems.get(position);
+
+        CryptoCoin cryptoCoin     = watchedItem.getCryptoCoin();
+        CryptoCurrency cryptoCurrency = watchedItem.getCryptoCurrency();
+
+        viewHolder.tvSymbol.setText(cryptoCoin.getSymbol());
+        viewHolder.tvName.setText(cryptoCoin.getCoinName());
+        viewHolder.tvPrice.setText(cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol());
+        viewHolder.tvChange.setText(cryptoCurrency.getChangePercent() + "%");
+        viewHolder.tvVolume.setText(cryptoCurrency.getVolume());
+
+        if (cryptoCurrency.isChangePositive()) {
+
+
+            viewHolder.tvChange.setTextColor(ContextCompat.getColor(context,R.color.colorAscending));
+        }
+        else {
+            viewHolder.tvChange.setTextColor(ContextCompat.getColor(context,R.color.colorDescending));
+        }
+
+        new ImageDownloader(viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
+    }
+
+    @Override
+    public int getItemCount() {
+        return watchedItems.size();
+    }
+
+    public static class ViewHolder extends  RecyclerView.ViewHolder {
+        ImageView   ivImage;
+        TextView    tvSymbol;
+        TextView    tvName;
+        TextView    tvPrice;
+        TextView    tvChange;
+        TextView    tvVolume;
+
+        public ViewHolder(View view) {
+            super(view);
+
+            ivImage   = view.findViewById(R.id.image);
+            tvSymbol  = view.findViewById(R.id.symbol);
+            tvName    = view.findViewById(R.id.name);
+            tvPrice   = view.findViewById(R.id.price);
+            tvChange  = view.findViewById(R.id.changeValue);
+            tvVolume  = view.findViewById(R.id.volume);
+        }
+    }
+}
+/*
 public class TopCoinsAdapter  extends BaseAdapter  {
 
         private static class ViewHolder {
@@ -148,3 +217,4 @@ public class TopCoinsAdapter  extends BaseAdapter  {
 
     }
 }
+*/

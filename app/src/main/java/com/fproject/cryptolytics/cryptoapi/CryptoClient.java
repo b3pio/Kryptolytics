@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.fproject.cryptolytics.utility.FileUtility;
 import com.fproject.cryptolytics.utility.GsonUtility;
 
 import org.json.JSONObject;
@@ -24,13 +25,17 @@ import java.util.List;
  */
 public class CryptoClient {
     private final static String MODULE_TAG = "[CryptoClient]";
-    private final static String DATA_SERVER = "https://min-api.cryptocompare.com/data";
-    private final static String IMG_SERVER  = "https://www.cryptocompare.com";
+    public final static String DATA_SERVER  = "https://min-api.cryptocompare.com/data";
+    public final static String IMAGE_SERVER = "https://www.cryptocompare.com";
 
     private RequestQueue requestQueue;
 
     // Context for accessing the application assets and resources.
     private Context context;
+
+    // --------------------------------------------------------------------------------------------
+    //region  Constructor
+    // --------------------------------------------------------------------------------------------
 
     /**
      * Initializes a new instance of the {@link CryptoClient} class.
@@ -39,47 +44,84 @@ public class CryptoClient {
         this.context = context;
         this.requestQueue = Volley.newRequestQueue(context);
     }
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Public Methods
+    // --------------------------------------------------------------------------------------------
 
     /**
      * Requests the available {@link CryptoCoin} list.
      */
     public void getCryptoCoins(CryptoCallback callback) {
         String url  = DATA_SERVER + "/all/coinlist";
-        String file = Uri.encode(url);
 
-        // The list does not change very often so we can afford to cache it.
-
-        if (isFileCached(file)) {
-            Log.d(MODULE_TAG, "getCryptoCoinsFromCache()");
-            getCryptoCoinsFromCache(file, url, callback);
-        }
-        else {
-            Log.d(MODULE_TAG, "Loading Coins from Server.");
-            getCryptoCoinsFromServer(file, url, callback);
-        }
-
+        getResponse(url, FileUtility.CURRENT_DAY, callback);
     }
 
     /**
-     * Obtains {@link CryptoCoin} list from the cache.
+     * Requests the top {@link CryptoCoin} list.
      */
-    private void getCryptoCoinsFromCache(String file, String url, CryptoCallback callback) {
+    public void getTopCrytpoCoins(Integer count, String toSymbol, CryptoCallback callback) {
+        String url = DATA_SERVER + "/top/totalvol?limit=" + count.toString() + "&tsym=" + toSymbol;
+
+        getResponse(url, FileUtility.CURRENT_DAY, callback);
+    }
+
+    /**
+     * Requests the {@link CryptoCurrency}.
+     */
+    public void getCrytpoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
+        String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
+
+        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+    }
+
+    /**
+     * Requests the {@link CryptoRate} list.
+     */
+    public void getCrytpoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
+        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms="
+                            + fromSymbol + "," + TextUtils.join("," , toSymbols);
+
+        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Private Methods
+    // --------------------------------------------------------------------------------------------
+
+    private  void getResponse(String url, int period, CryptoCallback callback) {
+        String file = Uri.encode(url);
+
+        if (FileUtility.isFileCached(context, file, period)) {
+            Log.d(MODULE_TAG, "getResponseFromCache() " + url);
+            getResponseFromCache(file, callback);
+        }
+        else {
+            Log.d(MODULE_TAG, "getResponseFromServer()" + url);
+            getResponseFromServer(file, url, callback);
+        }
+    }
+
+    public void getResponseFromCache(String file, CryptoCallback callback) {
         JSONObject response = GsonUtility.fromFile(context, file);
 
         if (response != null) {
-
             callback.onSuccess(new CryptoData(response));
-
-        } else {
-
+        }
+        else {
             callback.onFailure("Could not load from disk!");
         }
     }
 
-    /**
-     * Obtains {@link CryptoCoin} list from the server.
-     */
-    private void getCryptoCoinsFromServer(String file, String url, CryptoCallback callback){
+    private void getResponseFromServer(String file, String url, CryptoCallback callback) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
@@ -88,86 +130,13 @@ public class CryptoClient {
                     callback.onSuccess(new CryptoData(response));
 
                 },
-                (VolleyError error)   -> {
-                    callback.onFailure(error.getMessage());
-                }
+                (VolleyError error)  -> callback.onFailure(error.getMessage())
         );
 
         requestQueue.add(request);
     }
 
-    /**
-     *
-     */
-    public void getCrytpoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback) {
-        String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
-
-        Log.d(MODULE_TAG, url);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                (JSONObject response) -> callback.onSuccess(new CryptoData(response)),
-                (VolleyError error)   -> callback.onFailure(error.getMessage())
-        );
-
-        requestQueue.add(request);
-
-    }
-
-    public void getCrytpoRate(String fromSymbol, String toSymbol, CryptoCallback callback) {
-        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms=" + toSymbol;
-
-        Log.d(MODULE_TAG, url);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                (JSONObject response) -> callback.onSuccess(new CryptoData(response,fromSymbol,toSymbol)),
-                (VolleyError error)   -> callback.onFailure(error.getMessage())
-        );
-
-        requestQueue.add(request);
-    }
-
-    public void getCrytpoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
-        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms=" + TextUtils.join(",", toSymbols);
-
-        Log.d(MODULE_TAG, url);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                (JSONObject response) -> callback.onSuccess(new CryptoData(response,fromSymbol,toSymbols)),
-                (VolleyError error)   -> callback.onFailure(error.getMessage())
-        );
-
-        requestQueue.add(request);
-    }
-
-    /**
-     * Returns true if the file exists and it was created today, otherwise returns false.
-     */
-    private boolean isFileCached(String fileName) {
-        File file = new File(context.getFilesDir(), fileName);
-        Log.d("FILENAME", file.getAbsolutePath());
-
-        if (file.exists()) {
-            Date today     = new Date();
-            Date fileDate  = new Date(file.lastModified());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(today);
-
-            int todaysDays = calendar.get(Calendar.DAY_OF_MONTH);
-            int todaysMonth = calendar.get(Calendar.MONTH);
-            int todaysYear  = calendar.get(Calendar.YEAR);
-
-            calendar.setTime(fileDate);
-            int filesDay = calendar.get(Calendar.DAY_OF_MONTH);
-            int filesMonth = calendar.get(Calendar.MONTH);
-            int filesYear  = calendar.get(Calendar.YEAR);
-
-            if ((todaysDays == filesDay) && (todaysMonth == filesMonth) && (todaysYear == filesYear)) {
-                return  true;
-            }
-        }
-
-        return false;
-    }
-
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 }

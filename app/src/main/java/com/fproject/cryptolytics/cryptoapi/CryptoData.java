@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.cryptoapi;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,33 +19,15 @@ import java.util.Map;
  */
 public class CryptoData {
     private static final String MODULE_TAG = "CryptoData";
-    private static final String IMAGE_URL  = "https://www.cryptocompare.com";
 
     // The JSON that contains the actual data; that will be parsed.
     private JSONObject   cryptoData;
-
-    // Info about the data contained in the JSON
-    private String       fromSymbol = null;
-    private String       toSymbol   = null;
-    private List<String> toSymbols  = null;
 
     // --------------------------------------------------------------------------------------------
     //region  Constructor
     // --------------------------------------------------------------------------------------------
     public CryptoData(JSONObject cryptoData) {
         this.cryptoData = cryptoData;
-    }
-
-    public CryptoData(JSONObject cryptoData, String fromSymbol, String toSymbol){
-        this.cryptoData = cryptoData;
-        this.fromSymbol = fromSymbol;
-        this.toSymbol   = toSymbol;
-    }
-
-    public CryptoData(JSONObject cryptoData, String fromSymbol, List<String> toSymbols) {
-        this.cryptoData  = cryptoData;
-        this.fromSymbol  = fromSymbol;
-        this.toSymbols   = toSymbols;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -62,22 +45,18 @@ public class CryptoData {
         List<CryptoCoin> topCoins = new ArrayList<>();
 
         try {
-            JSONObject jsonCoins = cryptoData.getJSONObject("Data");
-            Iterator<String> keys = jsonCoins.keys();
+            JSONArray jsonData = cryptoData.getJSONArray("Data");
 
-            while (keys.hasNext()) {
-                JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
+            for (Integer index = 0; index < jsonData.length(); index ++)   {
 
-                CryptoCoin cryptoCoin = getCryptoCoin(jsonCoin);
+                JSONObject jsonIndex  = jsonData.getJSONObject(index);
+                CryptoCoin cryptoCoin = getTopCryptoCoin(jsonIndex, index);
 
-                // We only need the Top 10 coins; ignore the rest of them.
-                if (cryptoCoin.getSortOrder() < 20){
-                    topCoins.add(cryptoCoin);
-                }
-           }
+                topCoins.add(cryptoCoin);
+            }
         }
         catch (JSONException ex) {
-            Log.d(MODULE_TAG, "getAsTopCoins(): " +  ex.toString());
+            Log.d(MODULE_TAG, "getAsTopCoinsByVolume(): " +  ex.toString());
         }
 
         Collections.sort(topCoins,CryptoCoin.SortOrderComparator);
@@ -110,47 +89,22 @@ public class CryptoData {
         return cryptoCoinList;
     }
 
-    /**
-     * Parses the {@link CryptoData} as a {@link CryptoRate}.
-     */
-    public CryptoRate getAsCryptoRate(){
-        CryptoRate cryptoRate = null;
-
-        if ((fromSymbol == null) || (toSymbol == null)) {
-            return cryptoRate;
-        }
-
-        try {
-            String rateStr = cryptoData.getString(toSymbol);
-            Double exRate = Double.valueOf(rateStr);
-
-            cryptoRate = new CryptoRate(fromSymbol, toSymbol, exRate);
-        }
-        catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoRate(): " +  exception.toString());
-        }
-
-        return cryptoRate;
-    }
-
-    /**
-     * Parses the {@link CryptoData} as {@link CryptoRate} collection.
-     */
-    public Map<String,CryptoRate> getAsCryptoRates(){
+    public Map<String,CryptoRate>  getAsCryptoRates(){
         Map<String,CryptoRate> cryptoRates = new HashMap();
 
-        if ((fromSymbol == null) || (toSymbols == null)) {
-            return cryptoRates;
-        }
+        String fromSymbol = cryptoData.keys().next();
+        Iterator<String> keys = cryptoData.keys();
 
-        for (String toSymbol:toSymbols) {
+        while (keys.hasNext()) {
             try {
-                String rateStr = cryptoData.getString(toSymbol);
-                Double exRate = Double.valueOf(rateStr);
+
+                String toSymbol = keys.next();
+                String rateStr  = cryptoData.getString(toSymbol);
+                Double exRate   = Double.valueOf(rateStr);
 
                 cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, exRate));
-
-            } catch (JSONException exception) {
+            }
+            catch (JSONException exception) {
                 Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
             }
         }
@@ -241,7 +195,7 @@ public class CryptoData {
             String imageUrl     = null;
 
             if (jsonCoin.has("ImageUrl")) {
-                imageUrl = IMAGE_URL + jsonCoin.getString("ImageUrl");
+                imageUrl = CryptoClient.IMAGE_SERVER + jsonCoin.getString("ImageUrl");
             }
 
             cryptoCoin = new CryptoCoin(name, imageUrl, symbol, coinName, fullName,
@@ -249,6 +203,39 @@ public class CryptoData {
         }
         catch (JSONException exception) {
             Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  exception.toString());
+        }
+
+        return cryptoCoin;
+    }
+
+    /**
+     * Parses a {@link CryptoCoin} from the specified {@link JSONObject}.
+     * @note
+     */
+    private CryptoCoin getTopCryptoCoin(JSONObject jsonObject, Integer sortOrder) {
+        CryptoCoin cryptoCoin = null;
+
+        Log.d("TESTING", jsonObject.toString());
+
+        try {
+            JSONObject jsonCoinInfo = jsonObject.getJSONObject("CoinInfo");
+
+            String name         = jsonCoinInfo.getString("Name");
+            String symbol       = jsonCoinInfo.getString("Name");
+            String coinName     = jsonCoinInfo.getString("FullName");
+            String algorithm    = jsonCoinInfo.getString("Algorithm");
+            String proofType    = jsonCoinInfo.getString("ProofType");
+            String imageUrl     = null;
+
+            if (jsonCoinInfo.has("ImageUrl")) {
+                imageUrl = CryptoClient.IMAGE_SERVER + jsonCoinInfo.getString("ImageUrl");
+            }
+
+            cryptoCoin = new CryptoCoin(name, imageUrl, symbol, coinName, null,
+                    algorithm, proofType, null, sortOrder);
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getTopCryptoCoin(): " +  exception.toString());
         }
 
         return cryptoCoin;

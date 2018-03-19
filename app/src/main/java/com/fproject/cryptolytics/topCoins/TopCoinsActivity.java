@@ -7,6 +7,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +57,10 @@ public class TopCoinsActivity extends AppCompatActivity
         //
         cryptoClient = new CryptoClient(this);
         //
+        //
+        //
+        setupComponents();
+        //
         // Listeners
         //
         setupListeners();
@@ -83,17 +90,42 @@ public class TopCoinsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void setupComponents(){
+        RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
+        recyclerView.setHasFixedSize(true);
+
+        // Disable auto measure, otherwise the item will not size correctly.
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setAutoMeasureEnabled(false);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                llm.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+
+
+        watchedItems = new ArrayList<>();
+        watchListAdapter = new TopCoinsAdapter(this,watchedItems);
+        recyclerView.setAdapter(watchListAdapter);
+        recyclerView.setLayoutManager( llm);
+    }
     /**
      * Populate the activity with data.
      */
     private void updateActivity(){
+        /*
         if (watchedItems == null) {
             watchedItems = new ArrayList<>();
-            watchListAdapter = new TopCoinsAdapter(this, watchedItems);
+            watchListAdapter = new TopCoinsAdapter(watchedItems);
 
-            ListView listView = (ListView) findViewById(R.id.lv_top_coins);
-            listView.setAdapter(watchListAdapter);
+            RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+            RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
+            recyclerView.setAdapter(watchListAdapter);
         }
+        */
 
         cryptoCoins      = new ArrayList<>();
         cryptoCurrencies = new HashMap<>();
@@ -105,7 +137,7 @@ public class TopCoinsActivity extends AppCompatActivity
      * Obtain the {@link CryptoCoin} data.
      */
     private void getCryptoCoinsCallback(){
-        cryptoClient.getCryptoCoins(new CryptoCallback() {
+        cryptoClient.getTopCrytpoCoins(20, "EUR", new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
 
