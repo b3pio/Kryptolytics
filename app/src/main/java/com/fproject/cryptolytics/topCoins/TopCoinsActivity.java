@@ -6,6 +6,7 @@ import android.os.Debug;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class TopCoinsActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final static int TOP_COINS_COUNT = 20;
     private final static int SEARCH_CURRENCY_REQUEST  = 2;
 
     // These provide data about the watched items.
@@ -49,7 +51,8 @@ public class TopCoinsActivity extends AppCompatActivity
     private Map<Integer,CryptoCurrency> cryptoCurrencies = null;
 
     // The currency to which to convert the coins.
-    private String toSymbol = "EUR";
+    private String  toSymbol  = "EUR";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,32 +76,6 @@ public class TopCoinsActivity extends AppCompatActivity
         //
         //
         updateActivity();
-    }
-
-    /**
-     * Hook up the event listeners.
-     */
-    private void setupListeners() {
-        //
-        // DrawerLayout
-        //
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        //
-        // Navigation View
-        //
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        //
-        // Adapter
-        //
-        topCoinsAdapter.setOnClickListener(
-                (view, position) -> { openDetailsActivity(topCoinsAdapter.getItem(position));}
-        );
     }
 
     /**
@@ -128,6 +105,41 @@ public class TopCoinsActivity extends AppCompatActivity
     }
 
     /**
+     * Hook up the event listeners.
+     */
+    private void setupListeners() {
+        //
+        // DrawerLayout
+        //
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        //
+        // Navigation View
+        //
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        //
+        // Adapter
+        //
+        topCoinsAdapter.setOnClickListener(
+                (view, position) -> { openDetailsActivity(topCoinsAdapter.getItem(position));}
+        );
+        //
+        // SwipeRefreshLayout
+        //
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(
+                () -> {
+                    updateActivity();
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+    }
+
+    /**
      * Populate the activity with data.
      */
     private void updateActivity(){
@@ -144,7 +156,7 @@ public class TopCoinsActivity extends AppCompatActivity
      * Obtain the {@link CryptoCoin} data.
      */
     private void getCryptoCoinsCallback(){
-        cryptoClient.getTopCrytpoCoins(20, toSymbol, new CryptoCallback() {
+        cryptoClient.getTopCrytpoCoins(TOP_COINS_COUNT, toSymbol, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
 

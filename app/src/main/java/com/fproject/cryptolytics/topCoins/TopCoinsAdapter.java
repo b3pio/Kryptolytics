@@ -63,10 +63,13 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         viewHolder.tvSymbol.setText(cryptoCoin.getSymbol());
         viewHolder.tvName.setText(cryptoCoin.getCoinName());
         viewHolder.tvPrice.setText(topCoin.getPriceStr());
-        viewHolder.tvChange.setText(topCoin.getChangePercentStr());
 
-        viewHolder.tvVolume.setText(cryptoCoin.getTotalCoinSupply());
+        viewHolder.tvChange.setText(topCoin.getChangePercentStr());
         viewHolder.tvChange.setTextColor(getChangeColor(cryptoCurrency.isChangePositive()));
+
+        viewHolder.tvAlgorithm.setText(cryptoCoin.getAlgorithm());
+        viewHolder.tvProofType.setText(cryptoCoin.getProofType());
+
 
         new ImageDownloader(viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
     }
@@ -80,11 +83,12 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView    tvSymbol;
-        TextView    tvName;
-        TextView    tvPrice;
-        TextView    tvChange;
-        TextView    tvVolume;
+        TextView tvSymbol;
+        TextView tvName;
+        TextView tvPrice;
+        TextView tvChange;
+        TextView tvAlgorithm;
+        TextView tvProofType;
 
         ImageView       ivImage;
         OnClickListener ocListener;
@@ -92,12 +96,13 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         public ViewHolder(View view, OnClickListener ocListener) {
             super(view);
 
-            ivImage = view.findViewById(R.id.image);
-            tvSymbol = view.findViewById(R.id.symbol);
-            tvName = view.findViewById(R.id.name);
-            tvPrice = view.findViewById(R.id.price);
-            tvChange = view.findViewById(R.id.changeValue);
-            tvVolume = view.findViewById(R.id.volume);
+            ivImage = view.findViewById(R.id.iv_image);
+            tvSymbol = view.findViewById(R.id.tv_symbol);
+            tvName = view.findViewById(R.id.tv_name);
+            tvPrice = view.findViewById(R.id.tv_price);
+            tvChange = view.findViewById(R.id.tv_changeValue);
+            tvAlgorithm = view.findViewById(R.id.tv_algorithm);
+            tvProofType = view.findViewById(R.id.tv_proofType);
 
             this.ocListener = ocListener;
             view.setOnClickListener(this);
@@ -105,6 +110,7 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
+
             if (ocListener != null) {
                 ocListener.onClick(view, getAdapterPosition());
             }
