@@ -15,7 +15,12 @@
         <activity
             android:name=".topCoins.TopCoinsActivity"
             android:label="@string/title_activity_top_coins"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar">
+
+
+
+        </activity>
+
 
 
         <activity
@@ -39,11 +44,23 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".searchCoin.SearchCoinActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.ActionBar"/>
 
         <activity
             android:name=".searchCurrency.SearchCurrencyActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="Currency"
+            android:theme="@style/AppTheme">
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable_currency" />
+
+
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".details.DetailsActivity"

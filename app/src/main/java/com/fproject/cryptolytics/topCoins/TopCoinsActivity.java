@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.topCoins;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,8 +23,10 @@ import com.fproject.cryptolytics.cryptoapi.CryptoClient;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
+import com.fproject.cryptolytics.details.DetailsActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
+import com.fproject.cryptolytics.watchlist.WatchedItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,6 +93,12 @@ public class TopCoinsActivity extends AppCompatActivity
         //
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //
+        // Adapter
+        //
+        topCoinsAdapter.setOnClickListener(
+                (view, position) -> { openDetailsActivity(topCoinsAdapter.getItem(position));}
+        );
     }
 
     /**
@@ -219,8 +228,7 @@ public class TopCoinsActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem menuItem = menu.findItem(R.id.action_settings);
-        //menuItem.setTitle(toSymbol);
-        menuItem.setTitle("Currency");
+        menuItem.setTitle(toSymbol);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -289,5 +297,18 @@ public class TopCoinsActivity extends AppCompatActivity
                 updateActivity();
             }
         }
+    }
+
+    /**
+     * Open activity with item details.
+     */
+    public void openDetailsActivity(TopCoin topCoin) {
+
+        Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+
+        intent.putExtra("fromSymbol", topCoin.getFromSymbol());
+        intent.putExtra("toSymbol", topCoin.getToSymbol());
+
+        startActivityForResult(intent, 3);
     }
 }

@@ -1,13 +1,20 @@
 package com.fproject.cryptolytics.searchCurrency;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+
 
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
@@ -27,11 +34,11 @@ public class SearchCurrencyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.content_search_currency);
 
         populateListView();
         setupListView();
-        setupSearchView();
     }
 
     private void populateListView(){
@@ -63,8 +70,23 @@ public class SearchCurrencyActivity extends AppCompatActivity {
         });
     }
 
-    private void setupSearchView() {
-        SearchView searchView = (SearchView) findViewById(R.id.search);
+    /**
+     * Close the activity an return the specified CoinName.
+     */
+    public void closeActivty(String currencyName){
+        Intent intent = new Intent();
+        intent.putExtra("CurrencyName", currencyName);
+        setResult(RESULT_OK,intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_search_currency, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -82,15 +104,14 @@ public class SearchCurrencyActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        return true;
     }
 
-    /**
-     * Close the activity an return the specified CoinName.
-     */
-    public void closeActivty(String currencyName){
-        Intent intent = new Intent();
-        intent.putExtra("CurrencyName", currencyName);
-        setResult(RESULT_OK,intent);
-        finish();
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
+
 }
