@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     tools:context="com.fproject.cryptolytics.converter.ConverterListFragment">
-    <!--
-    android:background="@color/colorPrimary"-->
+
+
+
     <ListView
 
         android:id="@+id/lv_converter"
@@ -20,5 +20,7 @@
         android:scrollingCache="false"
         android:animationCache="false"
         android:listSelector="@color/colorSelector"/>
+
+
 
 </FrameLayout>

@@ -89,8 +89,11 @@ public class CryptoData {
         return cryptoCoinList;
     }
 
+    /*
     public Map<String,CryptoRate>  getAsCryptoRates(){
         Map<String,CryptoRate> cryptoRates = new HashMap();
+
+        Log.d(MODULE_TAG, cryptoData.toString());
 
         String fromSymbol = cryptoData.keys().next();
         Iterator<String> keys = cryptoData.keys();
@@ -107,6 +110,31 @@ public class CryptoData {
             catch (JSONException exception) {
                 Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
             }
+        }
+
+        return cryptoRates;
+    }
+    */
+
+    public Map<String,CryptoRate>  getAsCryptoRates(){
+        Map<String,CryptoRate> cryptoRates = new HashMap();
+
+        try {
+            String fromSymbol = cryptoData.keys().next();
+            JSONObject jsonFromSymbol = cryptoData.getJSONObject(fromSymbol);
+            Iterator<String> keys = jsonFromSymbol.keys();
+
+            while (keys.hasNext()) {
+
+                String toSymbol = keys.next();
+                String rateStr = jsonFromSymbol.getString(toSymbol);
+                Double exRate = Double.valueOf(rateStr);
+
+                cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, exRate));
+            }
+        }
+        catch (JSONException exception) {
+                Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
         }
 
         return cryptoRates;

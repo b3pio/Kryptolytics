@@ -14,17 +14,17 @@
         android:orientation="vertical">
 
         <fragment
-            android:layout_weight="2.5"
+            android:layout_weight="1"
             android:id="@+id/fgt_convertlist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:name="com.fproject.cryptolytics.converter.ConverterListFragment"/>
 
         <fragment
-            android:layout_weight="1.5"
+            android:layout_weight="1.1"
             android:id="@+id/fgt_keyboard"
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="match_parent"
             android:name="com.fproject.cryptolytics.converter.KeyboardFragment"/>
 
     </LinearLayout>

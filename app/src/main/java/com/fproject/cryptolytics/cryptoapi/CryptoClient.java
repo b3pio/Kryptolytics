@@ -83,7 +83,7 @@ public class CryptoClient {
      * Requests the {@link CryptoRate} list.
      */
     public void getCrytpoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
-        String url = DATA_SERVER + "/price?fsym="+ fromSymbol + "&tsyms="
+        String url = DATA_SERVER + "/pricemulti?fsyms="+ fromSymbol + "&tsyms="
                             + fromSymbol + "," + TextUtils.join("," , toSymbols);
 
         getResponse(url, FileUtility.CURRENT_MINUTE, callback);

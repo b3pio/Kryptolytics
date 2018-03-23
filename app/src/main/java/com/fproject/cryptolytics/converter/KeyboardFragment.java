@@ -3,6 +3,7 @@ package com.fproject.cryptolytics.converter;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import com.fproject.cryptolytics.R;
 /**
  * A custom {@link Fragment} used for editing numerical values.
  */
-public class KeyboardFragment extends Fragment implements View.OnClickListener {
+public class KeyboardFragment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
     // The text is being modified using the keyboard.
     private String text = null;
@@ -83,6 +84,7 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
 
         Button btnDel = view.findViewById(R.id.btn_del);
         btnDel.setOnClickListener(this);
+        btnDel.setOnLongClickListener(this);
     }
 
     /**
@@ -119,7 +121,7 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
             return;
 
         String charStr = String.valueOf(view.getTag());
-
+        text = removeCommas(text);
 
         switch (charStr) {
             case "ZERO":
@@ -141,6 +143,28 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public boolean onLongClick(View view) {
+        if ((text == null) || (view.getTag() == null))
+            return true;
+
+        String charStr = String.valueOf(view.getTag());
+        text = removeCommas(text);
+
+        switch (charStr) {
+            case "DEL":
+                onDeleteLongClicked();
+                break;
+        }
+
+
+        if (textChangedListener != null) {
+            textChangedListener.onTextChanged(text);
+        }
+
+        return true;
+    }
+
     public void onDeleteClicked() {
         text = text.substring(0, text.length() - 1);
         text = text.isEmpty() ? "0" : text;
@@ -154,6 +178,9 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onZeroClicked(){
+        if (nrDecimals(text) > 7)
+            return;
+
         if (text.equals("0"))
             return;
 
@@ -161,12 +188,30 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener {
     }
 
     public void onNumberClicked(String number){
+        if (nrDecimals(text) > 7)
+            return;
+
         if (!text.equals("0")){
             text += String.valueOf(number);
         }
         else {
             text = String.valueOf(number);
         }
+    }
+
+    private int nrDecimals(String text){
+        int integerPlaces = text.indexOf('.');
+        int decimalPlaces = text.length() - integerPlaces - 1;
+
+        return decimalPlaces;
+    }
+
+    private String removeCommas(String text){
+        return text.replaceAll("," , "");
+    }
+
+    public void onDeleteLongClicked(){
+        text = "0";
     }
 
     /**

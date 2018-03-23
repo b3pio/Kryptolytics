@@ -153,6 +153,6 @@ public class ConverterActivity extends AppCompatActivity
             return;
 
         selectedItem.setValue(str);
-        converterListFragment.notifySetDataChanged();
+        converterListFragment.valueChanged();
     }
 }

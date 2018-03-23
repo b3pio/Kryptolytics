@@ -19,6 +19,7 @@ import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.cryptoapi.CryptoRate;
 import com.fproject.cryptolytics.database.DatabaseManager;
+import com.fproject.cryptolytics.utility.DecimalFormater;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,12 +27,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment for converting items.
+ *
+ * @note
  * Activities that contain this fragment must implement the
- * {@link OnConvertItemClickListener} interface
- * to handle interaction events.
- * Use the {@link ConverterListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * {@link OnConvertItemClickListener} interface.
  */
 public class ConverterListFragment extends Fragment {
     private final static String MODULE_TAG = "[ConverterListFragment]";
@@ -40,15 +40,15 @@ public class ConverterListFragment extends Fragment {
     private CryptoClient    cryptoClient    = null;
     private DatabaseManager databaseManager = null;
 
-    private String fromSymbol = new String();
-    private List<String> toSymbols = new ArrayList<>();
+    private String fromSymbol       = new String();
+    private List<String> toSymbols  = new ArrayList<>();
 
     // List of converter items.
     private List<ConverterItem> converterItems  = null;
     private ConverterItem       selectedItem    = null;
 
-    private Map<String,CryptoCoin>  cryptoCoins     = null;
-    private Map<String,CryptoRate>  cryptoRates     = null;
+    private Map<String,CryptoCoin>  cryptoCoins = null;
+    private Map<String,CryptoRate>  cryptoRates  = null;
 
     private ConverterListAdapter  converterListAdapter  = null;
 
@@ -63,6 +63,7 @@ public class ConverterListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_convert_list, container, false);
     }
@@ -101,7 +102,15 @@ public class ConverterListFragment extends Fragment {
         // Update
         //
         updateFragment();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(" Updating...");
+    }
+
+    private void setUpdating(boolean value) {
+        if (getActivity() == null)
+            return;
+
+        ((AppCompatActivity) getActivity())
+                .getSupportActionBar()
+                .setSubtitle(value ? getResources().getString(R.string.subtitle_update) : "");
     }
 
     /**
@@ -115,22 +124,30 @@ public class ConverterListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                selectedItem = converterListAdapter.getConveterItem(position);
-
-                clearValues();
-                updateValues();
-
-                if (convertItemClickListener != null) {
-                    convertItemClickListener.onConvertItemClicked(selectedItem);
-                }
+                convertItemClicked(position);
             }
         });
+    }
+
+    /**
+     * This method is called when an item in the ConverterList is clicked.
+     */
+    private void convertItemClicked(int position) {
+        selectedItem = converterListAdapter.getConveterItem(position);
+
+        clearValues();
+        updateValues();
+
+        if (convertItemClickListener != null) {
+            convertItemClickListener.onConvertItemClicked(selectedItem);
+        }
     }
 
     /**
      * Populate the fragment with data.
      */
     private void updateFragment(){
+        setUpdating(true);
         if (converterItems == null) {
 
             converterItems = new ArrayList<>();
@@ -139,8 +156,6 @@ public class ConverterListFragment extends Fragment {
             converterItems.add(new ConverterItem(2, "XRP", " - "));
             converterItems.add(new ConverterItem(3, "XMR", " - "));
 
-            //converterItems.add(new ConverterItem(3, "ETL", " - "));
-            //converterItems.add(new ConverterItem(4, "BTC", " - "));
 
             ListView listView = getView().findViewById(R.id.lv_converter);
             converterListAdapter  = new ConverterListAdapter(getContext(), converterItems);
@@ -154,25 +169,12 @@ public class ConverterListFragment extends Fragment {
         cryptoRates = new HashMap<>();
 
         getCryptoCoinsCallback();
-        //getCryptoRatesCallback();
+        getCryptoRatesCallback();
     }
 
-    private void updateFromSymbol(){
-        if (selectedItem != null) {
-            fromSymbol = selectedItem.getSymbol();
-        }
-        else {
-            fromSymbol = converterItems.get(0).getSymbol();
-        }
-    }
-
-    private void updateToSymbols(){
-        toSymbols = new ArrayList<>();
-
-        for(ConverterItem convertItem : converterItems) {
-            toSymbols.add(convertItem.getSymbol());
-        }
-    }
+    // --------------------------------------------------------------------------------------------
+    //region Crypto Methods
+    // --------------------------------------------------------------------------------------------
 
     /**
      * Obtain the {@link CryptoCoin} data.
@@ -181,16 +183,13 @@ public class ConverterListFragment extends Fragment {
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-
                 cryptoCoins = cryptoData.getAsCryptoCoins();
                 onCryptoDataRecevied();
-
-                Log.d(MODULE_TAG, "getCryptoCoinsCallback() - onSuccess()");
             }
 
             @Override
             public void onFailure(String cryptoError) {
-                Log.d(MODULE_TAG, "getCryptoCoinsCallback() - onFailure()");
+                setUpdating(false);
             }
         });
     }
@@ -205,26 +204,13 @@ public class ConverterListFragment extends Fragment {
         cryptoClient.getCrytpoRates(fromSymbol, toSymbols, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-
                 cryptoRates = cryptoData.getAsCryptoRates();
-
-                // Earlier request
-                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onSuccess()" + String.valueOf(cryptoRates.size()));
-
-
-                if (!cryptoRates.isEmpty()) {
-                    if (cryptoRates.entrySet().iterator().next().getValue().getFromSymbol().equals(fromSymbol)) {
-                        onCryptoDataRecevied();
-                    }
-                }
-
-
-                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onSuccess()");
+                onCryptoDataRecevied();
             }
 
             @Override
             public void onFailure(String cryptoError) {
-                Log.d(MODULE_TAG, "getCryptoRatesCallback() - onFailure()");
+                setUpdating(false);
             }
         });
     }
@@ -235,6 +221,7 @@ public class ConverterListFragment extends Fragment {
     private void onCryptoDataRecevied(){
         if (cryptoCoins.size() == 0) return;
         if (cryptoRates.size() == 0) return;
+        if (!areCryptoRatesCorrect()) return;
 
         for (ConverterItem item:converterItems) {
 
@@ -243,59 +230,109 @@ public class ConverterListFragment extends Fragment {
 
             CryptoRate cryptoRate = cryptoRates.get(item.getSymbol());
             item.setCryptoRate(cryptoRate);
-
-            /*
-            Log.d(MODULE_TAG, "[" + item.getSymbol() + "][" +
-                cryptoRate.getFromSymbol() +  " -> " +
-                cryptoRate.getToSymbol()   +  " : " +
-                String.valueOf(cryptoRate.getExRate()) + "]");
-            */
         }
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle("");
-
-        if (selectedItem == null)
+        if (selectedItem == null) {
             selectedItem = converterItems.get(0);
+        }
 
         computeValues();
         converterListAdapter.notifyDataSetChanged();
+        setUpdating(false);
     }
-
-    public void notifySetDataChanged(){
-
-        computeValues();
-        converterListAdapter.notifyDataSetChanged();
-    }
-
 
     /**
-     * Update the values of the {@link ConverterItem} list.
+     * Determines whether is crypto rates are for current request.
      */
-    public void computeValues() {
-        if (cryptoRates.isEmpty())
-            return;
+    private boolean areCryptoRatesCorrect() {
 
-        // Convert the value to universal currency.
-        String valueStr  =   selectedItem.getValue();
-        Double selectedValue  = Double.valueOf(valueStr);
+        // Maybe an earlier request.
+        if (!cryptoRates.get(fromSymbol).getFromSymbol().equals(fromSymbol)) {
+            cryptoRates.clear();
+            return false;
+        }
 
-        for (ConverterItem converterItem:converterItems) {
+        return true;
+    }
 
-            Double newValue =selectedValue * converterItem.getCryptoRate().getExRate();
-            newValue = Math.round(newValue * 100000000D)/100000000D;
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 
-            converterItem.setValue(String.valueOf(newValue) + " " +  converterItem.getCryptoRate().getToSymbol());
+    // --------------------------------------------------------------------------------------------
+    //region Symbol Methods
+    // --------------------------------------------------------------------------------------------
+
+    private void updateFromSymbol(){
+        if (selectedItem != null) {
+            fromSymbol = selectedItem.getSymbol();
+        }
+        else {
+            if (!converterItems.isEmpty()) {
+                fromSymbol = converterItems.get(0).getSymbol();
+            }
+            else {
+                fromSymbol = new String();
+            }
         }
     }
 
-    public void updateValues(){
+    private void updateToSymbols(){
+        toSymbols = new ArrayList<>();
+
+        for(ConverterItem convertItem : converterItems) {
+            toSymbols.add(convertItem.getSymbol());
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Value Manipulation Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Update the values of the {@link ConverterItem} collection.
+     */
+    private void updateValues(){
         updateToSymbols();
         updateFromSymbol();
 
         getCryptoRatesCallback();
     }
 
-    public void clearValues() {
+    /**
+     * Calculate the values of the {@link ConverterItem} collection.
+     */
+    private void computeValues() {
+        if (cryptoRates.isEmpty())
+            return;
+
+        // Convert from the value of the selected item to the other ones.
+        String valueStr = selectedItem.getValue();
+        Double value = Double.valueOf(selectedItem.getValue());
+
+        // Format the selected value properly
+        String formatedStr = DecimalFormater.formatString(valueStr);
+        selectedItem.setValue(formatedStr);
+
+        for (ConverterItem converterItem : converterItems) {
+            if (converterItem == selectedItem)
+                continue;
+
+            Double newValue = value * converterItem.getExRate();
+            String formatedValue = DecimalFormater.formatDouble(newValue);
+
+            converterItem.setValue(formatedValue);
+        }
+    }
+
+    /**
+     * Clear the values of the {@link ConverterItem} collection.
+     */
+    private void clearValues() {
         cryptoRates.clear();
 
         for (ConverterItem converterItem:converterItems) {
@@ -303,22 +340,41 @@ public class ConverterListFragment extends Fragment {
             converterItem.setCryptoRate(null);
         }
 
-        selectedItem.setValue("1.0");
+        selectedItem.setValue("1.00");
         converterListAdapter.notifyDataSetChanged();
     }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Public Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Call this method when the value of the selected item changes, and
+     * the other values need to be recalculated.
+     */
+    public void valueChanged(){
+
+        computeValues();
+        converterListAdapter.notifyDataSetChanged();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnConvertItemClickListener {
-        // TODO: Update argument type and name
+
+        // This method is called when an item in the ConverterList is clicked.
         void onConvertItemClicked(ConverterItem converterItem);
     }
 }

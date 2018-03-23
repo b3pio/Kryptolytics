@@ -26,7 +26,6 @@ import java.util.List;
 public class ConverterListAdapter extends BaseAdapter  {
 
     public static class ViewHolder {
-        TextView tvSymbol;
         TextView tvName;
         TextView tvValue;
         ImageView ivImage;
@@ -76,17 +75,19 @@ public class ConverterListAdapter extends BaseAdapter  {
         ConverterItem item  = (ConverterItem) getItem(position);
         ViewHolder viewHolder  = (ViewHolder) view.getTag();
 
-        viewHolder.tvSymbol.setText(item.getSymbol());
-        viewHolder.tvValue.setText(item.getValue());
+        viewHolder.tvValue.setText(item.getValueStr());
 
         if (item.getCrpytoCoin() != null) {
             viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
-        }
-
-        if (item.isLoaded()) {
             viewHolder.imageDownloader = new ImageDownloader(viewHolder.ivImage);
             viewHolder.imageDownloader.execute(item.getCrpytoCoin().getImageUrl());
         }
+
+
+
+        //int viewHeight = (parent.getHeight() / converterItems.size()) -1 ;
+        //view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, viewHeight));
+
 
         return view;
     }
@@ -102,7 +103,7 @@ public class ConverterListAdapter extends BaseAdapter  {
 
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvSymbol = view.findViewById(R.id.tv_symbol);
+
         viewHolder.tvName   = view.findViewById(R.id.tv_name);
         viewHolder.tvValue  = view.findViewById(R.id.tv_value);
         viewHolder.ivImage   = view.findViewById(R.id.iv_image);

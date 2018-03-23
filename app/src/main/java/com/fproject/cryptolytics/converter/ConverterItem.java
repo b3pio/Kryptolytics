@@ -33,6 +33,14 @@ public class ConverterItem {
         return value;
     }
 
+    public String getValueStr(){
+        if (value.equals(" - ")) {
+            return value;
+        }
+
+        return  value + " " + symbol;
+    }
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -51,6 +59,14 @@ public class ConverterItem {
 
     public void setCrpytoCoin(CryptoCoin crpytoCoin) {
         this.crpytoCoin = crpytoCoin;
+    }
+
+    public Double getExRate(){
+        if (cryptoRate != null){
+            return cryptoRate.getExRate();
+        }
+
+        return Double.NaN;
     }
 
     public boolean isLoaded(){
