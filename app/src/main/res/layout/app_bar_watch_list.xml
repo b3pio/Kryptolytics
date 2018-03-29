@@ -22,6 +22,8 @@
 
     <include layout="@layout/content_watch_list" />
 
+
+    <!--
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -32,5 +34,6 @@
 
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_add_item" />
+        -->
 
 </android.support.design.widget.CoordinatorLayout>

@@ -10,12 +10,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fproject.cryptolytics.utility.FileUtility;
-import com.fproject.cryptolytics.utility.GsonUtility;
+import com.fproject.cryptolytics.utility.JsonUtils;
 
 import org.json.JSONObject;
-import java.io.File;
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
 
 /**
@@ -111,7 +109,7 @@ public class CryptoClient {
     }
 
     public void getResponseFromCache(String file, CryptoCallback callback) {
-        JSONObject response = GsonUtility.fromFile(context, file);
+        JSONObject response = JsonUtils.fromFile(context, file);
 
         if (response != null) {
             callback.onSuccess(new CryptoData(response));
@@ -126,7 +124,7 @@ public class CryptoClient {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
 
-                    GsonUtility.toFile(context, response, file);
+                    JsonUtils.toFile(context, response, file);
                     callback.onSuccess(new CryptoData(response));
 
                 },

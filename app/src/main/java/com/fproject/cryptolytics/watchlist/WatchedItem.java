@@ -78,4 +78,18 @@ public class WatchedItem {
 
         return true;
     }
+
+    public String getPriceStr(){
+        if ((cryptoCurrency == null) || (cryptoCurrency == null))
+            return new String();
+
+        return cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
+    }
+
+    public String getChangePercentStr(){
+        if ((cryptoCurrency == null) || (cryptoCurrency == null))
+            return new String();
+
+        return cryptoCurrency.getChangePercent() + "%";
+    }
 }

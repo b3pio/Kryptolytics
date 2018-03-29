@@ -3,7 +3,11 @@ package com.fproject.cryptolytics.watchlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.ContextMenu;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.fproject.cryptolytics.AboutActivity;
 import com.fproject.cryptolytics.converter.ConverterActivity;
@@ -30,6 +32,7 @@ import com.fproject.cryptolytics.details.DetailsActivity;
 import com.fproject.cryptolytics.searchCoin.SearchCoinActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +53,8 @@ public class WatchListActivity extends AppCompatActivity
     private Map<String,CryptoCoin>    cryptoCoins      = null;
     private Map<Long,CryptoCurrency>  cryptoCurrencies = null;
 
-    private WatchedItem       newItem          = null;
-    private WatchListAdapter  watchListAdapter = null;
+    private WatchedItem       newItem         = null;
+    private WatchListAdapter watchListAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +66,18 @@ public class WatchListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //
-        // Components
+        //
+        //
+        watchedItems = new ArrayList<>();
+        //
+        //
         //
         cryptoClient = new CryptoClient(this);
         databaseManager = new DatabaseManager(this);
+        //
+        //
+        //
+        setupComponents();
         //
         // Listeners
         //
@@ -77,27 +88,39 @@ public class WatchListActivity extends AppCompatActivity
         updateActivity();
     }
 
+    private void setupComponents(){
+        RecyclerView recyclerView = findViewById(R.id.rv_watch_list);
+        recyclerView.setHasFixedSize(true);
+        //
+        // LayoutManager
+        //
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setAutoMeasureEnabled(false);
+        recyclerView.setLayoutManager(layoutManager);
+        //
+        // ItemDecoration
+        //
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        //
+        // Adapter
+        //
+        watchListAdapter = new WatchListAdapter(this, watchedItems);
+        recyclerView.setAdapter(watchListAdapter);
+     }
+
     /**
      * Hook up the event listeners.
      */
     private void setupListeners(){
         //
-        // FloatingActionButton
-        //
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openSearchCoinsActivity();
-            }
-        });
-        //
         // DrawerLayout
         //
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         //
@@ -106,32 +129,76 @@ public class WatchListActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //
-        // ListView
+        // FloatingActionButton
         //
-        ListView listView = (ListView) findViewById(R.id.lv_watchlist);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*
+        FloatingActionButton button = findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                openDetailsActivity(watchListAdapter.getWatchedItem(i));
+            public void onClick(View view) {
+                openSearchCoinsActivity();
             }
         });
-        registerForContextMenu(listView);
+        */
+        //
+        //  OnClickListener
+        //
+        watchListAdapter.setOnClickListener(new WatchListAdapter.OnClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WatchedItem item = watchListAdapter.getWatchedItem(position);
+                openWatchedItemDetails(item);
+            }
+        });
+        //
+        // SwipeRefreshLayout
+        //
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setRefreshing(true);
+                updateActivity();
+            }
+        });
+        //
+        //  ItemTouchHelper
+        //
+        RecyclerView recyclerView = findViewById(R.id.rv_watch_list);
+        ItemTouchHelper helper = createItemTouchHelper();
+        helper.attachToRecyclerView(recyclerView);
+    }
+
+    /**
+     * Create the {@link ItemTouchHelper} that will be attached to the {@link RecyclerView}.
+     */
+    private ItemTouchHelper createItemTouchHelper(){
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                // We need this because Android is crap.
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                WatchedItem item = watchListAdapter.getWatchedItem(viewHolder.getAdapterPosition());
+                removeWatchedItem(item);
+            }
+        };
+        return new ItemTouchHelper(callback);
     }
 
     /**
      * Populate the activity with data.
      */
     private void updateActivity(){
-        if (watchedItems == null) {
-            watchedItems = databaseManager.getWatchListTable().getItems();
-            watchListAdapter = new WatchListAdapter(this, watchedItems);
+        watchedItems.clear();
+        watchedItems.addAll(databaseManager.getWatchListTable().getItems());
+        watchListAdapter.notifyDataSetChanged();
 
-            ListView listView = (ListView) findViewById(R.id.lv_watchlist);
-            listView.setAdapter(watchListAdapter);
-        }
-
-        cryptoCoins      = new HashMap<String,CryptoCoin>();
-        cryptoCurrencies = new HashMap<Long,CryptoCurrency>();
+        cryptoCoins      = new HashMap<>();
+        cryptoCurrencies = new HashMap<>();
 
         getCryptoCoinsCallback();
         getCryptoCurrenciesCallback();
@@ -145,12 +212,12 @@ public class WatchListActivity extends AppCompatActivity
             @Override
             public void onSuccess(CryptoData cryptoData) {
                 cryptoCoins = cryptoData.getAsCryptoCoins();
-                updateActivityData();
+                onCryptoDataRecevied();
             }
 
             @Override
             public void onFailure(String cryptoError) {
-
+                setRefreshing(false);
             }
         });
     }
@@ -164,7 +231,7 @@ public class WatchListActivity extends AppCompatActivity
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
                     cryptoCurrencies.put(item.getItemId(), cryptoData.getAsCryptoCurrency());
-                    updateActivityData();
+                    onCryptoDataRecevied();
                 }
 
                 @Override
@@ -178,12 +245,11 @@ public class WatchListActivity extends AppCompatActivity
     /**
      * Determines weather all the requested data has arrived and updates the WatchList.
      */
-    private void updateActivityData(){
+    private void onCryptoDataRecevied(){
         if ((cryptoCurrencies.size() != watchedItems.size()) || (cryptoCoins.size() == 0))
             return;
 
         for (WatchedItem item:watchedItems) {
-
             CryptoCoin cryptoCoin = cryptoCoins.get(item.getFromSymbol());
             item.setCryptoCoin(cryptoCoin);
 
@@ -192,6 +258,7 @@ public class WatchListActivity extends AppCompatActivity
         }
 
         watchListAdapter.notifyDataSetChanged();
+        setRefreshing(false);
     }
 
     @Override
@@ -204,32 +271,13 @@ public class WatchListActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo
-            menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.watch_list_cab,menu);
 
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+    private void setRefreshing(boolean value){
+       SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
 
-        WatchedItem item = watchListAdapter.getWatchedItem(info.position);
-        menu.setHeaderTitle(item.getFromSymbol() + " - " + item.getToSymbol());
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.action_remove:
-                    removeWatchedItem(watchListAdapter.getWatchedItem(info.position));
-                    break;
-
-            case R.id.action_details:
-                    openWatchedItemDetails(watchListAdapter.getWatchedItem(info.position));
-                    break;
-        }
-        return super.onContextItemSelected(item);
+       if (value != swipeRefreshLayout.isRefreshing()) {
+           swipeRefreshLayout.setRefreshing(value);
+       }
     }
 
     /**
@@ -242,8 +290,9 @@ public class WatchListActivity extends AppCompatActivity
         watchedItems.add(newItem);
         watchListAdapter.notifyDataSetChanged();
 
-        ListView listView = (ListView) findViewById(R.id.lv_watchlist);
-        listView.smoothScrollToPosition(watchListAdapter.getCount() - 1);
+        RecyclerView recyclerView = findViewById(R.id.rv_watch_list);
+        recyclerView.smoothScrollToPosition(watchListAdapter.getItemCount() - 1);
+
         updateActivity();
     }
 
@@ -252,9 +301,7 @@ public class WatchListActivity extends AppCompatActivity
      */
     private void removeWatchedItem(WatchedItem item){
         databaseManager.getWatchListTable().remove(item.getItemId());
-
-        watchedItems.remove(item);
-        watchListAdapter.notifyDataSetChanged();
+        watchListAdapter.remove(item);
     }
 
     private void openWatchedItemDetails(WatchedItem item){
@@ -278,7 +325,7 @@ public class WatchListActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            updateActivity();
+            openSearchCoinsActivity();
             return true;
         }
 
@@ -374,4 +421,5 @@ public class WatchListActivity extends AppCompatActivity
             }
         }
     }
+
 }

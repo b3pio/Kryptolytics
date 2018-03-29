@@ -1,19 +1,14 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fproject.cryptolytics.R;
-import com.fproject.cryptolytics.utility.ExtTextView;
 import com.fproject.cryptolytics.utility.ImageDownloader;
 
 import java.util.ArrayList;

@@ -19,8 +19,8 @@ import java.io.Writer;
  *
  * @author lSzathmary
  */
-public class GsonUtility {
-    private final static  String TAG = "[GsonUtility]";
+public class JsonUtils {
+    private final static  String TAG = "[JsonUtils]";
 
     /**
      * Saves a {@link JSONObject} to file.
