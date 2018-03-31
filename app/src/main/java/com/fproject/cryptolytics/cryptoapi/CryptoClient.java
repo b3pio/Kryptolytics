@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class CryptoClient {
     private final static String MODULE_TAG = "[CryptoClient]";
-    public final static String DATA_SERVER  = "https://min-api.cryptocompare.com/data";
-    public final static String IMAGE_SERVER = "https://www.cryptocompare.com";
+    public  final static String DATA_SERVER  = "https://min-api.cryptocompare.com/data";
+    public  final static String IMAGE_SERVER = "https://www.cryptocompare.com";
 
     private RequestQueue requestQueue;
 

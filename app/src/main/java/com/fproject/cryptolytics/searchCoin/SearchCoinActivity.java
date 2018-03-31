@@ -39,7 +39,7 @@ public class SearchCoinActivity extends AppCompatActivity {
         //
         cryptoClient = new CryptoClient(this);
         //
-        //
+        // Data
         //
         populateActivty();
     }

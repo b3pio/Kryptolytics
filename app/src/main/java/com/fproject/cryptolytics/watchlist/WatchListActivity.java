@@ -380,6 +380,8 @@ public class WatchListActivity extends AppCompatActivity
      */
     public void openSearchCurrencyActivity() {
         Intent intent = new Intent(getApplicationContext(), SearchCurrencyActivity.class);
+
+        intent.putExtra("backButton", false);
         startActivityForResult(intent, SEARCH_CURRENCY_REQUEST);
     }
 
