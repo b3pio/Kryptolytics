@@ -217,6 +217,7 @@ public class TopCoinsActivity extends AppCompatActivity
      */
     public void openSearchCurrencyActivity() {
         Intent intent = new Intent(getApplicationContext(), SearchCurrencyActivity.class);
+        intent.putExtra("showBackButton", true);
         startActivityForResult(intent, SEARCH_CURRENCY_REQUEST);
     }
 

@@ -113,6 +113,7 @@ public class CryptoClient {
 
         if (response != null) {
             callback.onSuccess(new CryptoData(response));
+
         }
         else {
             callback.onFailure("Could not load from disk!");

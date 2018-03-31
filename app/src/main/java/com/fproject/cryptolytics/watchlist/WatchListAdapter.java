@@ -17,17 +17,13 @@ import com.fproject.cryptolytics.utility.ImageDownloader;
 
 import java.util.List;
 
-/**
- * Created by chamu on 3/26/2018.
- */
 
 public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.ViewHolder> {
-    private List<WatchedItem> watchedItems;
-
-    private OnClickListener ocListener = null;
+    private OnClickListener     ocListener;
+    private List<WatchedItem>   watchedItems;
 
     // Context for accessing the application assets and resources.
-    private Context context  = null;
+    private Context context;
 
 
     public WatchListAdapter(Context context, List<WatchedItem> watchedItems) {
@@ -48,15 +44,11 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
         return watchedItems.get(position);
     }
 
-    public void remove(int position){
-        watchedItems.remove(position);
-        this.notifyItemRemoved(position);
-    }
-
-    public void remove(WatchedItem watchedItem){
+    public void removeItem(WatchedItem watchedItem) {
         int position = watchedItems.indexOf(watchedItem);
+
         watchedItems.remove(position);
-        this.notifyItemRemoved(position);
+        notifyItemRemoved(position);
     }
 
     @Override
@@ -70,25 +62,51 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         WatchedItem watchedItem = getWatchedItem(position);
-        viewHolder.tvSymbol.setText(watchedItem.getFromSymbol());
 
         if (watchedItem.isLoaded()) {
-            CryptoCoin cryptoCoin = watchedItem.getCryptoCoin();
-            CryptoCurrency cryptoCurrency = watchedItem.getCryptoCurrency();
-
-            viewHolder.tvName.setText(cryptoCoin.getCoinName());
-
-            String priceStr = cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
-            viewHolder.tvPrice.setText(priceStr);
-
-            String changePercentStr = cryptoCurrency.getChangePercent() + "%";
-            viewHolder.tvChange.setText(changePercentStr);
-
-            Integer changeColor = getChangeColor(cryptoCurrency.isChangePositive());
-            viewHolder.tvChange.setTextColor(changeColor);
-
-            bindImage(viewHolder, cryptoCoin.getImageUrl());
+            loadViewHolder(viewHolder, watchedItem);
         }
+        else {
+            clearViewHolder(viewHolder, watchedItem);
+        }
+    }
+
+    /**
+     * Load the data into the {@link ViewHolder}.
+     */
+    private void loadViewHolder(ViewHolder viewHolder, WatchedItem watchedItem) {
+
+        CryptoCoin cryptoCoin = watchedItem.getCryptoCoin();
+        CryptoCurrency cryptoCurrency = watchedItem.getCryptoCurrency();
+
+        viewHolder.tvSymbol.setText(watchedItem.getFromSymbol());
+        viewHolder.tvName.setText(cryptoCoin.getCoinName());
+
+        String priceStr = cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
+        viewHolder.tvPrice.setText(priceStr);
+
+        String changePercentStr = cryptoCurrency.getChangePercent() + "%";
+        viewHolder.tvChange.setText(changePercentStr);
+
+        Integer changeColor = getChangeColor(cryptoCurrency.isChangePositive());
+        viewHolder.tvChange.setTextColor(changeColor);
+
+        bindImage(viewHolder, cryptoCoin.getImageUrl());
+    }
+
+    /**
+     * Clear the data into the {@link ViewHolder}.
+     */
+    private void clearViewHolder(ViewHolder viewHolder, WatchedItem watchedItem) {
+        if (viewHolder.imageDownloader != null)  {
+            viewHolder.imageDownloader.cancel(true);
+        }
+
+        viewHolder.tvSymbol.setText(watchedItem.getFromSymbol());
+        viewHolder.ivImage.setImageDrawable(null);
+        viewHolder.tvName.setText(" - ");
+        viewHolder.tvPrice.setText(" - ");
+        viewHolder.tvChange.setText("");
     }
 
     private void bindImage(ViewHolder viewHolder, String imageUrl){
@@ -101,12 +119,18 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
     }
 
     private int getChangeColor(boolean positive) {
+
         if (positive) {
-            return ContextCompat.getColor(context, R.color.colorPositive);
-        } else {
+           return ContextCompat.getColor(context, R.color.colorPositive);
+        }
+        else {
             return ContextCompat.getColor(context, R.color.colorNegative);
         }
     }
+
+    // --------------------------------------------------------------------------------------------
+    //region ViewHolder
+    // --------------------------------------------------------------------------------------------
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivImage;
@@ -140,9 +164,20 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region OnClickListener
+    // --------------------------------------------------------------------------------------------
+
     public interface OnClickListener {
         void onClick(View view, int position);
     }
 
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 }
 

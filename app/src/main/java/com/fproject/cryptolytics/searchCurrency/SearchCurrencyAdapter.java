@@ -122,7 +122,6 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
             }
 
             return results;
-
         }
 
         /**

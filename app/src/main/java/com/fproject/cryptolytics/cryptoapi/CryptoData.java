@@ -89,33 +89,9 @@ public class CryptoData {
         return cryptoCoinList;
     }
 
-    /*
-    public Map<String,CryptoRate>  getAsCryptoRates(){
-        Map<String,CryptoRate> cryptoRates = new HashMap();
-
-        Log.d(MODULE_TAG, cryptoData.toString());
-
-        String fromSymbol = cryptoData.keys().next();
-        Iterator<String> keys = cryptoData.keys();
-
-        while (keys.hasNext()) {
-            try {
-
-                String toSymbol = keys.next();
-                String rateStr  = cryptoData.getString(toSymbol);
-                Double exRate   = Double.valueOf(rateStr);
-
-                cryptoRates.put(toSymbol, new CryptoRate(fromSymbol, toSymbol, exRate));
-            }
-            catch (JSONException exception) {
-                Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
-            }
-        }
-
-        return cryptoRates;
-    }
-    */
-
+    /**
+     * Parses the {@link CryptoData} as a {@link CryptoRate} collection.
+     */
     public Map<String,CryptoRate>  getAsCryptoRates(){
         Map<String,CryptoRate> cryptoRates = new HashMap();
 
@@ -141,7 +117,7 @@ public class CryptoData {
     }
 
     /**
-     * Parses the {@link CryptoData} as a  {@link CryptoCurrency}.
+     * Parses the {@link CryptoData} as a {@link CryptoCurrency}.
      */
     public CryptoCurrency getAsCryptoCurrency() {
         CryptoCurrency cryptoCurrency = null;
@@ -194,6 +170,52 @@ public class CryptoData {
         }
 
         return cryptoCurrency;
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region  Parsing Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Parses the {@link CryptoData} as a {@link String} message.
+     */
+    public String getAsCryptoMessage(){
+        String message = null;
+
+        try {
+
+            message = cryptoData.getString("Message");
+
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getAsCryptoMessage(): " +  exception.toString());
+        }
+
+        return message;
+    }
+
+    /**
+     * Determine whether the {@link CryptoData} is an error message
+     */
+    public boolean isErrorMessage(){
+        String response = new String();
+
+        try {
+
+            if (cryptoData.has("Response")) {
+                response = cryptoData.getString("Response");
+            }
+
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getAsCryptoMessage(): " +  exception.toString());
+        }
+
+        return response.contains("Error");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -275,6 +297,7 @@ public class CryptoData {
 
         return cryptoCoin;
     }
+
     // --------------------------------------------------------------------------------------------
     //endregion
     // --------------------------------------------------------------------------------------------
