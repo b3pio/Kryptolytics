@@ -13,6 +13,9 @@
     <string name="title_activity_converter">Converter</string>
     <string name="title_activity_top_coins">Top Coins</string>
 
+    <string name="title_activity_search_coin">Coin</string>
+    <string name="title_activity_search_currency">Currency</string>
+
     <string name="subtitle_update">Updating</string>;
     <string name="subtitle_empty"></string>;
 

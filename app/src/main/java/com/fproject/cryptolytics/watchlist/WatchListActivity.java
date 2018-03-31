@@ -2,7 +2,6 @@ package com.fproject.cryptolytics.watchlist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -212,7 +211,7 @@ public class WatchListActivity extends AppCompatActivity
             @Override
             public void onSuccess(CryptoData cryptoData) {
                 cryptoCoins = cryptoData.getAsCryptoCoins();
-                onCryptoDataRecevied();
+                onCryptoDataReceived();
             }
 
             @Override
@@ -231,7 +230,7 @@ public class WatchListActivity extends AppCompatActivity
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
                     cryptoCurrencies.put(item.getItemId(), cryptoData.getAsCryptoCurrency());
-                    onCryptoDataRecevied();
+                    onCryptoDataReceived();
                 }
 
                 @Override
@@ -245,7 +244,7 @@ public class WatchListActivity extends AppCompatActivity
     /**
      * Determines weather all the requested data has arrived and updates the WatchList.
      */
-    private void onCryptoDataRecevied(){
+    private void onCryptoDataReceived(){
         if ((cryptoCurrencies.size() != watchedItems.size()) || (cryptoCoins.size() == 0))
             return;
 

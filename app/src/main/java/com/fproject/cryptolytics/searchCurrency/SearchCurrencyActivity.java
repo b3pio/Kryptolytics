@@ -10,17 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SearchView;
-
+import android.support.v7.widget.SearchView;
 
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.utility.ResourceHelper;
 
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * Activity for searching between the list of traditional currencies (like Euro, Dollar...)
@@ -70,6 +68,7 @@ public class SearchCurrencyActivity extends AppCompatActivity {
             currencyList.add(currency.getKey() + " - " + currency.getValue());
         }
 
+        Collections.sort(currencyList);
         ListView listView = findViewById(R.id.lv_search_currency);
         searchCurrencyAdapter = new SearchCurrencyAdapter(this, currencyList);
         listView.setAdapter(searchCurrencyAdapter);
@@ -82,16 +81,16 @@ public class SearchCurrencyActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.lv_search_currency);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String symbol = searchCurrencyAdapter.getSymbolAt(position);
-                closeActivty(symbol);
+                closeActivity(symbol);
             }
         });
     }
 
     @NonNull
-    private SearchView.OnQueryTextListener createOnQueryTextListener() {
+    private SearchView.OnQueryTextListener createSearchViewListener() {
         return new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -113,7 +112,7 @@ public class SearchCurrencyActivity extends AppCompatActivity {
     /**
      * Close the activity an return the specified CoinName.
      */
-    private void closeActivty(String currencyName){
+    private void closeActivity(String currencyName){
         Intent intent = new Intent();
         intent.putExtra("CurrencyName", currencyName);
 
@@ -135,9 +134,9 @@ public class SearchCurrencyActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_search_currency, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
 
-        searchView.setOnQueryTextListener(createOnQueryTextListener());
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(createSearchViewListener());
 
         return true;
     }

@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
- public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
+public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
+
     // --------------------------------------------------------------------------------------------
     //region ViewHolder
     // --------------------------------------------------------------------------------------------
@@ -104,6 +105,7 @@ import java.util.List;
     // --------------------------------------------------------------------------------------------
     //region CurrencyFilter
     // --------------------------------------------------------------------------------------------
+
     private class CurrencyFilter extends Filter {
 
         @Override
@@ -111,6 +113,7 @@ import java.util.List;
             FilterResults results = new FilterResults();
 
             if ((constraint == null) || (constraint.length() == 0))  {
+
                 results.count = currencies.size();
                 results.values = currencies;
             }
@@ -143,8 +146,7 @@ import java.util.List;
         }
 
         @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
+        protected void publishResults(CharSequence constraint, FilterResults results) {
 
             filteredCurrencies = (List) results.values;
             notifyDataSetChanged();
