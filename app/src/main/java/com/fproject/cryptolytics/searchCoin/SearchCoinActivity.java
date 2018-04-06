@@ -42,6 +42,10 @@ public class SearchCoinActivity extends AppCompatActivity {
         //
         cryptoClient = new CryptoClient(this);
         //
+        // Activity
+        //
+        setupActivity();
+        //
         // Listeners
         //
         setupListeners();
@@ -54,6 +58,14 @@ public class SearchCoinActivity extends AppCompatActivity {
     // --------------------------------------------------------------------------------------------
     //region Private Methods
     // --------------------------------------------------------------------------------------------
+
+    /**
+     * Configure the activity.
+     */
+    private void setupActivity() {
+        Boolean showBackButton = getIntent().getBooleanExtra("showBackButton", false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton);
+    }
 
     /**
      * Populate the activity with data.
@@ -159,6 +171,12 @@ public class SearchCoinActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setOnQueryTextListener(createSearchViewListener());
 
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
         return true;
     }
 

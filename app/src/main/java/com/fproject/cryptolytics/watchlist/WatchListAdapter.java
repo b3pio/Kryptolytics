@@ -132,7 +132,7 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
     //region ViewHolder
     // --------------------------------------------------------------------------------------------
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivImage;
         TextView  tvSymbol;
         TextView  tvName;
@@ -157,6 +157,8 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
 
         @Override
         public void onClick(View view) {
+
+           
 
             if (ocListener != null) {
                 ocListener.onClick(view, getAdapterPosition());

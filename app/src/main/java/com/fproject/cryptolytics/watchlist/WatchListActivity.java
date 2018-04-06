@@ -154,7 +154,6 @@ public class WatchListActivity extends AppCompatActivity
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //showSwipeRefresh();
                 updateActivity();
             }
         });

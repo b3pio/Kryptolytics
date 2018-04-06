@@ -51,6 +51,9 @@ public class WatchListTable {
         onCreate(database);
     }
 
+    /**
+     * Add an item to the table.
+     */
     public long add(String fromSymbol, String toSymbol){
         ContentValues values = new ContentValues();
 
@@ -60,6 +63,9 @@ public class WatchListTable {
         return databaseManager.getWritableDatabase().insert(TABLE_WATCHLIST, null, values);
     }
 
+    /**
+     * Remove an item from the table.
+     */
     public void remove(long id){
         SQLiteDatabase database = databaseManager.getWritableDatabase();
 
