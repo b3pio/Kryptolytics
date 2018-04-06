@@ -3,9 +3,11 @@ package com.fproject.cryptolytics.converter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,6 +136,16 @@ public class ConverterListFragment extends Fragment {
      */
     private void setupListeners() {
         //
+        // SwipeRefreshLayout
+        //
+        SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateFragment();
+            }
+        });
+        //
         //  OnClickListener
         //
        converterListAdapter.setOnClickListener(new ConverterListAdapter.OnClickListener() {
@@ -215,6 +227,21 @@ public class ConverterListFragment extends Fragment {
 
         databaseManager.getConverterTable().add(symbol);
         updateFragment();
+    }
+
+    /**
+     * Stop the refresh animation.
+     */
+    private void hideSwipeRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                SwipeRefreshLayout swipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        }, 1000);
     }
 
     /**
@@ -322,7 +349,7 @@ public class ConverterListFragment extends Fragment {
 
             @Override
             public void onFailure(String cryptoError) {
-
+                hideSwipeRefresh();
             }
         });
     }
@@ -343,7 +370,7 @@ public class ConverterListFragment extends Fragment {
 
             @Override
             public void onFailure(String cryptoError) {
-
+                hideSwipeRefresh();
             }
         });
     }
@@ -375,6 +402,7 @@ public class ConverterListFragment extends Fragment {
 
         computeValues();
         converterListAdapter.notifyDataSetChanged();
+        hideSwipeRefresh();
     }
 
     /**

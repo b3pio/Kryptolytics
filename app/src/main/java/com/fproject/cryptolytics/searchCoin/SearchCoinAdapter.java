@@ -96,7 +96,7 @@ public class SearchCoinAdapter extends BaseAdapter implements Filterable {
     private ViewHolder createViewHolder(View view) {
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvName =  view.findViewById(R.id.fullName);
+        viewHolder.tvName =  view.findViewById(R.id.tv_name);
         view.setTag(viewHolder);
 
         return viewHolder;

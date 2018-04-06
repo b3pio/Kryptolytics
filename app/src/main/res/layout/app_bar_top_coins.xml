@@ -22,5 +22,4 @@
 
     <include layout="@layout/content_top_coins" />
 
-
 </android.support.design.widget.CoordinatorLayout>

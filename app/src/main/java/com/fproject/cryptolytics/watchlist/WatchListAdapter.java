@@ -145,11 +145,11 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
         public ViewHolder(View view, OnClickListener ocListener) {
             super(view);
 
-            ivImage   = view.findViewById(R.id.image);
-            tvSymbol  = view.findViewById(R.id.symbol);
-            tvName    = view.findViewById(R.id.name);
-            tvPrice   = view.findViewById(R.id.price);
-            tvChange  = view.findViewById(R.id.changeValue);
+            ivImage   = view.findViewById(R.id.iv_image);
+            tvSymbol  = view.findViewById(R.id.tv_symbol);
+            tvName    = view.findViewById(R.id.tv_name);
+            tvPrice   = view.findViewById(R.id.tv_price);
+            tvChange  = view.findViewById(R.id.tv_changeValue);
 
             this.ocListener = ocListener;
             view.setOnClickListener(this);
@@ -157,9 +157,6 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
 
         @Override
         public void onClick(View view) {
-
-           
-
             if (ocListener != null) {
                 ocListener.onClick(view, getAdapterPosition());
             }

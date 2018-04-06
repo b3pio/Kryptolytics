@@ -82,7 +82,7 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
 
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.row_search_coin, null);
+            view = inflater.inflate(R.layout.row_search_currency, null);
 
             createViewHolder(view);
         }
@@ -96,7 +96,7 @@ public class SearchCurrencyAdapter extends BaseAdapter implements Filterable {
     private ViewHolder createViewHolder(View view){
         ViewHolder viewHolder = new ViewHolder();
 
-        viewHolder.tvName = view.findViewById(R.id.fullName);
+        viewHolder.tvName = view.findViewById(R.id.tv_name);
         view.setTag(viewHolder);
 
         return viewHolder;

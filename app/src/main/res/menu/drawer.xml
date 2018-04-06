@@ -5,7 +5,6 @@
 
     <group android:checkableBehavior="single">
 
-
         <item
             android:id="@+id/nav_watchlist"
             android:icon="@drawable/ic_menu_watch_list"
@@ -18,12 +17,14 @@
 
         <item
             android:id="@+id/nav_converter"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Converter" />
+            android:icon="@drawable/ic_menu_converter"
+            android:title="@string/title_activity_converter" />
+
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_about"
-            android:title="About" />
+            android:title="@string/title_activity_about" />
+
     </group>
 
 </menu>

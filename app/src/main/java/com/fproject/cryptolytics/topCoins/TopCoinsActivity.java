@@ -2,7 +2,6 @@ package com.fproject.cryptolytics.topCoins;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +26,6 @@ import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.details.DetailsActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
-import com.fproject.cryptolytics.watchlist.WatchedItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -234,13 +232,13 @@ public class TopCoinsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
+        getMenuInflater().inflate(R.menu.top_coins, menu);
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.action_settings);
+        MenuItem menuItem = menu.findItem(R.id.action_currency);
         menuItem.setTitle(toSymbol);
 
         return super.onPrepareOptionsMenu(menu);
@@ -254,7 +252,7 @@ public class TopCoinsActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_currency) {
             openSearchCurrencyActivity();
             return true;
         }

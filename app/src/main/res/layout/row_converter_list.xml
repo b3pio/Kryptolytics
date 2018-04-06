@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:paddingBottom="20dp">
 
-
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="24dp"
@@ -28,7 +27,6 @@
         android:text=" - "
         android:textColor="@color/colorText"
         android:textSize="14sp"/>
-
 
     <TextView
         android:focusable="false"

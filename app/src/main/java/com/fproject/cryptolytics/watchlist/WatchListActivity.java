@@ -61,6 +61,7 @@ public class WatchListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_activity_watch_list);
         setContentView(R.layout.activity_watch_list);
         //
         // Components
@@ -390,7 +391,7 @@ public class WatchListActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
+        if (id == R.id.action_add) {
             openSearchCoinsActivity();
             return true;
         }
