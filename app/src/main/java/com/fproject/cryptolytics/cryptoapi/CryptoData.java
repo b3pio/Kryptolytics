@@ -172,6 +172,32 @@ public class CryptoData {
         return cryptoCurrency;
     }
 
+    /**
+     * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
+     */
+    public List<CryptoHistory> getAsCryptoHistories(){
+        List<CryptoHistory> cryptoHistories = new ArrayList<>();
+
+        try {
+            JSONArray jsonData = cryptoData.getJSONArray("Data");
+
+            for (Integer index = 0; index < jsonData.length(); index ++)   {
+
+                JSONObject jsonIndex  = jsonData.getJSONObject(index);
+                CryptoHistory cryptoHistory = getCryptoHistory(jsonIndex,index);
+
+                cryptoHistories.add(cryptoHistory);
+            }
+        }
+        catch (JSONException ex) {
+            Log.d(MODULE_TAG, "getAsCryptoHistories(): " +  ex.toString());
+        }
+
+        Collections.sort(cryptoHistories, CryptoHistory.SortOrderComparator);
+
+        return cryptoHistories;
+    }
+
     // --------------------------------------------------------------------------------------------
     //endregion
     // --------------------------------------------------------------------------------------------
@@ -260,12 +286,9 @@ public class CryptoData {
 
     /**
      * Parses a {@link CryptoCoin} from the specified {@link JSONObject}.
-     * @note
      */
     private CryptoCoin getTopCryptoCoin(JSONObject jsonObject, Integer sortOrder) {
         CryptoCoin cryptoCoin = null;
-
-        Log.d("TESTING", jsonObject.toString());
 
         try {
             JSONObject jsonCoinInfo = jsonObject.getJSONObject("CoinInfo");
@@ -296,6 +319,46 @@ public class CryptoData {
         }
 
         return cryptoCoin;
+    }
+
+    /**
+     * Parses a {@link CryptoHistory} from the specified {@link JSONObject}.
+     */
+    private CryptoHistory getCryptoHistory(JSONObject jsonObject, Integer sortOrder) {
+        CryptoHistory cryptoHistory = null;
+
+        try {
+
+            String timeStr = jsonObject.getString("time");
+            float time = Float.valueOf(timeStr);
+
+            String closeStr = jsonObject.getString("close");
+            float close = Float.valueOf(closeStr);
+
+            String highStr = jsonObject.getString("high");
+            float high = Float.valueOf(highStr);
+
+            String lowStr = jsonObject.getString("low");
+            float low = Float.valueOf(lowStr);
+
+            String openStr = jsonObject.getString("open");
+            float open = Float.valueOf(openStr);
+
+            String volumeFromStr = jsonObject.getString("volumefrom");
+            float volumeFrom = Float.valueOf(volumeFromStr);
+
+            String volumeToStr = jsonObject.getString("volumeto");
+            float volumeTo = Float.valueOf(volumeToStr);
+
+            cryptoHistory = new CryptoHistory(time, close, high, low, open,
+                    volumeFrom, volumeTo, sortOrder);
+
+        }
+        catch (JSONException exception) {
+            Log.d(MODULE_TAG, "getCryptoHistory(): " +  exception.toString());
+        }
+
+        return cryptoHistory;
     }
 
     // --------------------------------------------------------------------------------------------

@@ -361,7 +361,7 @@ public class ConverterListFragment extends Fragment {
         if (fromSymbol.isEmpty() || toSymbols.isEmpty())
             return;
 
-        cryptoClient.getCrytpoRates(fromSymbol, toSymbols, new CryptoCallback() {
+        cryptoClient.getCryptoRates(fromSymbol, toSymbols, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
                 cryptoRates = cryptoData.getAsCryptoRates();

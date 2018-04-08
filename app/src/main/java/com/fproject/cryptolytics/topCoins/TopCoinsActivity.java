@@ -154,7 +154,7 @@ public class TopCoinsActivity extends AppCompatActivity
      * Obtain the {@link CryptoCoin} data.
      */
     private void getCryptoCoinsCallback(){
-        cryptoClient.getTopCrytpoCoins(TOP_COINS_COUNT, toSymbol, new CryptoCallback() {
+        cryptoClient.getTopCryptoCoins(TOP_COINS_COUNT, toSymbol, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
 
@@ -174,7 +174,7 @@ public class TopCoinsActivity extends AppCompatActivity
      */
     private void getCryptoCurrenciesCallback() {
         for(CryptoCoin cryptoCoin:cryptoCoins) {
-            cryptoClient.getCrytpoCurrency(cryptoCoin.getSymbol(), toSymbol, new CryptoCallback() {
+            cryptoClient.getCryptoCurrency(cryptoCoin.getSymbol(), toSymbol, new CryptoCallback() {
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
 

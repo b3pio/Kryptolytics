@@ -7,6 +7,7 @@
     <string name="action_add">Add</string>
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
+    <string name="action_chart">Chart</string>
 
     <string name="title_activity_watch_list">Watchlist</string>
     <string name="title_activity_about">About</string>
@@ -14,5 +15,7 @@
     <string name="title_activity_top_coins">Top Coins</string>
     <string name="title_activity_search_coin">Coin</string>
     <string name="title_activity_search_currency">Currency</string>
+    <string name="title_activity_chart">Daily Chart</string>
+    <string name="title_activity_details">Details</string>
 
 </resources>

@@ -77,11 +77,8 @@ public class CryptoCoin {
             Integer sortOrder1 = cryptoCoin1.getSortOrder();
             Integer sortOrder2 = cryptoCoin2.getSortOrder();
 
-            //ascending order
+            // Ascending order
             return sortOrder1.compareTo(sortOrder2);
-
-            //descending order
-            //return StudentName2.compareTo(StudentName1);
         }
     };
 

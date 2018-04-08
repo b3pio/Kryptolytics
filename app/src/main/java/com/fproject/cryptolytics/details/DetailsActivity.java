@@ -1,8 +1,10 @@
 package com.fproject.cryptolytics.details;
 
-import android.graphics.Color;
+import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +41,7 @@ public class DetailsActivity extends AppCompatActivity {
         // Action Bar
         //
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        //getSupportActionBar().setTitle("");
         getSupportActionBar().setElevation(0);
         //
         //  Components
@@ -81,7 +83,7 @@ public class DetailsActivity extends AppCompatActivity {
      * Obtain the {@link CryptoCurrency} data.
      */
     private void getCryptoCurrencyCallback(){
-        cryptoClient.getCrytpoCurrency(fromSymbol, toSymbol, new CryptoCallback() {
+        cryptoClient.getCryptoCurrency(fromSymbol, toSymbol, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
                 cryptoCurrency =  cryptoData.getAsCryptoCurrency();
@@ -100,6 +102,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         ImageView ivImage = findViewById(R.id.image);
         new ImageDownloader(ivImage).execute(cryptoCoin.getImageUrl());
+
+        //getSupportActionBar().setTitle(cryptoCoin.getCoinName());
 
         TextView tvName = findViewById(R.id.name);
         tvName.setText(cryptoCoin.getFullName());
@@ -134,28 +138,67 @@ public class DetailsActivity extends AppCompatActivity {
         String changePercentStr = cryptoCurrency.getChangePercent() + "%";
         tvChangePercent.setText(changePercentStr);
 
-        if (cryptoCurrency.isChangePositive()) {
-            tvChangePercent.setTextColor(Color.GREEN);
-            tvChangeValue.setTextColor(Color.GREEN);
-        }
-        else {
-            tvChangePercent.setTextColor(Color.RED);
-            tvChangeValue.setTextColor(Color.RED);
-        }
+        int color = getChangeColor(cryptoCurrency.isChangePositive());
+        tvChangePercent.setTextColor(color);
+        tvChangeValue.setTextColor(color);
 
         TextView tvSupply = findViewById(R.id.supply);
         tvSupply.setText(cryptoCurrency.getSupply());
 
+        /*
         TextView tvMarket = findViewById(R.id.market);
         tvMarket.setText(cryptoCurrency.getMarket());
+        */
+
 
         TextView tvMarketCap = findViewById(R.id.marketCap);
         tvMarketCap.setText(cryptoCurrency.getMarketCap());
     }
 
+
+
+    private int getChangeColor(boolean positive) {
+
+        if (positive) {
+            return ContextCompat.getColor(this, R.color.colorPositive);
+        }
+        else {
+            return ContextCompat.getColor(this, R.color.colorNegative);
+        }
+    }
+
+    /**
+     * Open activity with item details.
+     */
+    public void openChartActivity() {
+
+        Intent intent = new Intent(getApplicationContext(), ChartActivity.class);
+
+        intent.putExtra("fromSymbol", fromSymbol);
+        intent.putExtra("toSymbol", toSymbol);
+
+        startActivityForResult(intent, 3);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //region Override Methods
+    // --------------------------------------------------------------------------------------------
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.details, menu);
+
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.action_chart:
+                openChartActivity();
+                return true;
 
             case android.R.id.home:
                 onBackPressed();
@@ -170,4 +213,8 @@ public class DetailsActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 }

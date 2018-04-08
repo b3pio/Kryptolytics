@@ -8,29 +8,30 @@
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="70dp"
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="15dp"/>
 
         <TextView
             android:id="@+id/name"
+            android:layout_alignParentTop="true"
             android:layout_toEndOf="@id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
             android:text= " - "
             android:textColor="@color/colorTextLight"
-            android:textSize="20sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/price"
@@ -38,23 +39,23 @@
             android:layout_below="@id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
             android:text= " - "
             android:textColor="@color/colorTextLight"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/changePercent"
-            android:layout_below="@id/name"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:text= " - "
             android:textColor="@color/colorTextLight"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
@@ -67,6 +68,7 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
@@ -83,7 +85,7 @@
                     android:text="Change:"
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Space
                     android:layout_width="30dp"/>
@@ -93,61 +95,7 @@
                     android:text= " - "
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:text="High:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp"/>
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/high"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp"/>
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:text="Low:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp"/>
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/low"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </TableRow>
-
-            <TableRow>
-                <TextView
-                    android:text="Open:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/open"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </TableRow>
 
             <TableRow>
@@ -155,7 +103,7 @@
                     android:text="Volume:"
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Space
                     android:layout_width="30dp"/>
@@ -165,9 +113,103 @@
                     android:text= " - "
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </TableRow>
 
+            <TableRow>
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="10dp"/>
+            </TableRow>
+            <TableRow>
+                <TextView
+                    android:text="High:"
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp"/>
+
+                <Space
+                    android:layout_width="30dp"/>
+
+                <TextView
+                    android:id="@+id/high"
+                    android:text= " - "
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:text="Low:"
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp"/>
+
+                <Space
+                    android:layout_width="30dp"/>
+
+                <TextView
+                    android:id="@+id/low"
+                    android:text= " - "
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:text="Open:"
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="30dp"/>
+
+                <TextView
+                    android:id="@+id/open"
+                    android:text= " - "
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp" />
+            </TableRow>
+
+
+
+
+            <TableRow>
+                <Space
+                    android:layout_width="55dp"
+                    android:layout_height="10dp"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Supply:"
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="30dp"/>
+
+                <TextView
+                    android:id="@+id/supply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:padding="5dp"
+                    android:textColor="@color/colorText"
+                    android:textSize="14sp" />
+            </TableRow>
+
+
+
+
+            <!--
             <TableRow>
                 <TextView
                     android:layout_width="wrap_content"
@@ -189,6 +231,7 @@
                     android:textColor="@color/colorText"
                     android:textSize="16sp" />
             </TableRow>
+            -->
 
             <TableRow>
                 <TextView
@@ -197,7 +240,7 @@
                     android:text="Market Cap:"
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <Space
                     android:layout_width="30dp"/>
@@ -209,50 +252,29 @@
                     android:text=" - "
                     android:padding="5dp"
                     android:textColor="@color/colorText"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
             </TableRow>
 
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Supply:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/supply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </TableRow>
 
         </TableLayout>
 
         </RelativeLayout>
     </ScrollView>
 
-    <!-- Footer -->
+
     <RelativeLayout
         android:id="@+id/footer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:gravity="center">
 
         <TextView
             android:id="@+id/lastUpdate"
-            android:padding="5dp"
+            android:layout_margin="10dp"
             android:textColor="@color/colorTextLight"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 

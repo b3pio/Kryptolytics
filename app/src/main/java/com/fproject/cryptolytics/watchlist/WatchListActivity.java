@@ -226,7 +226,7 @@ public class WatchListActivity extends AppCompatActivity
      */
     private void getCryptoCurrenciesCallback() {
         for(WatchedItem item:watchedItems) {
-            cryptoClient.getCrytpoCurrency(item.getFromSymbol(), item.getToSymbol(), new CryptoCallback() {
+            cryptoClient.getCryptoCurrency(item.getFromSymbol(), item.getToSymbol(), new CryptoCallback() {
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
 

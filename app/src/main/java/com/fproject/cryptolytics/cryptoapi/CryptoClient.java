@@ -62,7 +62,7 @@ public class CryptoClient {
     /**
      * Requests the top {@link CryptoCoin} list.
      */
-    public void getTopCrytpoCoins(Integer count, String toSymbol, CryptoCallback callback) {
+    public void getTopCryptoCoins(Integer count, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/top/totalvol?limit=" + count.toString() + "&tsym=" + toSymbol;
 
         getResponse(url, FileUtility.CURRENT_DAY, callback);
@@ -71,7 +71,7 @@ public class CryptoClient {
     /**
      * Requests the {@link CryptoCurrency}.
      */
-    public void getCrytpoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
+    public void getCryptoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
         String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
 
         getResponse(url, FileUtility.CURRENT_MINUTE, callback);
@@ -80,9 +80,19 @@ public class CryptoClient {
     /**
      * Requests the {@link CryptoRate} list.
      */
-    public void getCrytpoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
+    public void getCryptoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
         String url = DATA_SERVER + "/pricemulti?fsyms="+ fromSymbol + "&tsyms="
                             + fromSymbol + "," + TextUtils.join("," , toSymbols);
+
+        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+    }
+
+
+    /**
+     * Requests the {@link CryptoHistory}.
+     */
+    public void getCryptoHistories(String fromSymbol, String toSymbol, CryptoCallback callback) {
+        String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol + "&tsym=" + toSymbol + "&limit=30";
 
         getResponse(url, FileUtility.CURRENT_MINUTE, callback);
     }
