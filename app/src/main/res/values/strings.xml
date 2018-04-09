@@ -18,4 +18,10 @@
     <string name="title_activity_chart">Daily Chart</string>
     <string name="title_activity_details">Details</string>
 
+    <string name="common_version">Version 0.1.1</string>
+    <string name="about_feedback">Send FeedBack</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_mp_chart">MP Android Chart</string>
+    <string name="about_crypto_compare">Powered by CryptoCompare</string>
+
 </resources>

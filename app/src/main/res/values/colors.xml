@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#2B547E</color>
     <color name="colorPrimaryLight">#ffffff</color>
+    <color name="colorPrimaryMenu">#696767</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#ff8c40</color>
     <color name="colorAccentLight">#1c4066</color>
@@ -14,4 +15,5 @@
     <color name="colorNegative">#ff732d</color>
     <color name="colorChartMain">#f47f19</color>
     <color name="colorChartText">#979393</color>
+
 </resources>
