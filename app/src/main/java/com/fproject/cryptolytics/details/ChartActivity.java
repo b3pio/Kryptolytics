@@ -3,6 +3,7 @@ package com.fproject.cryptolytics.details;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.cryptoapi.CryptoHistory;
 import com.fproject.cryptolytics.utility.DateFormatter;
+import com.fproject.cryptolytics.utility.DecimalFormatter;
 import com.fproject.cryptolytics.utility.ImageDownloader;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -43,6 +45,8 @@ public class ChartActivity extends AppCompatActivity {
     private CryptoCoin          cryptoCoin;
 
     private TextView  tvPrice;
+    private TextView  tvHigh;
+    private TextView  tvLow;
     private TextView  tvTime;
     private LineChart lineChart;
 
@@ -77,13 +81,20 @@ public class ChartActivity extends AppCompatActivity {
      */
     private void setupActivity() {
         tvPrice = findViewById(R.id.tv_price);
+        tvHigh = findViewById(R.id.tv_high);
+        tvLow = findViewById(R.id.tv_low);
         tvTime  = findViewById(R.id.tv_time);
+        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
+        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
         //
         // Toolbar
         //
         //getSupportActionBar().setTitle("");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
+
+        //setupActionBar();
         //
         // Params
         //
@@ -93,6 +104,18 @@ public class ChartActivity extends AppCompatActivity {
         // Chart
         //
         setupChart();
+    }
+
+
+    private void setupActionBar(){
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar_details);
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //
+        //  Activity Title
+        //
+        //tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
     }
 
     /**
@@ -201,11 +224,18 @@ public class ChartActivity extends AppCompatActivity {
     private void updateHeader() {
         if (cryptoCoin == null) return;
 
+
+        /*
+        TextView tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
+        tvTitle.setText(cryptoCoin.getCoinName());
+        */
+        getSupportActionBar().setTitle(cryptoCoin.getCoinName());
+
         ImageView ivImage = findViewById(R.id.iv_image);
         new ImageDownloader(ivImage).execute(cryptoCoin.getImageUrl());
 
         TextView tvName = findViewById(R.id.tv_name);
-        tvName.setText(cryptoCoin.getFullName());
+        tvName.setText(cryptoCoin.getSymbol());
     }
 
     /**
@@ -239,6 +269,7 @@ public class ChartActivity extends AppCompatActivity {
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
         lineChart.invalidate();
+        lineChart.setScaleEnabled(false);
 
         selectedChanged(cryptoHistories.get(cryptoHistories.size() - 1));
     }
@@ -247,11 +278,17 @@ public class ChartActivity extends AppCompatActivity {
      * This method has to be called when the selected value on the chart has changed.
      */
     private void selectedChanged(CryptoHistory cryptoHistory) {
-        String priceStr = cryptoHistory.getClose() + " " + toSymbol;
+        String priceStr = DecimalFormatter.formatFloat(cryptoHistory.getClose()) + " " + toSymbol;
         tvPrice.setText(priceStr);
 
         String timeStr = DateFormatter.format(cryptoHistory.getTime());
         tvTime.setText(timeStr);
+
+        String highStr = DecimalFormatter.formatFloat(cryptoHistory.getHigh()) + " ";
+        tvHigh.setText(highStr);
+
+        String lowStr = DecimalFormatter.formatFloat(cryptoHistory.getLow()) +  " ";
+        tvLow.setText(lowStr);
     }
 
     // --------------------------------------------------------------------------------------------

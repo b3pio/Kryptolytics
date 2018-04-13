@@ -2,10 +2,12 @@ package com.fproject.cryptolytics.details;
 
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +35,9 @@ public class DetailsActivity extends AppCompatActivity {
     private CryptoCoin      cryptoCoin     = null;
     private CryptoCurrency  cryptoCurrency = null;
 
+    // The title of the Activity
+    private TextView tvTitle = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +45,19 @@ public class DetailsActivity extends AppCompatActivity {
         //
         // Action Bar
         //
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //getSupportActionBar().setTitle("");
+        //getSupportActionBar().setTitle("BTC | RON");
+
+        //setupActionBar();
+        /*
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar_details);
+        */
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getSupportActionBar().setElevation(0);
+
         //
         //  Components
         //
@@ -51,6 +66,18 @@ public class DetailsActivity extends AppCompatActivity {
         //
         //
         updateActivity();
+    }
+
+
+    private void setupActionBar(){
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.action_bar_details);
+        getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //
+        //  Activity Title
+        //
+        tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
     }
 
     private void updateActivity(){
@@ -103,10 +130,20 @@ public class DetailsActivity extends AppCompatActivity {
         ImageView ivImage = findViewById(R.id.image);
         new ImageDownloader(ivImage).execute(cryptoCoin.getImageUrl());
 
+
+        //tvTitle.setText(cryptoCoin.getCoinName());
+        getSupportActionBar().setTitle(cryptoCoin.getCoinName());
+
+
+        //getSupportActionBar().setTitle(cryptoCoin.getCoinName() + "|" + toSymbol);
+
         //getSupportActionBar().setTitle(cryptoCoin.getCoinName());
 
+        //getSupportActionBar().setTitle(fromSymbol +  " | " + toSymbol) ;
+
         TextView tvName = findViewById(R.id.name);
-        tvName.setText(cryptoCoin.getFullName());
+        //tvName.setText(cryptoCoin.getFullName());
+        tvName.setText(cryptoCoin.getSymbol());
 
         TextView tvPrice = findViewById(R.id.price);
         String priceStr = cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
@@ -115,10 +152,13 @@ public class DetailsActivity extends AppCompatActivity {
         TextView tvHigh = findViewById(R.id.high);
         String highStr = cryptoCurrency.getHigh()+ " " + cryptoCurrency.getToSymbol();
         tvHigh.setText(highStr);
+        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
+
 
         TextView tvLow = findViewById(R.id.low);
         String lowStr = cryptoCurrency.getLow()+ " " + cryptoCurrency.getToSymbol();
         tvLow.setText(lowStr);
+        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
 
         TextView tvOpen = findViewById(R.id.open);
         String openStr = cryptoCurrency.getOpen() + " " + cryptoCurrency.getToSymbol();
@@ -153,6 +193,12 @@ public class DetailsActivity extends AppCompatActivity {
 
         TextView tvMarketCap = findViewById(R.id.marketCap);
         tvMarketCap.setText(cryptoCurrency.getMarketCap());
+
+        TextView tvAlgorithm = findViewById(R.id.tv_algorithm);
+        tvAlgorithm.setText(cryptoCoin.getAlgorithm());
+
+        TextView tvProofType = findViewById(R.id.tv_proofType);
+        tvProofType.setText(cryptoCoin.getProofType());
     }
 
 

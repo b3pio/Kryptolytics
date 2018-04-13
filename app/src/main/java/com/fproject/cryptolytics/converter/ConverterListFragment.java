@@ -27,7 +27,7 @@ import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.cryptoapi.CryptoRate;
 import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.searchCoin.SearchCoinActivity;
-import com.fproject.cryptolytics.utility.DecimalFormater;
+import com.fproject.cryptolytics.utility.DecimalFormatter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -396,7 +396,7 @@ public class ConverterListFragment extends Fragment {
             selectedItem = converterItems.get(0);
 
             if (converterItems.get(0).getValue().equals(" - ")){
-                converterItems.get(0).setValue("1.0");
+                converterItems.get(0).setValue("1");
             }
         }
 
@@ -479,7 +479,7 @@ public class ConverterListFragment extends Fragment {
         Double value = Double.valueOf(selectedItem.getValue());
 
         // Format the selected value properly
-        String formattedStr = DecimalFormater.formatString(valueStr);
+        String formattedStr = DecimalFormatter.formatString(valueStr);
         selectedItem.setValue(formattedStr);
 
         for (ConverterItem converterItem : converterItems) {
@@ -487,7 +487,7 @@ public class ConverterListFragment extends Fragment {
                 continue;
 
             Double newValue = value * converterItem.getExRate();
-            String formattedValue = DecimalFormater.formatDouble(newValue);
+            String formattedValue = DecimalFormatter.formatDouble(newValue);
 
             converterItem.setValue(formattedValue);
         }
@@ -504,7 +504,7 @@ public class ConverterListFragment extends Fragment {
             converterItem.setCryptoRate(null);
         }
 
-        selectedItem.setValue("1.00");
+        selectedItem.setValue("1");
         converterListAdapter.notifyDataSetChanged();
     }
 

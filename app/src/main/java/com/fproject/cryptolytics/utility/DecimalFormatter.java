@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 /**
  * Created by chamu on 3/22/2018.
  */
-public class DecimalFormater {
+public class DecimalFormatter {
 
     /**
      * Gets the numbers after the decimals point.
@@ -30,7 +30,7 @@ public class DecimalFormater {
     /**
      *
      */
-    public static String formatString(String valueStr){
+    public static String formatString(String valueStr) {
         Double value = Double.valueOf(valueStr);
 
         DecimalFormat decimalFormat = new DecimalFormat("###,###,##0");
@@ -48,5 +48,14 @@ public class DecimalFormater {
         decimalFormat.setMaximumFractionDigits(8);
 
         return decimalFormat.format(value);
+    }
+
+
+    public static String formatFloat(float value) {
+
+        DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00######");
+        decimalFormat.setMaximumFractionDigits(2);
+
+        return decimalFormat.format(value) ;
     }
 }

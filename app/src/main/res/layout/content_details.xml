@@ -61,206 +61,212 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1"
-        android:paddingTop="25dp"
         android:layout_above="@id/footer"
         android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-        <TableLayout
-            android:id="@+id/contentTable"
-            android:paddingTop="25dp"
-            android:layout_alignParentTop="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            <TableLayout
+                android:id="@+id/contentTable"
+                android:stretchColumns="0,1"
+                android:paddingTop="25dp"
+                android:paddingLeft="35dp"
+                android:paddingRight="35dp"
+                android:paddingBottom="25dp"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <TableRow>
-                <TextView
-                    android:text="Change:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
+                <TableRow
+                    android:background="@color/colorSelector">
+                    <TextView
+                        android:text="Change:"
 
-                <Space
-                    android:layout_width="30dp"/>
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/changeValue"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_gravity="right"
+                        android:id="@+id/changeValue"
+                        android:text= " - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-            <TableRow>
-                <TextView
-                    android:text="Volume:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
+                <TableRow>
+                    <TextView
+                        android:text="Volume:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
-                <Space
-                    android:layout_width="30dp"/>
+                    <TextView
+                        android:textAlignment="viewEnd"
+                        android:id="@+id/volume"
+                        android:text= " - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/volume"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
+                <TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp" />
+                </TableRow>
 
-            <TableRow>
-                <Space
-                    android:layout_width="55dp"
-                    android:layout_height="10dp"/>
-            </TableRow>
-            <TableRow>
-                <TextView
-                    android:text="High:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp"/>
+                <TableRow
+                    android:background="@color/colorSelector">
 
-                <Space
-                    android:layout_width="30dp"/>
+                    <TextView
+                        android:text="High:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp"/>
 
-                <TextView
-                    android:id="@+id/high"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp"/>
-            </TableRow>
+                    <TextView
+                        android:textAlignment="viewEnd"
+                        android:id="@+id/high"
+                        android:text= " - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp"/>
+                </TableRow>
 
-            <TableRow>
-                <TextView
-                    android:text="Low:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp"/>
+                <TableRow>
+                    <TextView
+                        android:text="Low:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp"/>
 
-                <Space
-                    android:layout_width="30dp"/>
+                    <TextView
+                        android:id="@+id/low"
+                        android:text= " - "
+                        android:textAlignment="textEnd"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/low"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
+                <TableRow
+                    android:background="@color/colorSelector">
+                    <TextView
+                        android:text="Open:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
-            <TableRow>
-                <TextView
-                    android:text="Open:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/open"
+                        android:textAlignment="textEnd"
+                        android:text= " - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-                <Space
-                    android:layout_width="30dp"/>
+                <TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp" />
+                </TableRow>
 
-                <TextView
-                    android:id="@+id/open"
-                    android:text= " - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Market Cap:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
+                    <TextView
+                        android:id="@+id/marketCap"
+                        android:textAlignment="textEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
+                <TableRow
+                    android:background="@color/colorSelector">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ProofType:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
+                    <TextView
+                        android:id="@+id/tv_proofType"
+                        android:textAlignment="textEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-            <TableRow>
-                <Space
-                    android:layout_width="55dp"
-                    android:layout_height="10dp"/>
-            </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Algorithm:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Supply:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tv_algorithm"
+                        android:textAlignment="textEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-                <Space
-                    android:layout_width="30dp"/>
+                <TableRow
+                    android:background="@color/colorSelector">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Supply:"
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/supply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
+                    <TextView
+                        android:id="@+id/supply"
+                        android:textAlignment="textEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:padding="5dp"
+                        android:textColor="@color/colorText"
+                        android:textSize="14sp" />
+                </TableRow>
 
-
-
-
-            <!--
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Market:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/market"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="16sp" />
-            </TableRow>
-            -->
-
-            <TableRow>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Market Cap:"
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-
-                <Space
-                    android:layout_width="30dp"/>
-
-                <TextView
-                    android:id="@+id/marketCap"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" - "
-                    android:padding="5dp"
-                    android:textColor="@color/colorText"
-                    android:textSize="14sp" />
-            </TableRow>
-
-
-        </TableLayout>
+            </TableLayout>
 
         </RelativeLayout>
-    </ScrollView>
 
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/footer"

@@ -15,7 +15,7 @@
     <string name="title_activity_top_coins">Top Coins</string>
     <string name="title_activity_search_coin">Coin</string>
     <string name="title_activity_search_currency">Currency</string>
-    <string name="title_activity_chart">Daily Chart</string>
+    <string name="title_activity_chart">Chart</string>
     <string name="title_activity_details">Details</string>
 
     <string name="common_version">Version 0.1.1</string>
