@@ -386,7 +386,7 @@ public class ConverterListFragment extends Fragment {
         for (ConverterItem item:converterItems) {
 
             CryptoCoin cryptoCoin = cryptoCoins.get(item.getSymbol());
-            item.setCrpytoCoin(cryptoCoin);
+            item.setCryptoCoin(cryptoCoin);
 
             CryptoRate cryptoRate = cryptoRates.get(item.getSymbol());
             item.setCryptoRate(cryptoRate);

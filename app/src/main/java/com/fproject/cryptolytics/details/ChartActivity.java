@@ -3,7 +3,6 @@ package com.fproject.cryptolytics.details;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.MenuItem;
@@ -59,15 +58,15 @@ public class ChartActivity extends AppCompatActivity {
         //
         cryptoClient = new CryptoClient(this);
         //
-        //
+        //  Activity
         //
         setupActivity();
         //
-        // Listeners
+        //  Listeners
         //
         setupListeners();
         //
-        // Data
+        //  Data
         //
         updateActivity();
     }
@@ -80,46 +79,40 @@ public class ChartActivity extends AppCompatActivity {
      * Configure the activity.
      */
     private void setupActivity() {
-        tvPrice = findViewById(R.id.tv_price);
-        tvHigh = findViewById(R.id.tv_high);
-        tvLow = findViewById(R.id.tv_low);
-        tvTime  = findViewById(R.id.tv_time);
-        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
-        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
-        //
-        // Toolbar
-        //
-        //getSupportActionBar().setTitle("");
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setElevation(0);
-
-        //setupActionBar();
         //
         // Params
         //
         fromSymbol = getIntent().getStringExtra("fromSymbol");
         toSymbol = getIntent().getStringExtra("toSymbol");
         //
+        //
+        //
+        tvPrice = findViewById(R.id.tv_price);
+        tvHigh  = findViewById(R.id.tv_high);
+        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
+        tvLow   = findViewById(R.id.tv_low);
+        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
+        tvTime  = findViewById(R.id.tv_time);
+        //
+        // ActionBar
+        //
+        setupActionBar();
+        //
         // Chart
         //
         setupChart();
     }
 
-
-    private void setupActionBar(){
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.action_bar_details);
-        getSupportActionBar().setElevation(0);
+    /**
+     * Configure the Action Bar.
+     */
+    private void setupActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //
-        //  Activity Title
-        //
-        //tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
+        getSupportActionBar().setElevation(0);
     }
 
     /**
-     * Configure the Chart component.
+     * Configure the chart.
      */
     private void setupChart() {
         lineChart = findViewById(R.id.lineChart);
@@ -162,14 +155,12 @@ public class ChartActivity extends AppCompatActivity {
             public void onValueSelected(Entry e, Highlight h) {
 
                 CryptoHistory cryptoHistory = (CryptoHistory) e.getData();
-                selectedChanged(cryptoHistory);
+                selectedPointChanged(cryptoHistory);
             }
 
             @Override
             public void onNothingSelected() {
-                if (!cryptoHistories.isEmpty()) {
-                    selectedChanged(cryptoHistories.get(cryptoHistories.size() - 1));
-                }
+                selectLastPoint();
             }
         });
     }
@@ -224,11 +215,6 @@ public class ChartActivity extends AppCompatActivity {
     private void updateHeader() {
         if (cryptoCoin == null) return;
 
-
-        /*
-        TextView tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
-        tvTitle.setText(cryptoCoin.getCoinName());
-        */
         getSupportActionBar().setTitle(cryptoCoin.getCoinName());
 
         ImageView ivImage = findViewById(R.id.iv_image);
@@ -271,24 +257,33 @@ public class ChartActivity extends AppCompatActivity {
         lineChart.invalidate();
         lineChart.setScaleEnabled(false);
 
-        selectedChanged(cryptoHistories.get(cryptoHistories.size() - 1));
+        selectLastPoint();
     }
 
     /**
      * This method has to be called when the selected value on the chart has changed.
      */
-    private void selectedChanged(CryptoHistory cryptoHistory) {
-        String priceStr = DecimalFormatter.formatFloat(cryptoHistory.getClose()) + " " + toSymbol;
-        tvPrice.setText(priceStr);
-
+    private void selectedPointChanged(CryptoHistory cryptoHistory) {
         String timeStr = DateFormatter.format(cryptoHistory.getTime());
         tvTime.setText(timeStr);
 
-        String highStr = DecimalFormatter.formatFloat(cryptoHistory.getHigh()) + " ";
+        String highStr = DecimalFormatter.formatFloat(cryptoHistory.getHigh());
         tvHigh.setText(highStr);
 
-        String lowStr = DecimalFormatter.formatFloat(cryptoHistory.getLow()) +  " ";
+        String lowStr = DecimalFormatter.formatFloat(cryptoHistory.getLow());
         tvLow.setText(lowStr);
+
+        String priceStr = DecimalFormatter.formatFloat(cryptoHistory.getClose()) + " " + toSymbol;
+        tvPrice.setText(priceStr);
+    }
+
+    /**
+     * Select the last point on the chart.
+     */
+    private void selectLastPoint(){
+        if ((cryptoHistories != null) && (!cryptoHistories.isEmpty()) ) {
+            selectedPointChanged(cryptoHistories.get(cryptoHistories.size() - 1));
+        }
     }
 
     // --------------------------------------------------------------------------------------------

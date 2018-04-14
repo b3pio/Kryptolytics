@@ -49,25 +49,32 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener, 
      * Hook up the event listeners.
      */
     private void setupListeners(View view) {
-        Button btnZero  = view.findViewById(R.id.btn_zero);
+        Button btnDel = view.findViewById(R.id.btn_del);
+        btnDel.setOnClickListener(this);
+        btnDel.setOnLongClickListener(this);
+
+        Button btnDot = view.findViewById(R.id.btn_dot);
+        btnDot.setOnClickListener(this);
+
+        Button btnZero = view.findViewById(R.id.btn_zero);
         btnZero.setOnClickListener(this);
 
-        Button btnOne   = view.findViewById(R.id.btn_one);
+        Button btnOne = view.findViewById(R.id.btn_one);
         btnOne.setOnClickListener(this);
 
-        Button btnTwo   = view.findViewById(R.id.btn_two);
+        Button btnTwo = view.findViewById(R.id.btn_two);
         btnTwo.setOnClickListener(this);
 
         Button btnThree = view.findViewById(R.id.btn_three);
         btnThree.setOnClickListener(this);
 
-        Button btnFour  = view.findViewById(R.id.btn_four);
+        Button btnFour = view.findViewById(R.id.btn_four);
         btnFour.setOnClickListener(this);
 
-        Button btnFive  = view.findViewById(R.id.btn_five);
+        Button btnFive = view.findViewById(R.id.btn_five);
         btnFive.setOnClickListener(this);
 
-        Button btnSix   = view.findViewById(R.id.btn_six);
+        Button btnSix = view.findViewById(R.id.btn_six);
         btnSix.setOnClickListener(this);
 
         Button btnSeven = view.findViewById(R.id.btn_seven);
@@ -76,15 +83,8 @@ public class KeyboardFragment extends Fragment implements View.OnClickListener, 
         Button btnEight = view.findViewById(R.id.btn_eight);
         btnEight.setOnClickListener(this);
 
-        Button btnNine  = view.findViewById(R.id.btn_nine);
+        Button btnNine = view.findViewById(R.id.btn_nine);
         btnNine.setOnClickListener(this);
-
-        Button btnDot = view.findViewById(R.id.btn_dot);
-        btnDot.setOnClickListener(this);
-
-        Button btnDel = view.findViewById(R.id.btn_del);
-        btnDel.setOnClickListener(this);
-        btnDel.setOnLongClickListener(this);
     }
 
     /**

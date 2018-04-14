@@ -47,7 +47,6 @@ public class ConverterActivity extends AppCompatActivity
         setupListeners();
     }
 
-
     /**
      * Hook up the event listeners.
      */

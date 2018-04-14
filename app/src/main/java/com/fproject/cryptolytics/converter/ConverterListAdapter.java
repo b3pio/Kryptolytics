@@ -65,10 +65,10 @@ public class ConverterListAdapter extends RecyclerView.Adapter<ConverterListAdap
         viewHolder.tvValue.setText(item.getValueStr());
         viewHolder.itemView.setSelected(selectedIndex == position);
 
-        if (item.getCrpytoCoin() != null) {
+        if (item.getCryptoCoin() != null) {
 
-            viewHolder.tvName.setText(item.getCrpytoCoin().getCoinName());
-            bindImage(viewHolder, item.getCrpytoCoin().getImageUrl());
+            viewHolder.tvName.setText(item.getCryptoCoin().getCoinName());
+            bindImage(viewHolder, item.getCryptoCoin().getImageUrl());
         }
     }
 

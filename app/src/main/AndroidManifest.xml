@@ -64,8 +64,6 @@
         <activity
             android:name=".details.ChartActivity"
             android:label="@string/title_activity_chart"/>
-        <activity android:name=".details.TestActivity"
-            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

@@ -16,9 +16,8 @@ public class ConverterTable {
 
     private static final String TABLE_CONVERTER = "T_Converter";
 
-    private static final String KEY_ID          = "Id";
+    private static final String KEY_ID     = "Id";
     private static final String KEY_SYMBOL = "Symbol";
-
 
     private DatabaseManager databaseManager = null;
 

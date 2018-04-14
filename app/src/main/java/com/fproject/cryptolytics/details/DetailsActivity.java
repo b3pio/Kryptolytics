@@ -35,57 +35,58 @@ public class DetailsActivity extends AppCompatActivity {
     private CryptoCoin      cryptoCoin     = null;
     private CryptoCurrency  cryptoCurrency = null;
 
-    // The title of the Activity
-    private TextView tvTitle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_details);
         //
-        // Action Bar
-        //
-
-        //getSupportActionBar().setTitle("");
-        //getSupportActionBar().setTitle("BTC | RON");
-
-        //setupActionBar();
-        /*
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.action_bar_details);
-        */
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        getSupportActionBar().setElevation(0);
-
-        //
         //  Components
         //
         cryptoClient = new CryptoClient(this);
         //
+        //  Activity
         //
+        setupActivity();
+        //
+        //  Data
         //
         updateActivity();
     }
 
 
-    private void setupActionBar(){
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.action_bar_details);
-        getSupportActionBar().setElevation(0);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //
-        //  Activity Title
-        //
-        tvTitle = getSupportActionBar().getCustomView().findViewById(R.id.tv_title);
-    }
+    // --------------------------------------------------------------------------------------------
+    //region Private Methods
+    // --------------------------------------------------------------------------------------------
 
-    private void updateActivity(){
+    /**
+     * Configure the activity.
+     */
+    private void setupActivity(){
         fromSymbol = getIntent().getStringExtra("fromSymbol");
         toSymbol = getIntent().getStringExtra("toSymbol");
+        //
+        // ActionBar
+        //
+        setupActionBar();
+    }
 
+
+    /**
+     * Configure the Action Bar.
+     */
+    private void setupActionBar(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
+    }
+
+    /**
+     * Populate the activity with data.
+     */
+    private void updateActivity(){
         getCryptoCoinCallback();
         getCryptoCurrencyCallback();
+
     }
 
     /**
@@ -126,82 +127,95 @@ public class DetailsActivity extends AppCompatActivity {
 
     private void updateActivityData(){
         if ((cryptoCoin == null) || (cryptoCurrency == null)) return;
-
-        ImageView ivImage = findViewById(R.id.image);
-        new ImageDownloader(ivImage).execute(cryptoCoin.getImageUrl());
-
-
-        //tvTitle.setText(cryptoCoin.getCoinName());
+        //
+        //  Name
+        //
         getSupportActionBar().setTitle(cryptoCoin.getCoinName());
-
-
-        //getSupportActionBar().setTitle(cryptoCoin.getCoinName() + "|" + toSymbol);
-
-        //getSupportActionBar().setTitle(cryptoCoin.getCoinName());
-
-        //getSupportActionBar().setTitle(fromSymbol +  " | " + toSymbol) ;
-
-        TextView tvName = findViewById(R.id.name);
-        //tvName.setText(cryptoCoin.getFullName());
+        //
+        //  Image
+        //
+        ImageView ivImage = findViewById(R.id.iv_image);
+        new ImageDownloader(ivImage).execute(cryptoCoin.getImageUrl());
+        //
+        //  Name
+        //
+        TextView tvName = findViewById(R.id.tv_name);
         tvName.setText(cryptoCoin.getSymbol());
-
-        TextView tvPrice = findViewById(R.id.price);
+        //
+        //  Price
+        //
+        TextView tvPrice = findViewById(R.id.tv_price);
         String priceStr = cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
         tvPrice.setText(priceStr);
-
-        TextView tvHigh = findViewById(R.id.high);
+        //
+        //  High
+        //
+        TextView tvHigh = findViewById(R.id.tv_high);
         String highStr = cryptoCurrency.getHigh()+ " " + cryptoCurrency.getToSymbol();
         tvHigh.setText(highStr);
         tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
-
-
-        TextView tvLow = findViewById(R.id.low);
-        String lowStr = cryptoCurrency.getLow()+ " " + cryptoCurrency.getToSymbol();
+        //
+        //  Low
+        //
+        TextView tvLow = findViewById(R.id.tv_low);
+        String lowStr = cryptoCurrency.getLow() + " " + cryptoCurrency.getToSymbol();
         tvLow.setText(lowStr);
         tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
-
-        TextView tvOpen = findViewById(R.id.open);
+        //
+        //  Open
+        //
+        TextView tvOpen = findViewById(R.id.tv_open);
         String openStr = cryptoCurrency.getOpen() + " " + cryptoCurrency.getToSymbol();
         tvOpen.setText(openStr);
-
-        TextView tvVolume = findViewById(R.id.volume);
+        //
+        //  Volume
+        //
+        TextView tvVolume = findViewById(R.id.tv_volume);
         tvVolume.setText(cryptoCurrency.getVolume());
-
-        TextView tvLastUpdate = findViewById(R.id.lastUpdate);
+        //
+        //  LastUpdate
+        //
+        TextView tvLastUpdate = findViewById(R.id.tv_lastUpdate);
         tvLastUpdate.setText(cryptoCurrency.getLastUpdate());
-
-        TextView tvChangeValue = findViewById(R.id.changeValue);
+        //
+        //  ChangeValue
+        //
+        TextView tvChangeValue = findViewById(R.id.tv_changeValue);
         String changeValueStr = cryptoCurrency.getChangeValue() + " " + cryptoCurrency.getToSymbol();
         tvChangeValue.setText(changeValueStr);
-
-        TextView tvChangePercent = findViewById(R.id.changePercent);
+        //
+        //  ChangePercent
+        //
+        TextView tvChangePercent = findViewById(R.id.tv_changePercent);
         String changePercentStr = cryptoCurrency.getChangePercent() + "%";
         tvChangePercent.setText(changePercentStr);
-
+        //
+        //  ChangeColor
+        //
         int color = getChangeColor(cryptoCurrency.isChangePositive());
         tvChangePercent.setTextColor(color);
         tvChangeValue.setTextColor(color);
-
-        TextView tvSupply = findViewById(R.id.supply);
+        //
+        //  Supply
+        //
+        TextView tvSupply = findViewById(R.id.tv_supply);
         tvSupply.setText(cryptoCurrency.getSupply());
-
-        /*
-        TextView tvMarket = findViewById(R.id.market);
-        tvMarket.setText(cryptoCurrency.getMarket());
-        */
-
-
-        TextView tvMarketCap = findViewById(R.id.marketCap);
+        //
+        //  MarketCap
+        //
+        TextView tvMarketCap = findViewById(R.id.tv_marketCap);
         tvMarketCap.setText(cryptoCurrency.getMarketCap());
-
+        //
+        //  Algorithm
+        //
         TextView tvAlgorithm = findViewById(R.id.tv_algorithm);
         tvAlgorithm.setText(cryptoCoin.getAlgorithm());
-
+        //
+        //  ProofType
+        //
         TextView tvProofType = findViewById(R.id.tv_proofType);
         tvProofType.setText(cryptoCoin.getProofType());
     }
-
-
 
     private int getChangeColor(boolean positive) {
 
@@ -214,7 +228,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
-     * Open activity with item details.
+     * Open activity with chart.
      */
     public void openChartActivity() {
 
@@ -225,6 +239,10 @@ public class DetailsActivity extends AppCompatActivity {
 
         startActivityForResult(intent, 3);
     }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------
     //region Override Methods

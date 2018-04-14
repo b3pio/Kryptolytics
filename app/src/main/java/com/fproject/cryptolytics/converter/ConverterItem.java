@@ -12,7 +12,7 @@ public class ConverterItem {
     private String symbol;
     private String value;
 
-    private CryptoCoin crpytoCoin;
+    private CryptoCoin cryptoCoin;
     private CryptoRate cryptoRate;
 
     public ConverterItem(long itemId, String symbol, String value) {
@@ -53,12 +53,12 @@ public class ConverterItem {
         this.cryptoRate = cryptoRate;
     }
 
-    public CryptoCoin getCrpytoCoin() {
-        return crpytoCoin;
+    public CryptoCoin getCryptoCoin() {
+        return cryptoCoin;
     }
 
-    public void setCrpytoCoin(CryptoCoin crpytoCoin) {
-        this.crpytoCoin = crpytoCoin;
+    public void setCryptoCoin(CryptoCoin cryptoCoin) {
+        this.cryptoCoin = cryptoCoin;
     }
 
     public Double getExRate(){
@@ -70,7 +70,7 @@ public class ConverterItem {
     }
 
     public boolean isLoaded(){
-        if (cryptoRate == null || crpytoCoin == null)
+        if (cryptoRate == null || cryptoCoin == null)
             return false;
 
         return true;
