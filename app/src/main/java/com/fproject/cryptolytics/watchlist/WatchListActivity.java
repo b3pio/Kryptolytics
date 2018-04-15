@@ -9,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,6 +41,7 @@ import java.util.Map;
 
 public class WatchListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private final static int MAX_ITEM_COUNT = 20;
 
     private final static int SEARCH_COIN_REQUEST      = 1;
     private final static int SEARCH_CURRENCY_REQUEST  = 2;
@@ -263,7 +265,7 @@ public class WatchListActivity extends AppCompatActivity
             item.setCryptoCurrency(cryptoCurrency);
         }
 
-        watchListAdapter.notifyDataSetChanged();
+        watchListAdapter.notifyItemRangeChanged(0, watchListAdapter.getItemCount());
         hideSwipeRefresh();
     }
 
@@ -392,9 +394,17 @@ public class WatchListActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            openSearchCoinsActivity();
+
+            if (watchedItems.size() < MAX_ITEM_COUNT) {
+                openSearchCoinsActivity();
+            }
+            else {
+                displayMessage("Maximum item count reached.");
+            }
+
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

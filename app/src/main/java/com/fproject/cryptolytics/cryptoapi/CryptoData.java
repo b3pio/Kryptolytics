@@ -133,34 +133,27 @@ public class CryptoData {
 
             JSONObject jsonDisplay = cryptoData.getJSONObject("DISPLAY").getJSONObject(fromSymbol).getJSONObject(toSymbol);
 
-            String market     = jsonDisplay.getString("MARKET");
-            String lastUpdate = jsonDisplay.getString("LASTUPDATE");
-
             String price = jsonDisplay.getString("PRICE");
-            price  = price.substring(price.indexOf(" ")).trim();
-
-            String open = jsonDisplay.getString("OPENDAY");
-            open = open.substring(open.indexOf(" ")).trim();
-
-            String high = jsonDisplay.getString("HIGHDAY");
-            high  = high.substring(high.indexOf(" ")).trim();
-
-            String low  = jsonDisplay.getString("LOWDAY");
-            low  = low.substring(low.indexOf(" ")).trim();
+            price = cleanString(price);
 
             String supply = jsonDisplay.getString("SUPPLY");
-            supply  = supply.substring(supply.indexOf(" ")).trim();
-
-            String volume  = jsonDisplay.getString("VOLUMEDAY");
-            volume  = volume.substring(volume.indexOf(" ")).trim();
+            supply = cleanString(supply);
 
             String marketCap = jsonDisplay.getString("MKTCAP");
-            marketCap = marketCap.substring(marketCap.indexOf(" ")).trim();
+            marketCap = cleanString(marketCap);
 
-            String changePct = jsonDisplay.getString("CHANGEPCTDAY");
+            String change= jsonDisplay.getString("CHANGEDAY");
+            change = cleanString(change);
 
-            String change     = jsonDisplay.getString("CHANGEDAY");
-            change  = change.substring(change.indexOf(" ")).trim();
+            String changePct    = jsonDisplay.getString("CHANGEPCTDAY");
+            String market       = jsonDisplay.getString("MARKET");
+            String lastUpdate   = jsonDisplay.getString("LASTUPDATE");
+
+            // This values could be missing
+            String open     = getValueFromJSONObject("OPENDAY",jsonDisplay);
+            String high     = getValueFromJSONObject("HIGHDAY",jsonDisplay);
+            String low      = getValueFromJSONObject("LOWDAY",jsonDisplay);
+            String volume   = getValueFromJSONObject("VOLUMDAY",jsonDisplay);
 
             cryptoCurrency = new CryptoCurrency(fromSymbol, toSymbol, market, price,
                     lastUpdate, open, high, low, change, changePct,supply, volume, marketCap);
@@ -359,6 +352,33 @@ public class CryptoData {
         }
 
         return cryptoHistory;
+    }
+
+    /**
+     * Tries to extract the specified value from the string if it exists,
+     * otherwise returns zero;
+     */
+    private String getValueFromJSONObject(String key, JSONObject jsonObject) throws JSONException {
+        String value = new String("0");
+
+        if (jsonObject.has(key)) {
+            value = jsonObject.getString(key);
+            value = cleanString(value);
+        }
+
+        return value;
+    }
+
+    /**
+     * Clean unnecessary symbols from the string.
+     */
+    private String cleanString(String string) {
+
+        if ((string !=null) && (!string.isEmpty())) {
+            string = string.substring(string.indexOf(" ")).trim();
+        }
+
+        return string;
     }
 
     // --------------------------------------------------------------------------------------------

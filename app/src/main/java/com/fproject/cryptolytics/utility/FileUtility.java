@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class FileUtility {
 
-    public static final int CURRENT_DAY     = 0;
-    public static final int CURRENT_HOUR    = 1;
-    public static final int CURRENT_MINUTE  = 2;
+    public static final int CURRENT_DAY         = 0;
+    public static final int CURRENT_HOUR        = 1;
+    public static final int CURRENT_MINUTE      = 2;
 
     /**
      * Returns true if the file exists and it was created int specified period, otherwise returns false.

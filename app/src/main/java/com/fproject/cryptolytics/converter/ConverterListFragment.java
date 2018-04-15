@@ -200,7 +200,7 @@ public class ConverterListFragment extends Fragment {
     /**
      * Populate the fragment with data.
      */
-    private void updateFragment(){
+    private void updateFragment() {
         converterItems.clear();
         converterItems.addAll(databaseManager.getConverterTable().getItems());
         converterListAdapter.notifyDataSetChanged();
@@ -211,8 +211,17 @@ public class ConverterListFragment extends Fragment {
         cryptoCoins = new HashMap<>();
         cryptoRates = new HashMap<>();
 
-        getCryptoCoinsCallback();
-        getCryptoRatesCallback();
+        clearValues();
+
+        if (!toSymbols.isEmpty() && (!fromSymbol.isEmpty())) {
+
+            getCryptoCoinsCallback();
+            getCryptoRatesCallback();
+
+        }
+        else {
+            hideSwipeRefresh();
+        }
 
     }
 
@@ -358,9 +367,6 @@ public class ConverterListFragment extends Fragment {
      * Obtain the {@link CryptoRate} data.
      */
     private void getCryptoRatesCallback(){
-        if (fromSymbol.isEmpty() || toSymbols.isEmpty())
-            return;
-
         cryptoClient.getCryptoRates(fromSymbol, toSymbols, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
@@ -504,7 +510,17 @@ public class ConverterListFragment extends Fragment {
             converterItem.setCryptoRate(null);
         }
 
-        selectedItem.setValue("1");
+        if (selectedItem == null) {
+            selectedItem = converterItems.get(0);
+
+            if (converterItems.get(0).getValue().equals(" - ")){
+                converterItems.get(0).setValue("1");
+            }
+        }
+        else {
+            selectedItem.setValue("1");
+        }
+
         converterListAdapter.notifyDataSetChanged();
     }
 

@@ -74,7 +74,8 @@ public class CryptoClient {
     public void getCryptoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
         String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
 
-        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+        //getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+        getResponse(url, -1, callback);
     }
 
     /**
