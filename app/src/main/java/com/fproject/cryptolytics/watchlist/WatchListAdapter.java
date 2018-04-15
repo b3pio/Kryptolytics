@@ -90,7 +90,7 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
 
         Integer changeColor = getChangeColor(cryptoCurrency.isChangePositive());
         viewHolder.tvChange.setTextColor(changeColor);
-        //viewHolder.tvChange.setBackgroundColor(changeColor);
+
 
         bindImage(viewHolder, cryptoCoin.getImageUrl());
     }

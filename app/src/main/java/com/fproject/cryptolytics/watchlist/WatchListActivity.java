@@ -9,7 +9,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fproject.cryptolytics.AboutActivity;
+import com.fproject.cryptolytics.news.NewsActivity;
 import com.fproject.cryptolytics.converter.ConverterActivity;
 import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.R;
@@ -415,9 +415,15 @@ public class WatchListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_top_coins) {
 
             Intent intent = new Intent(this, TopCoinsActivity.class);
+            finish();
+            startActivity(intent);
+
+        } else if (id == R.id.nav_news) {
+
+            Intent intent = new Intent(this, NewsActivity.class);
             finish();
             startActivity(intent);
 

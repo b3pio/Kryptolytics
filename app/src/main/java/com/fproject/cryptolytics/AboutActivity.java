@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.fproject.cryptolytics.converter.ConverterActivity;
+import com.fproject.cryptolytics.news.NewsActivity;
 import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
@@ -131,9 +132,14 @@ public class AboutActivity extends AppCompatActivity
         int id = item.getItemId();
 
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_top_coins) {
 
             Intent intent = new Intent(this, TopCoinsActivity.class);
+            finish();
+            startActivity(intent);
+        }  else if (id == R.id.nav_news) {
+
+            Intent intent = new Intent(this, NewsActivity.class);
             finish();
             startActivity(intent);
 

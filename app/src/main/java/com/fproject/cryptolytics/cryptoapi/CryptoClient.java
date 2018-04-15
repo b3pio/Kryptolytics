@@ -7,11 +7,13 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.fproject.cryptolytics.utility.FileUtility;
 import com.fproject.cryptolytics.utility.JsonUtils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -56,7 +58,7 @@ public class CryptoClient {
     public void getCryptoCoins(CryptoCallback callback) {
         String url  = DATA_SERVER + "/all/coinlist";
 
-        getResponse(url, FileUtility.CURRENT_DAY, callback);
+        getObject(url, FileUtility.CURRENT_DAY, callback);
     }
 
     /**
@@ -65,7 +67,7 @@ public class CryptoClient {
     public void getTopCryptoCoins(Integer count, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/top/totalvol?limit=" + count.toString() + "&tsym=" + toSymbol;
 
-        getResponse(url, FileUtility.CURRENT_DAY, callback);
+        getObject(url, FileUtility.CURRENT_DAY, callback);
     }
 
     /**
@@ -74,8 +76,8 @@ public class CryptoClient {
     public void getCryptoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
         String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
 
-        //getResponse(url, FileUtility.CURRENT_MINUTE, callback);
-        getResponse(url, -1, callback);
+        //getObject(url, FileUtility.CURRENT_MINUTE, callback);
+        getObject(url, -1, callback);
     }
 
     /**
@@ -85,7 +87,7 @@ public class CryptoClient {
         String url = DATA_SERVER + "/pricemulti?fsyms="+ fromSymbol + "&tsyms="
                             + fromSymbol + "," + TextUtils.join("," , toSymbols);
 
-        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+        getObject(url, FileUtility.CURRENT_MINUTE, callback);
     }
 
 
@@ -95,7 +97,16 @@ public class CryptoClient {
     public void getCryptoHistories(String fromSymbol, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol + "&tsym=" + toSymbol + "&limit=30";
 
-        getResponse(url, FileUtility.CURRENT_MINUTE, callback);
+        getObject(url, FileUtility.CURRENT_MINUTE, callback);
+    }
+
+    /**
+     * Requests the {@link CryptoHistory}.
+     */
+    public void getCryptoNewsList(CryptoCallback callback) {
+        String url = DATA_SERVER + "/news/?lang=EN";
+
+        getArray(url, FileUtility.CURRENT_MINUTE, callback);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -106,21 +117,45 @@ public class CryptoClient {
     //region Private Methods
     // --------------------------------------------------------------------------------------------
 
-    private  void getResponse(String url, int period, CryptoCallback callback) {
+    private void getObject(String url, int period, CryptoCallback callback) {
         String file = Uri.encode(url);
 
         if (FileUtility.isFileCached(context, file, period)) {
-            Log.d(MODULE_TAG, "getResponseFromCache() " + url);
-            getResponseFromCache(file, callback);
+            Log.d(MODULE_TAG, "getObjectFromCache() " + url);
+            getObjectFromCache(file, callback);
         }
         else {
-            Log.d(MODULE_TAG, "getResponseFromServer()" + url);
-            getResponseFromServer(file, url, callback);
+            Log.d(MODULE_TAG, "getObjectFromServer()" + url);
+            getObjectFromServer(file, url, callback);
         }
     }
 
-    public void getResponseFromCache(String file, CryptoCallback callback) {
-        JSONObject response = JsonUtils.fromFile(context, file);
+    private void getArray(String url, int period, CryptoCallback callback) {
+        String file = Uri.encode(url);
+
+        if (FileUtility.isFileCached(context, file, period)) {
+            Log.d(MODULE_TAG, "getArrayFromCache() " + url);
+            getArrayFromCache(file, callback);
+        }
+        else {
+            Log.d(MODULE_TAG, "getArrayFromServer()" + url);
+            getArrayFromServer(file, url, callback);
+        }
+    }
+
+    public void getObjectFromCache(String file, CryptoCallback callback) {
+        JSONObject response = JsonUtils.objectFromFile(context, file);
+
+        if (response != null) {
+            callback.onSuccess(new CryptoData(response));
+
+        }
+        else {
+            callback.onFailure("Could not load from disk!");
+        }
+    }
+    public void getArrayFromCache(String file, CryptoCallback callback) {
+        JSONArray response = JsonUtils.arrayFromFile(context, file);
 
         if (response != null) {
             callback.onSuccess(new CryptoData(response));
@@ -131,16 +166,39 @@ public class CryptoClient {
         }
     }
 
-    private void getResponseFromServer(String file, String url, CryptoCallback callback) {
+    private void getObjectFromServer(String file, String url, CryptoCallback callback) {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 (JSONObject response) -> {
 
-                    JsonUtils.toFile(context, response, file);
+                    JsonUtils.objectToFile(context, response, file);
                     callback.onSuccess(new CryptoData(response));
 
                 },
-                (VolleyError error)  -> callback.onFailure(error.getMessage())
+                (VolleyError error)  -> {
+
+                    callback.onFailure(error.getMessage());
+                }
+        );
+
+        requestQueue.add(request);
+    }
+
+
+    private void getArrayFromServer(String file, String url, CryptoCallback callback) {
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                (JSONArray response) -> {
+
+                    JsonUtils.arrayToFile(context, response, file);
+                    callback.onSuccess(new CryptoData(response));
+
+                },
+                (VolleyError error)  -> {
+
+                    callback.onFailure(error.getMessage());
+
+                }
         );
 
         requestQueue.add(request);

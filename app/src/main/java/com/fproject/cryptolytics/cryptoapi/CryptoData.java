@@ -21,13 +21,18 @@ public class CryptoData {
     private static final String MODULE_TAG = "CryptoData";
 
     // The JSON that contains the actual data; that will be parsed.
-    private JSONObject   cryptoData;
+    private JSONObject cryptoObject;
+    private JSONArray   cryptoArray;
 
     // --------------------------------------------------------------------------------------------
     //region  Constructor
     // --------------------------------------------------------------------------------------------
     public CryptoData(JSONObject cryptoData) {
-        this.cryptoData = cryptoData;
+        this.cryptoObject = cryptoData;
+    }
+
+    public CryptoData(JSONArray cryptoArray) {
+        this.cryptoArray = cryptoArray;
     }
 
     // --------------------------------------------------------------------------------------------
@@ -45,7 +50,7 @@ public class CryptoData {
         List<CryptoCoin> topCoins = new ArrayList<>();
 
         try {
-            JSONArray jsonData = cryptoData.getJSONArray("Data");
+            JSONArray jsonData = cryptoObject.getJSONArray("Data");
 
             for (Integer index = 0; index < jsonData.length(); index ++)   {
 
@@ -71,7 +76,7 @@ public class CryptoData {
         Map<String,CryptoCoin> cryptoCoinList = new HashMap<String,CryptoCoin>();
 
         try {
-            JSONObject jsonCoins  = cryptoData.getJSONObject("Data");
+            JSONObject jsonCoins  = cryptoObject.getJSONObject("Data");
             Iterator<String> keys = jsonCoins.keys();
 
             // Parse each coin.
@@ -96,8 +101,8 @@ public class CryptoData {
         Map<String,CryptoRate> cryptoRates = new HashMap();
 
         try {
-            String fromSymbol = cryptoData.keys().next();
-            JSONObject jsonFromSymbol = cryptoData.getJSONObject(fromSymbol);
+            String fromSymbol = cryptoObject.keys().next();
+            JSONObject jsonFromSymbol = cryptoObject.getJSONObject(fromSymbol);
             Iterator<String> keys = jsonFromSymbol.keys();
 
             while (keys.hasNext()) {
@@ -123,7 +128,7 @@ public class CryptoData {
         CryptoCurrency cryptoCurrency = null;
 
         try {
-            JSONObject jsonRaw = cryptoData.getJSONObject("RAW");
+            JSONObject jsonRaw = cryptoObject.getJSONObject("RAW");
 
             String fromSymbol = jsonRaw.keys().next();
             JSONObject jsonFromSymbol = jsonRaw.getJSONObject(fromSymbol);
@@ -131,7 +136,7 @@ public class CryptoData {
             String toSymbol = jsonFromSymbol.keys().next();
             JSONObject jsonToSymbol = jsonFromSymbol.getJSONObject(toSymbol);
 
-            JSONObject jsonDisplay = cryptoData.getJSONObject("DISPLAY").getJSONObject(fromSymbol).getJSONObject(toSymbol);
+            JSONObject jsonDisplay = cryptoObject.getJSONObject("DISPLAY").getJSONObject(fromSymbol).getJSONObject(toSymbol);
 
             String price = jsonDisplay.getString("PRICE");
             price = cleanString(price);
@@ -172,7 +177,7 @@ public class CryptoData {
         List<CryptoHistory> cryptoHistories = new ArrayList<>();
 
         try {
-            JSONArray jsonData = cryptoData.getJSONArray("Data");
+            JSONArray jsonData = cryptoObject.getJSONArray("Data");
 
             for (Integer index = 0; index < jsonData.length(); index ++)   {
 
@@ -191,6 +196,40 @@ public class CryptoData {
         return cryptoHistories;
     }
 
+    /**
+     * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
+     */
+    public List<CryptoNews> getAsCryptoNewsList(){
+        List<CryptoNews> cryptoNewsList = new ArrayList<>();
+
+        try {
+
+            for (Integer index = 0; index < cryptoArray.length(); index ++)   {
+
+                JSONObject jsonIndex  = cryptoArray.getJSONObject(index);
+
+                String title     = jsonIndex.getString("title");
+                String body      = jsonIndex.getString("body");
+                String url       = jsonIndex.getString("url");
+                String imageUrl  = jsonIndex.getString("imageurl");
+                String source    = jsonIndex.getString("source");
+                Long   date      = jsonIndex.getLong("published_on");
+
+                CryptoNews cryptoNews = new CryptoNews(title, body, url, imageUrl, source, date, index);
+                cryptoNewsList.add(cryptoNews);
+            }
+
+        }
+        catch (JSONException ex) {
+            Log.d(MODULE_TAG, "getAsCryptoNewsList(): " +  ex.toString());
+        }
+
+        Collections.sort(cryptoNewsList, CryptoNews.SortOrderComparator);
+
+        return cryptoNewsList;
+    }
+
+
     // --------------------------------------------------------------------------------------------
     //endregion
     // --------------------------------------------------------------------------------------------
@@ -207,7 +246,7 @@ public class CryptoData {
 
         try {
 
-            message = cryptoData.getString("Message");
+            message = cryptoObject.getString("Message");
 
         }
         catch (JSONException exception) {
@@ -225,8 +264,8 @@ public class CryptoData {
 
         try {
 
-            if (cryptoData.has("Response")) {
-                response = cryptoData.getString("Response");
+            if (cryptoObject.has("Response")) {
+                response = cryptoObject.getString("Response");
             }
 
         }

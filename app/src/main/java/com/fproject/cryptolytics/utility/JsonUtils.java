@@ -3,6 +3,7 @@ package com.fproject.cryptolytics.utility;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,7 +26,7 @@ public class JsonUtils {
     /**
      * Saves a {@link JSONObject} to file.
      */
-    public static void toFile(Context context, JSONObject jsonObject, String fileName){
+    public static void objectToFile(Context context, JSONObject jsonObject, String fileName){
         File file = null;
 
         try {
@@ -37,7 +38,27 @@ public class JsonUtils {
             writer.close();
         }
         catch (IOException exception) {
-            Log.d(TAG, " toFile(): "  + exception.toString());
+            Log.d(TAG, " objectToFile(): "  + exception.toString());
+        }
+
+    }
+
+    /**
+     * Saves a {@link JSONObject} to file.
+     */
+    public static void arrayToFile(Context context, JSONArray jsonArray, String fileName){
+        File file = null;
+
+        try {
+            file = new File(context.getFilesDir(), fileName);
+            file.createNewFile();
+
+            Writer writer = new BufferedWriter(new FileWriter(file));
+            writer.write(jsonArray.toString());
+            writer.close();
+        }
+        catch (IOException exception) {
+            Log.d(TAG, " objectToFile(): "  + exception.toString());
         }
 
     }
@@ -45,13 +66,25 @@ public class JsonUtils {
     /**
      * Loads a {@link JSONObject} from a file/
      */
-    public static JSONObject fromFile(Context context, String fileName) {
+    public static JSONObject objectFromFile(Context context, String fileName) {
         String jsonString = null;
 
         File file = new File(context.getFilesDir(), fileName);
         jsonString = stringFromFile(file);
 
         return stringToJsonObject(jsonString);
+    }
+
+    /**
+     * Loads a {@link JSONArray} from a file/
+     */
+    public static JSONArray arrayFromFile(Context context, String fileName) {
+        String jsonString = null;
+
+        File file = new File(context.getFilesDir(), fileName);
+        jsonString = stringFromFile(file);
+
+        return stringToJsonArray(jsonString);
     }
 
     /**
@@ -93,5 +126,22 @@ public class JsonUtils {
         }
 
         return  jsonObject;
+    }
+
+    /**
+     * Creates a {@link JSONArray} based on the specified {@link String}.
+     */
+    private static JSONArray stringToJsonArray(String jsonString) {
+        JSONArray jsonArray = null;
+
+        try {
+
+            jsonArray = new JSONArray(jsonString);
+
+        } catch (JSONException exception) {
+            Log.d(TAG, "stringToJsonArray(): "  + exception.toString());
+        }
+
+        return  jsonArray;
     }
 }

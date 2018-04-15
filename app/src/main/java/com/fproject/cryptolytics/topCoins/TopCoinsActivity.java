@@ -24,6 +24,7 @@ import com.fproject.cryptolytics.cryptoapi.CryptoCoin;
 import com.fproject.cryptolytics.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolytics.cryptoapi.CryptoData;
 import com.fproject.cryptolytics.details.DetailsActivity;
+import com.fproject.cryptolytics.news.NewsActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
@@ -266,9 +267,16 @@ public class TopCoinsActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_top_coins) {
 
             // already there
+
+        }
+        else if (id == R.id.nav_news) {
+
+            Intent intent = new Intent(this, NewsActivity.class);
+            finish();
+            startActivity(intent);
 
         } else if (id == R.id.nav_watchlist) {
 

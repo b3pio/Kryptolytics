@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fproject.cryptolytics.AboutActivity;
+import com.fproject.cryptolytics.news.NewsActivity;
 import com.fproject.cryptolytics.topCoins.TopCoinsActivity;
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.watchlist.WatchListActivity;
@@ -97,9 +98,15 @@ public class ConverterActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_top_coins) {
 
             Intent intent = new Intent(this, TopCoinsActivity.class);
+            finish();
+            startActivity(intent);
+
+        } else if (id == R.id.nav_news) {
+
+            Intent intent = new Intent(this, NewsActivity.class);
             finish();
             startActivity(intent);
 

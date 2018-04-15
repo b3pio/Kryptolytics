@@ -45,6 +45,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable_coin" />
@@ -63,7 +64,11 @@
         </activity>
         <activity
             android:name=".details.ChartActivity"
-            android:label="@string/title_activity_chart"/>
+            android:label="@string/title_activity_chart" />
+        <activity
+            android:name=".news.NewsActivity"
+            android:label="@string/title_activity_news"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

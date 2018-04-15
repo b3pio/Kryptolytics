@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+   <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_watchlist"
@@ -11,9 +11,14 @@
             android:title="@string/title_activity_watch_list" />
 
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_top_coins"
             android:icon="@drawable/ic_menu_top_coins"
             android:title="@string/title_activity_top_coins" />
+
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_menu_news"
+            android:title="@string/title_activity_news" />
 
         <item
             android:id="@+id/nav_converter"
