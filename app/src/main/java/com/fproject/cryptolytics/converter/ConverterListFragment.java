@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,9 +42,10 @@ import static android.app.Activity.RESULT_OK;
  *
  * @note
  * Activities that contain this fragment must implement the
- * {@link OnConvertItemClickListener} interface.
+ * {@link OnConvertItemSelectionListener} interface.
  */
 public class ConverterListFragment extends Fragment {
+
     private final static int MAX_ITEM_COUNT         = 10;
     private final static int SEARCH_COIN_REQUEST    = 1;
 
@@ -61,8 +63,8 @@ public class ConverterListFragment extends Fragment {
     private Map<String,CryptoCoin>  cryptoCoins;
     private Map<String,CryptoRate>  cryptoRates;
 
-    private ConverterListAdapter        converterListAdapter;
-    private OnConvertItemClickListener  convertItemClickListener;
+    private ConverterListAdapter            converterListAdapter;
+    private OnConvertItemSelectionListener  convertItemSelectionListener;
 
     // --------------------------------------------------------------------------------------------
     //region Constructor/Create Methods
@@ -192,18 +194,18 @@ public class ConverterListFragment extends Fragment {
         clearValues();
         updateValues();
 
-        if (convertItemClickListener != null) {
-            convertItemClickListener.onConvertItemClicked(selectedItem);
-        }
+        notifySelectionListener();
     }
 
     /**
      * Populate the fragment with data.
      */
     private void updateFragment() {
-        converterItems.clear();
-        converterItems.addAll(databaseManager.getConverterTable().getItems());
-        converterListAdapter.notifyDataSetChanged();
+        selectedItem   = null;
+        converterItems = databaseManager.getConverterTable().getItems();
+        converterListAdapter.setItems(converterItems);
+
+        clearValues();
 
         updateFromSymbol();
         updateToSymbols();
@@ -211,18 +213,8 @@ public class ConverterListFragment extends Fragment {
         cryptoCoins = new HashMap<>();
         cryptoRates = new HashMap<>();
 
-        clearValues();
-
-        if (!toSymbols.isEmpty() && (!fromSymbol.isEmpty())) {
-
-            getCryptoCoinsCallback();
-            getCryptoRatesCallback();
-
-        }
-        else {
-            hideSwipeRefresh();
-        }
-
+        getCryptoCoinsCallback();
+        getCryptoRatesCallback();
     }
 
     private void removeConvertItem(int position) {
@@ -268,80 +260,6 @@ public class ConverterListFragment extends Fragment {
     // --------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------
-    //region Override Methods
-    // --------------------------------------------------------------------------------------------
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_convert_list, container, false);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof OnConvertItemClickListener) {
-            convertItemClickListener = (OnConvertItemClickListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnConvertItemClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        convertItemClickListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            openSearchCoinsActivity();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if ((requestCode == SEARCH_COIN_REQUEST) && resultCode == (RESULT_OK)) {
-            String coinName = data.getStringExtra("CoinName");
-
-            if (coinName != null) {
-                addConvertItem(coinName);
-            }
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------
-    //endregion
-    // --------------------------------------------------------------------------------------------
-
-    // --------------------------------------------------------------------------------------------
     //region Crypto Methods
     // --------------------------------------------------------------------------------------------
 
@@ -359,6 +277,7 @@ public class ConverterListFragment extends Fragment {
             @Override
             public void onFailure(String cryptoError) {
                 hideSwipeRefresh();
+
             }
         });
     }
@@ -386,8 +305,8 @@ public class ConverterListFragment extends Fragment {
      */
     private void onCryptoDataReceived(){
         if (cryptoCoins.size() == 0)  return;
-        if (cryptoRates.size() == 0)  return;
         if (!areCryptoRatesCorrect()) return;
+        if ((cryptoRates.size() == 0) && (!converterItems.isEmpty())) return;
 
         for (ConverterItem item:converterItems) {
 
@@ -396,14 +315,6 @@ public class ConverterListFragment extends Fragment {
 
             CryptoRate cryptoRate = cryptoRates.get(item.getSymbol());
             item.setCryptoRate(cryptoRate);
-        }
-
-        if (selectedItem == null) {
-            selectedItem = converterItems.get(0);
-
-            if (converterItems.get(0).getValue().equals(" - ")){
-                converterItems.get(0).setValue("1");
-            }
         }
 
         computeValues();
@@ -415,6 +326,8 @@ public class ConverterListFragment extends Fragment {
      * Determines whether is crypto rates are for current request.
      */
     private boolean areCryptoRatesCorrect() {
+        if (cryptoRates.isEmpty())
+            return true;
 
         // Maybe an earlier request.
         if (!cryptoRates.get(fromSymbol).getFromSymbol().equals(fromSymbol)) {
@@ -470,15 +383,19 @@ public class ConverterListFragment extends Fragment {
         updateToSymbols();
         updateFromSymbol();
 
+        cryptoRates.clear();
         getCryptoRatesCallback();
     }
 
     /**
      * Calculate the values of the {@link ConverterItem} collection.
+     *
+     * @note - Call this only directly after the selected value has changed.
      */
     private void computeValues() {
-        if (cryptoRates.isEmpty())
-            return;
+        if (selectedItem == null)  return;
+        if (cryptoRates.isEmpty()) return;
+        if (converterItems.isEmpty()) return;
 
         // Convert from the value of the selected item to the other ones.
         String valueStr = selectedItem.getValue();
@@ -503,25 +420,29 @@ public class ConverterListFragment extends Fragment {
      * Clear the values of the {@link ConverterItem} collection.
      */
     private void clearValues() {
-        cryptoRates.clear();
+        if (converterItems.isEmpty()) return;
+
+        Log.d("TEST_ME_MOFO", String.valueOf(converterItems.size()));
 
         for (ConverterItem converterItem:converterItems) {
             converterItem.setValue(" - ");
-            converterItem.setCryptoRate(null);
         }
 
         if (selectedItem == null) {
             selectedItem = converterItems.get(0);
-
-            if (converterItems.get(0).getValue().equals(" - ")){
-                converterItems.get(0).setValue("1");
-            }
-        }
-        else {
-            selectedItem.setValue("1");
         }
 
+        selectedItem.setValue("1");
         converterListAdapter.notifyDataSetChanged();
+        notifySelectionListener();
+    }
+
+    private void notifySelectionListener() {
+
+        if (convertItemSelectionListener != null) {
+            convertItemSelectionListener.onConvertItemSelected(selectedItem);
+        }
+
     }
 
     // --------------------------------------------------------------------------------------------
@@ -570,15 +491,89 @@ public class ConverterListFragment extends Fragment {
     //endregion
     // --------------------------------------------------------------------------------------------
 
+    // --------------------------------------------------------------------------------------------
+    //region Override Methods
+    // --------------------------------------------------------------------------------------------
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_convert_list, container, false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnConvertItemSelectionListener) {
+            convertItemSelectionListener = (OnConvertItemSelectionListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnConvertItemSelectionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        convertItemSelectionListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            openSearchCoinsActivity();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == SEARCH_COIN_REQUEST) && resultCode == (RESULT_OK)) {
+            String coinName = data.getStringExtra("CoinName");
+
+            if (coinName != null) {
+                addConvertItem(coinName);
+            }
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    public interface OnConvertItemClickListener {
+    public interface OnConvertItemSelectionListener {
 
         // This method is called when an item in the ConverterList is clicked.
-        void onConvertItemClicked(ConverterItem converterItem);
+        void onConvertItemSelected(ConverterItem converterItem);
     }
 }

@@ -148,14 +148,13 @@ public class NewsActivity extends AppCompatActivity
         cryptoClient.getCryptoNewsList(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-
                 cryptoNewsList = cryptoData.getAsCryptoNewsList();
                 onCryptoDataReceived();
             }
 
             @Override
             public void onFailure(String cryptoError) {
-
+                hideSwipeRefresh();
             }
         });
     }

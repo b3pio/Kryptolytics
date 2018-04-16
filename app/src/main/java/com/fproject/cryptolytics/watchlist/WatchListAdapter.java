@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.watchlist;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -115,8 +116,12 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
             viewHolder.imageDownloader.cancel(true);
         }
 
-        viewHolder.imageDownloader = new ImageDownloader(viewHolder.ivImage);
+        viewHolder.imageDownloader = new ImageDownloader(getIconPlaceHolder(), viewHolder.ivImage);
         viewHolder.imageDownloader.execute(imageUrl);
+    }
+
+    private Drawable getIconPlaceHolder() {
+        return ContextCompat.getDrawable(context,R.drawable.ph_coin_icon);
     }
 
     private int getChangeColor(boolean positive) {

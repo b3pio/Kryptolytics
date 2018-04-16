@@ -3,6 +3,7 @@ package com.fproject.cryptolytics.utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -29,9 +30,22 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
     private final Context context;
     private final WeakReference<ImageView> imageView;
 
+    // Display this when images is not available.
+    private Drawable placeHolder = null;
+
     public ImageDownloader(ImageView imageView) {
         this.imageView = new WeakReference<ImageView>(imageView);
         this.context   = imageView.getContext();
+    }
+
+    public ImageDownloader(Drawable placeHolder, ImageView imageView) {
+        this.imageView   = new WeakReference<ImageView>(imageView);
+        this.context     = imageView.getContext();
+        this.placeHolder = placeHolder;
+
+        if (imageView != null){
+            imageView.setImageDrawable(placeHolder);
+        }
     }
 
     @Override
@@ -56,8 +70,6 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
             if (bitmap != null){
                 bitmapToFile(bitmap, fileName);
             }
-
-
         }
 
         return bitmap;
@@ -68,14 +80,18 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView = this.imageView.get();
 
         if (isCancelled()) {
-            imageView.setImageDrawable(null);
+            imageView.setImageDrawable(placeHolder);
             return;
         }
 
         if (imageView != null) {
-            imageView.setImageBitmap(bitmap);
-        } else  {
-            imageView.setImageDrawable(null);
+
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
+            }
+            else {
+                imageView.setImageDrawable(placeHolder);
+            }
         }
     }
 
@@ -122,7 +138,7 @@ public class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
      * Write the specified bitmap into a file.
      */
     private boolean bitmapToFile(Bitmap bitmap, String fileName) {
-        File file = null;
+        File file;
 
         try {
 

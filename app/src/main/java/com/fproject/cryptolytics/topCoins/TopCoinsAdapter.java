@@ -2,6 +2,7 @@ package com.fproject.cryptolytics.topCoins;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,11 +18,7 @@ import com.fproject.cryptolytics.utility.ImageDownloader;
 
 import java.util.List;
 
-/**
- * Created by chamu on 3/11/2018.
- */
 public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHolder> {
-
     private List<TopCoin> topCoins;
 
     private Context         context     = null;
@@ -42,7 +39,7 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
     }
 
     public TopCoin getItem(int position){
-        return  topCoins.get(position);
+        return topCoins.get(position);
     }
 
     @Override
@@ -70,8 +67,7 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         viewHolder.tvAlgorithm.setText(cryptoCoin.getAlgorithm());
         viewHolder.tvProofType.setText(cryptoCoin.getProofType());
 
-
-        new ImageDownloader(viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
+        new ImageDownloader(getIconPlaceHolder(), viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
     }
 
     private int getChangeColor(boolean positive) {
@@ -81,6 +77,14 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
             return ContextCompat.getColor(context, R.color.colorNegative);
         }
     }
+
+    private Drawable getIconPlaceHolder() {
+        return ContextCompat.getDrawable(context,R.drawable.ph_coin_icon);
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //region ViewHolder
+    // --------------------------------------------------------------------------------------------
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvSymbol;
@@ -96,10 +100,10 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         public ViewHolder(View view, OnClickListener ocListener) {
             super(view);
 
-            ivImage = view.findViewById(R.id.iv_image);
+            ivImage  = view.findViewById(R.id.iv_image);
             tvSymbol = view.findViewById(R.id.tv_symbol);
-            tvName = view.findViewById(R.id.tv_name);
-            tvPrice = view.findViewById(R.id.tv_price);
+            tvName   = view.findViewById(R.id.tv_name);
+            tvPrice  = view.findViewById(R.id.tv_price);
             tvChange = view.findViewById(R.id.tv_changeValue);
             tvAlgorithm = view.findViewById(R.id.tv_algorithm);
             tvProofType = view.findViewById(R.id.tv_proofType);
@@ -117,8 +121,19 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         }
     }
 
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region OnClickListener
+    // --------------------------------------------------------------------------------------------
+
     public interface OnClickListener {
         void onClick(View view, int position);
     }
 
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 }

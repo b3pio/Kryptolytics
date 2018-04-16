@@ -8,7 +8,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,7 +19,7 @@ import com.fproject.cryptolytics.watchlist.WatchListActivity;
 
 public class ConverterActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ConverterListFragment.OnConvertItemClickListener,
+        ConverterListFragment.OnConvertItemSelectionListener,
         KeyboardFragment.OnTextChangedListener {
 
     // Meet our child fragments
@@ -48,6 +47,10 @@ public class ConverterActivity extends AppCompatActivity
         setupListeners();
     }
 
+    // --------------------------------------------------------------------------------------------
+    //region Private Methods
+    // --------------------------------------------------------------------------------------------
+
     /**
      * Hook up the event listeners.
      */
@@ -68,15 +71,43 @@ public class ConverterActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Public Methods
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Hooked up to the {@link ConverterListFragment}.
+     */
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+    public void onConvertItemSelected(ConverterItem converterItem){
+
+        selectedItem = converterItem;
+        keyboardFragment.setText(converterItem.getValue());
     }
+
+    /**
+     * Hooked up to the {@link KeyboardFragment}.
+     */
+    @Override
+    public void onTextChanged(String str) {
+        if (selectedItem == null)
+            return;
+
+        selectedItem.setValue(str);
+        converterListFragment.valueChanged();
+    }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
+
+    // --------------------------------------------------------------------------------------------
+    //region Override Methods
+    // --------------------------------------------------------------------------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -133,25 +164,18 @@ public class ConverterActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * Hooked up to the {@link ConverterListFragment}.
-     */
     @Override
-    public void onConvertItemClicked(ConverterItem converterItem){
-
-        selectedItem = converterItem;
-        keyboardFragment.setText(converterItem.getValue());
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
-    /**
-     * Hooked up to the {@link KeyboardFragment}.
-     */
-    @Override
-    public void onTextChanged(String str) {
-        if (selectedItem == null)
-            return;
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 
-        selectedItem.setValue(str);
-        converterListFragment.valueChanged();
-    }
 }

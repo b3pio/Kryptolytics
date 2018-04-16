@@ -1,6 +1,8 @@
 package com.fproject.cryptolytics.news;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -16,9 +18,7 @@ import com.fproject.cryptolytics.utility.ImageDownloader;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- *
- */
+
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private OnClickListener     ocListener;
     private List<CryptoNews>    cryptoNewsList;
@@ -64,12 +64,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     private void bindImage(ViewHolder viewHolder, String imageUrl){
+
         if (viewHolder.imageDownloader != null) {
             viewHolder.imageDownloader.cancel(true);
         }
 
-        viewHolder.imageDownloader = new ImageDownloader(viewHolder.ivThumbnail);
+        viewHolder.imageDownloader = new ImageDownloader(getThumbnailPlaceHolder(), viewHolder.ivThumbnail);
         viewHolder.imageDownloader.execute(imageUrl);
+    }
+
+    private Drawable getThumbnailPlaceHolder() {
+        return ContextCompat.getDrawable(context, R.drawable.ph_news_thumbnail);
     }
 
     private String getRelativeDateString(long dateValue){
@@ -81,7 +86,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             return context.getString(R.string.common_just_now);
         }
         else if (TimeUnit.MILLISECONDS.toMinutes(difference) < 60) {
-            return (String) DateUtils.getRelativeTimeSpanString(date, now, DateUtils.MINUTE_IN_MILLIS);
+
+            return (String) DateUtils.getRelativeTimeSpanString(date, now,
+                    DateUtils.MINUTE_IN_MILLIS);
+
         }
 
         return (String) DateUtils.getRelativeTimeSpanString(date, now,  DateUtils.HOUR_IN_MILLIS);
@@ -97,7 +105,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         TextView  tvTitle;
         TextView  tvSource;
         TextView  tvDate;
-
 
         ImageDownloader imageDownloader;
         OnClickListener ocListener;

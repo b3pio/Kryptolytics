@@ -1,6 +1,8 @@
 package com.fproject.cryptolytics.converter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,13 @@ public class ConverterListAdapter extends RecyclerView.Adapter<ConverterListAdap
         this.ocListener = ocListener;
     }
 
+    public void setItems(List<ConverterItem> converterItems) {
+        this.selectedIndex  = -1;
+        this.converterItems = converterItems;
+
+        notifyDataSetChanged();
+    }
+
     public int getItemCount() {
         return converterItems.size();
     }
@@ -66,7 +75,6 @@ public class ConverterListAdapter extends RecyclerView.Adapter<ConverterListAdap
         viewHolder.itemView.setSelected(selectedIndex == position);
 
         if (item.getCryptoCoin() != null) {
-
             viewHolder.tvName.setText(item.getCryptoCoin().getCoinName());
             bindImage(viewHolder, item.getCryptoCoin().getImageUrl());
         }
