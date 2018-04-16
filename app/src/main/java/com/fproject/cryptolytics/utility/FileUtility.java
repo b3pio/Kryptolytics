@@ -13,9 +13,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class FileUtility {
 
-    public static final int CURRENT_DAY         = 0;
-    public static final int CURRENT_HOUR        = 1;
-    public static final int CURRENT_MINUTE      = 2;
+    public static final int CURRENT_TIME   = 3;
+    public static final int CURRENT_DAY    = 0;
+    public static final int CURRENT_HOUR   = 1;
+    public static final int CURRENT_MINUTE = 2;
+
 
     /**
      * Returns true if the file exists and it was created int specified period, otherwise returns false.
@@ -44,7 +46,10 @@ public class FileUtility {
                return isFromCurrentHour(file);
 
            case CURRENT_MINUTE:
-               return  isFromCurrentMinute(file);
+               return isFromCurrentMinute(file);
+
+           case CURRENT_TIME:
+               return isFromCurrentTime(file);
         }
 
         return false;
@@ -115,6 +120,20 @@ public class FileUtility {
 
         // The difference is less than a minute.
         if (TimeUnit.MILLISECONDS.toMinutes(difference) <= 1)
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Returns true if the specified file was created in the current minute, otherwise returns false.
+     */
+    public static boolean isFromCurrentTime(File file) {
+        Long today     = new Date().getTime();
+        Long fileDate  = new Date(file.lastModified()).getTime();
+        Long difference = today - fileDate;
+
+        if (TimeUnit.MILLISECONDS.toSeconds(difference) <= 15)
             return true;
 
         return false;

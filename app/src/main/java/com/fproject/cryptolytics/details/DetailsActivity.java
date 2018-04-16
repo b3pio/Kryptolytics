@@ -48,12 +48,16 @@ public class DetailsActivity extends AppCompatActivity {
         //  Activity
         //
         setupActivity();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //
-        //  Data
+        // Data
         //
         updateActivity();
     }
-
 
     // --------------------------------------------------------------------------------------------
     //region Private Methods

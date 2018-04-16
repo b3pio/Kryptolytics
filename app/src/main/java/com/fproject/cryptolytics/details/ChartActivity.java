@@ -65,8 +65,13 @@ public class ChartActivity extends AppCompatActivity {
         //  Listeners
         //
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //
-        //  Data
+        // Data
         //
         updateActivity();
     }
@@ -122,14 +127,14 @@ public class ChartActivity extends AppCompatActivity {
         lineChart.setExtraRightOffset(5.0f);
         lineChart.setDrawBorders(true);
         lineChart.setBorderWidth(0.5f);
-        lineChart.setBorderColor(ContextCompat.getColor(this, R.color.colorChartText));
+        lineChart.setBorderColor(ContextCompat.getColor(this, R.color.colorChartBorder));
         //
         // X Axis
         //
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new ChartDateFormatter());
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorText));
+        xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
         xAxis.setDrawGridLines(true);
         xAxis.setDrawAxisLine(false);
         //
@@ -140,7 +145,7 @@ public class ChartActivity extends AppCompatActivity {
         // Left Axis
         //
         YAxis leftRight = lineChart.getAxisRight();
-        leftRight.setTextColor(ContextCompat.getColor(this, R.color.colorText));
+        leftRight.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
         leftRight.setDrawGridLines(true);
         leftRight.setDrawAxisLine(false);
     }
@@ -249,7 +254,7 @@ public class ChartActivity extends AppCompatActivity {
         dataSet.setFillColor(ContextCompat.getColor(this, R.color.colorChartMain));
         dataSet.setFillAlpha(200);
         dataSet.setDrawValues(false);
-        dataSet.setHighLightColor(ContextCompat.getColor(this, R.color.colorChartText));
+        dataSet.setHighLightColor(ContextCompat.getColor(this, R.color.colorChartBorder));
         dataSet.setHighlightEnabled(true);
 
         LineData lineData = new LineData(dataSet);

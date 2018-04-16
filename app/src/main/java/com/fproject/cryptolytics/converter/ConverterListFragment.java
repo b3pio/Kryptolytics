@@ -422,8 +422,6 @@ public class ConverterListFragment extends Fragment {
     private void clearValues() {
         if (converterItems.isEmpty()) return;
 
-        Log.d("TEST_ME_MOFO", String.valueOf(converterItems.size()));
-
         for (ConverterItem converterItem:converterItems) {
             converterItem.setValue(" - ");
         }

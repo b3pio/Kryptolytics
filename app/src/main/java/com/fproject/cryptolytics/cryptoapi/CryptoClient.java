@@ -76,8 +76,7 @@ public class CryptoClient {
     public void getCryptoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
         String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
 
-        //getObject(url, FileUtility.CURRENT_MINUTE, callback);
-        getObject(url, -1, callback);
+        getObject(url, FileUtility.CURRENT_TIME, callback);
     }
 
     /**
@@ -97,7 +96,7 @@ public class CryptoClient {
     public void getCryptoHistories(String fromSymbol, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol + "&tsym=" + toSymbol + "&limit=30";
 
-        getObject(url, FileUtility.CURRENT_MINUTE, callback);
+        getObject(url, FileUtility.CURRENT_HOUR, callback);
     }
 
     /**

@@ -35,7 +35,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorTextLight"
+            android:textColor="@color/colorPrimaryLightText"
             android:textSize="16sp" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorTextLight"
+            android:textColor="@color/colorPrimaryLightText"
             android:textSize="14sp" />
 
         <TableLayout
@@ -62,7 +62,7 @@
             <TableRow>
                 <TextView
                     android:text="High:"
-                    android:textColor="@color/colorTextLight"
+                    android:textColor="@color/colorPrimaryLightText"
                     android:textSize="14sp" />
 
                 <Space
@@ -72,7 +72,7 @@
                     android:id="@+id/tv_high"
                     android:textAlignment="textEnd"
                     android:text= " - "
-                    android:textColor="@color/colorTextLight"
+                    android:textColor="@color/colorPrimaryLightText"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -80,7 +80,7 @@
                 android:paddingTop="5dp">
                 <TextView
                     android:text="Low:"
-                    android:textColor="@color/colorTextLight"
+                    android:textColor="@color/colorPrimaryLightText"
                     android:textSize="14sp" />
 
                 <Space
@@ -90,7 +90,7 @@
                     android:textAlignment="viewEnd"
                     android:id="@+id/tv_low"
                     android:text= " - "
-                    android:textColor="@color/colorTextLight"
+                    android:textColor="@color/colorPrimaryLightText"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -119,7 +119,7 @@
         <TextView
             android:id="@+id/tv_time"
             android:layout_margin="10dp"
-            android:textColor="@color/colorTextLight"
+            android:textColor="@color/colorPrimaryLightText"
             android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>

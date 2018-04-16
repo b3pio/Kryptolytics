@@ -58,11 +58,20 @@ public class NewsActivity extends AppCompatActivity
         // Listeners
         //
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //
         // Data
         //
         updateActivity();
     }
+
+    // --------------------------------------------------------------------------------------------
+    //region Private Methods
+    // --------------------------------------------------------------------------------------------
 
     /**
      * Configure the activity.
@@ -193,6 +202,10 @@ public class NewsActivity extends AppCompatActivity
         intent.setData(Uri.parse(url));
         startActivity(intent);
     }
+
+    // --------------------------------------------------------------------------------------------
+    //endregion
+    // --------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------
     //region Override Methods

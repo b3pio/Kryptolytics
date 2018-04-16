@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- [BLUE] -->
     <color name="colorPrimary">#2B547E</color>
     <color name="colorPrimaryLight">#ffffff</color>
-    <color name="colorPrimaryMenu">#696767</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#ff8c40</color>
-    <color name="colorAccentLight">#1c4066</color>
-    <color name="colorTextLight">#ffffff</color>
-    <color name="colorText">#2B547E</color>
-    <color name="colorPressed">#bcb8b8</color>
+    <color name="colorAccentLight">#696767</color>
+    <color name="colorPrimaryLightText">#ffffff</color>
+    <color name="colorPrimaryText">#2B547E</color>
+    <color name="colorPressedButton">#bcb8b8</color>
     <color name="colorBorder">#bcb8b8</color>
-    <color name="colorSelector">#f1f1f1</color>
+    <color name="colorRowSelectorDark">#f1f1f1</color>
+    <color name="colorRowSelectorLight">#ffffff</color>
     <color name="colorPositive">#85f900</color>
     <color name="colorNegative">#ff732d</color>
     <color name="colorChartMain">#f47f19</color>
-    <color name="colorChartText">#979393</color>
+    <color name="colorChartBorder">#979393</color>
 
+    <!--[GREY]-->
+    <!--
+    <color name="colorPrimary">#28333b</color>
+    <color name="colorPrimaryLight">#ffffff</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#e40400</color>
+    <color name="colorAccentLight">#696767</color>
+    <color name="colorPrimaryLightText">#ffffff</color>
+    <color name="colorPrimaryText">#28333b</color>
+    <color name="colorPressedButton">#bcb8b8</color>
+    <color name="colorBorder">#bcb8b8</color>
+    <color name="colorRowSelectorDark">#f1f1f1</color>
+    <color name="colorRowSelectorLight">#ffffff</color>
+    <color name="colorPositive">#09c70f</color>
+    <color name="colorNegative">#e40400</color>
+    <color name="colorChartMain">#e40400</color>
+    <color name="colorChartBorder">#979393</color>
+    -->
 </resources>

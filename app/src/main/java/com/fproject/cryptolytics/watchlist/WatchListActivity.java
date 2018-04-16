@@ -33,6 +33,7 @@ import com.fproject.cryptolytics.database.DatabaseManager;
 import com.fproject.cryptolytics.details.DetailsActivity;
 import com.fproject.cryptolytics.searchCoin.SearchCoinActivity;
 import com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity;
+import com.fproject.cryptolytics.utility.InternetChecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +48,7 @@ public class WatchListActivity extends AppCompatActivity
     private final static int SEARCH_CURRENCY_REQUEST  = 2;
 
     // These provide data about the watched items.
+    private InternetChecker  internetChecker;
     private CryptoClient     cryptoClient;
     private DatabaseManager  databaseManager;
 
@@ -68,6 +70,7 @@ public class WatchListActivity extends AppCompatActivity
         //
         // Components
         //
+        internetChecker = new InternetChecker(this);
         cryptoClient = new CryptoClient(this);
         databaseManager = new DatabaseManager(this);
         //
@@ -78,6 +81,11 @@ public class WatchListActivity extends AppCompatActivity
         // Listeners
         //
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //
         // Data
         //
@@ -325,11 +333,6 @@ public class WatchListActivity extends AppCompatActivity
 
         snackbar.show();
     }
-
-    // --------------------------------------------------------------------------------------------
-    //endregion
-    // --------------------------------------------------------------------------------------------
-
     // --------------------------------------------------------------------------------------------
     //endregion
     // --------------------------------------------------------------------------------------------

@@ -50,7 +50,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/colorText"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 android:text="@string/app_name"/>
 
@@ -62,17 +62,17 @@
 
             <ImageView
                 android:id="@+id/iv_info"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_below="@id/iv_image"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="30dp"
-                android:src="@drawable/ic_info"/>
+                android:src="@drawable/ic_about_info"/>
 
             <TextView
                 android:id="@+id/tv_info"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_image"
@@ -92,17 +92,17 @@
 
             <ImageView
                 android:id="@+id/iv_feedback"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_below="@id/iv_info"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/ic_mail"/>
+                android:src="@drawable/ic_about_mail"/>
 
             <TextView
                 android:id="@+id/tv_feedback"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_info"
@@ -147,8 +147,8 @@
                 android:layout_height="wrap_content">
 
             <ImageView
-                android:tint="@color/colorPrimaryMenu"
-                android:src="@drawable/ic_chart"
+                android:tint="@color/colorAccentLight"
+                android:src="@drawable/ic_about_chart"
                 android:id="@+id/iv_mp_chart"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -158,7 +158,7 @@
 
             <TextView
                 android:id="@+id/tv_mp_chat"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_credits"
@@ -178,17 +178,17 @@
 
             <ImageView
                 android:id="@+id/iv_crypto_compare"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_below="@id/iv_mp_chart"
                 android:layout_marginStart="25dp"
                 android:layout_marginTop="20dp"
-                android:src="@drawable/ic_crypto_compare"/>
+                android:src="@drawable/ic_about_crypto"/>
 
             <TextView
                 android:id="@+id/tv_crypto_compare"
-                android:tint="@color/colorPrimaryMenu"
+                android:tint="@color/colorAccentLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_mp_chart"

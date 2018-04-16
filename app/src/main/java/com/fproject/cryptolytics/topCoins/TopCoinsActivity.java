@@ -66,13 +66,18 @@ public class TopCoinsActivity extends AppCompatActivity
         //
         // Component
         //
-        setupComponents();
+        setupActivity();
         //
         // Listeners
         //
         setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //
-        //
+        // Data
         //
         updateActivity();
     }
@@ -80,7 +85,7 @@ public class TopCoinsActivity extends AppCompatActivity
     /**
      * Setup the components of the activity.
      */
-    private void setupComponents(){
+    private void setupActivity(){
         RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
         recyclerView.setHasFixedSize(true);
         //
