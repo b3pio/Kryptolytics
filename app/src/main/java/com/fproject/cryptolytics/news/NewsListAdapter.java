@@ -69,7 +69,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             viewHolder.imageDownloader.cancel(true);
         }
 
-        viewHolder.imageDownloader = new ImageDownloader(getThumbnailPlaceHolder(), viewHolder.ivThumbnail);
+        viewHolder.imageDownloader = new ImageDownloader(getThumbnailPlaceHolder(),
+                                            viewHolder.ivThumbnail);
+
         viewHolder.imageDownloader.execute(imageUrl);
     }
 

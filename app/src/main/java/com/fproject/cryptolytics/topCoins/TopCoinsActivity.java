@@ -279,32 +279,37 @@ public class TopCoinsActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_news) {
 
-            Intent intent = new Intent(this, NewsActivity.class);
-            finish();
-            startActivity(intent);
+            switchToActivity(NewsActivity.class);
 
         } else if (id == R.id.nav_watchlist) {
 
-            Intent intent = new Intent(this, WatchListActivity.class);
-            finish();
-            startActivity(intent);
+            switchToActivity(WatchListActivity.class);
 
         } else if (id == R.id.nav_converter) {
 
-            Intent intent = new Intent(this, ConverterActivity.class);
-            finish();
-            startActivity(intent);
+            switchToActivity(ConverterActivity.class);
 
         } else if (id == R.id.nav_about) {
 
-            Intent intent = new Intent(this, AboutActivity.class);
-            finish();
-            startActivity(intent);
+            switchToActivity(AboutActivity.class);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Close the current activity and open an activity of the specified type.
+     */
+    private void switchToActivity(Class activity) {
+
+        Intent intent = new Intent(this, activity);
+
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override

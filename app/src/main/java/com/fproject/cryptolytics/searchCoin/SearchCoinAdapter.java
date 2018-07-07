@@ -107,6 +107,7 @@ public class SearchCoinAdapter extends BaseAdapter implements Filterable {
     // --------------------------------------------------------------------------------------------
 
     private class CoinFilter extends Filter {
+
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();

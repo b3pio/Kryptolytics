@@ -89,7 +89,7 @@ public class WatchListTable {
         int fromSymbol = cursor.getColumnIndex(KEY_FROM_SYMBOL);
         int toSymbol   = cursor.getColumnIndex(KEY_TO_SYMBOL);
 
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
             WatchedItem watchedItem = new WatchedItem(cursor.getInt(id),
                     cursor.getString(fromSymbol),
