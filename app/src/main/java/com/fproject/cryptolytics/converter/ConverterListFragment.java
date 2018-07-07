@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.fproject.cryptolytics.R;
 import com.fproject.cryptolytics.cryptoapi.CryptoCallback;
@@ -45,7 +46,6 @@ import static android.app.Activity.RESULT_OK;
  * {@link OnConvertItemSelectionListener} interface.
  */
 public class ConverterListFragment extends Fragment {
-
     private final static int MAX_ITEM_COUNT         = 10;
     private final static int SEARCH_COIN_REQUEST    = 1;
 
@@ -249,10 +249,9 @@ public class ConverterListFragment extends Fragment {
      * Display a message using a snack bar.
      */
     private void displayMessage(String message) {
-        Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                message, Snackbar.LENGTH_LONG);
 
-        snackbar.show();
+        Toast.makeText(getActivity().getApplicationContext(), message,
+                Toast.LENGTH_SHORT).show();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -463,7 +462,7 @@ public class ConverterListFragment extends Fragment {
 
         }
         else {
-            displayMessage("Maximum item count reached.");
+            displayMessage("Maximum item count reached!");
         }
     }
 

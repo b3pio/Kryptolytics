@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.fproject.cryptolytics.AboutActivity;
 import com.fproject.cryptolytics.news.NewsActivity;
@@ -331,10 +332,8 @@ public class WatchListActivity extends AppCompatActivity
      */
     private void displayMessage(String message) {
 
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                message, Snackbar.LENGTH_LONG);
-
-        snackbar.show();
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_SHORT).show();
     }
     // --------------------------------------------------------------------------------------------
     //endregion
@@ -349,6 +348,8 @@ public class WatchListActivity extends AppCompatActivity
      */
     public void openSearchCoinsActivity() {
         Intent intent = new Intent(getApplicationContext(), SearchCoinActivity.class);
+
+        intent.putExtra("showBackButton", false);
         startActivityForResult(intent, SEARCH_COIN_REQUEST);
     }
 
@@ -358,7 +359,7 @@ public class WatchListActivity extends AppCompatActivity
     public void openSearchCurrencyActivity() {
         Intent intent = new Intent(getApplicationContext(), SearchCurrencyActivity.class);
 
-        intent.putExtra("backButton", false);
+        intent.putExtra("showBackButton", false);
         startActivityForResult(intent, SEARCH_CURRENCY_REQUEST);
     }
 
@@ -405,7 +406,7 @@ public class WatchListActivity extends AppCompatActivity
                 openSearchCoinsActivity();
             }
             else {
-                displayMessage("Maximum item count reached.");
+                displayMessage("Maximum item count reached!");
             }
 
             return true;
