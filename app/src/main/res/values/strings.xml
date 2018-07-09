@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cryptolytics</string>
+    <string name="app_name">Cryptolitycs</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -19,7 +19,7 @@
     <string name="title_activity_chart">Chart</string>
     <string name="title_activity_details">Details</string>
 
-    <string name="common_version">Version 0.1.1</string>
+    <string name="common_version">Version 1.0.0</string>
     <string name="about_feedback">Send FeedBack</string>
     <string name="about_credits">Credits</string>
     <string name="about_mp_chart">MP Android Chart</string>

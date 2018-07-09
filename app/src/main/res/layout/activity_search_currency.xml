@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fproject.cryptolytics.searchCurrency.SearchCurrencyActivity">
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.searchCurrency.SearchCurrencyActivity">
 
 </android.support.constraint.ConstraintLayout>

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fproject.cryptolytics.details.DetailsActivity" >
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.details.DetailsActivity" >
 
     <RelativeLayout
         android:id="@+id/rl_header"

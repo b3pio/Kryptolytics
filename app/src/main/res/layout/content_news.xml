@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fproject.cryptolytics.news.NewsActivity"
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.news.NewsActivity"
     tools:showIn="@layout/app_bar_news">
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.fproject.cryptolytics.converter.ConverterActivity"
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.converter.ConverterActivity"
     tools:showIn="@layout/app_bar_converter">
 
     <LinearLayout
@@ -18,14 +18,14 @@
             android:id="@+id/fgt_convertlist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.fproject.cryptolytics.converter.ConverterListFragment"/>
+            android:name="com.fproject.cryptolitycs.converter.ConverterListFragment"/>
 
         <fragment
             android:layout_weight="1.1"
             android:id="@+id/fgt_keyboard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.fproject.cryptolytics.converter.KeyboardFragment"/>
+            android:name="com.fproject.cryptolitycs.converter.KeyboardFragment"/>
 
     </LinearLayout>
 

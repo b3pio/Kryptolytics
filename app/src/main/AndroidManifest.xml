@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fproject.cryptolytics">
+    package="com.fproject.cryptolitycs">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".watchlist.WatchListActivity"
+            android:name="com.fproject.cryptolitycs.watchlist.WatchListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter android:label="@string/app_name">
@@ -24,23 +24,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".topCoins.TopCoinsActivity"
+            android:name="com.fproject.cryptolitycs.topCoins.TopCoinsActivity"
             android:label="@string/title_activity_top_coins"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".converter.ConverterActivity"
+            android:name="com.fproject.cryptolitycs.converter.ConverterActivity"
             android:label="@string/title_activity_converter"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AboutActivity"
+            android:name="com.fproject.cryptolitycs.AboutActivity"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".details.DetailsActivity"
+            android:name="com.fproject.cryptolitycs.details.DetailsActivity"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".searchCoin.SearchCoinActivity"
+            android:name="com.fproject.cryptolitycs.searchCoin.SearchCoinActivity"
             android:label="@string/title_activity_search_coin"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -52,7 +52,7 @@
                 android:resource="@xml/searchable_coin" />
         </activity>
         <activity
-            android:name=".searchCurrency.SearchCurrencyActivity"
+            android:name="com.fproject.cryptolitycs.searchCurrency.SearchCurrencyActivity"
             android:label="@string/title_activity_search_currency"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -64,10 +64,10 @@
                 android:resource="@xml/searchable_currency" />
         </activity>
         <activity
-            android:name=".details.ChartActivity"
+            android:name="com.fproject.cryptolitycs.details.ChartActivity"
             android:label="@string/title_activity_chart" />
         <activity
-            android:name=".news.NewsActivity"
+            android:name="com.fproject.cryptolitycs.news.NewsActivity"
             android:label="@string/title_activity_news"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

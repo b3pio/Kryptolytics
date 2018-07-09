@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_anchorGravity="center"
-    tools:context="com.fproject.cryptolytics.converter.KeyboardFragment">
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.converter.KeyboardFragment">
 
     <TableLayout
         android:background="@color/colorPrimaryLightText"
