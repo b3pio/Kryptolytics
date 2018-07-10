@@ -24,9 +24,10 @@ import java.util.List;
  * @author lszathmary
  */
 public class CryptoClient {
-    private final static String MODULE_TAG = "[CryptoClient]";
-    public  final static String DATA_SERVER  = "https://min-api.cryptocompare.com/data";
-    public  final static String IMAGE_SERVER = "https://www.cryptocompare.com";
+    private final static String EXTRA_PARAM     = "Cryptolitycs";
+    private final static String MODULE_TAG      = "[CryptoClient]";
+    public  final static String DATA_SERVER     = "https://min-api.cryptocompare.com/data";
+    public  final static String IMAGE_SERVER    = "https://www.cryptocompare.com";
 
     private RequestQueue requestQueue;
 
@@ -65,7 +66,9 @@ public class CryptoClient {
      * Requests the top {@link CryptoCoin} list.
      */
     public void getTopCryptoCoins(Integer count, String toSymbol, CryptoCallback callback) {
-        String url = DATA_SERVER + "/top/totalvol?limit=" + count.toString() + "&tsym=" + toSymbol;
+        String url = DATA_SERVER + "/top/totalvol?limit=" + count.toString()
+                + "&tsym=" + toSymbol
+                + "&extraParams=" + EXTRA_PARAM;
 
         getObject(url, FileUtility.CURRENT_DAY, callback);
     }
@@ -74,7 +77,9 @@ public class CryptoClient {
      * Requests the {@link CryptoCurrency}.
      */
     public void getCryptoCurrency(String fromSymbol, String toSymbol, CryptoCallback callback){
-        String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol + "&tsyms=" + toSymbol;
+        String url = DATA_SERVER + "/pricemultifull?fsyms="+ fromSymbol
+                + "&tsyms=" + toSymbol
+                + "&extraParams=" + EXTRA_PARAM;
 
         getObject(url, FileUtility.CURRENT_TIME, callback);
     }
@@ -83,8 +88,10 @@ public class CryptoClient {
      * Requests the {@link CryptoRate} list.
      */
     public void getCryptoRates(String fromSymbol, List<String> toSymbols, CryptoCallback callback) {
-        String url = DATA_SERVER + "/pricemulti?fsyms="+ fromSymbol + "&tsyms="
-                            + fromSymbol + "," + TextUtils.join("," , toSymbols);
+        String url = DATA_SERVER + "/pricemulti?fsyms="
+                + fromSymbol + "&tsyms="
+                + fromSymbol + "," + TextUtils.join("," , toSymbols)
+                + "&extraParams=" + EXTRA_PARAM;
 
         getObject(url, FileUtility.CURRENT_MINUTE, callback);
     }
@@ -94,7 +101,10 @@ public class CryptoClient {
      * Requests the {@link CryptoHistoryPoint} list.
      */
     public void getCryptoHistoryPoints(String fromSymbol, String toSymbol, CryptoCallback callback) {
-        String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol + "&tsym=" + toSymbol + "&limit=30";
+        String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol
+                + "&tsym=" + toSymbol
+                + "&limit=30"
+                + "&extraParams=" + EXTRA_PARAM;
 
         getObject(url, FileUtility.CURRENT_HOUR, callback);
     }
@@ -103,7 +113,7 @@ public class CryptoClient {
      * Requests the {@link CryptoNewsArticle} list.
      */
     public void getCryptoNewsArticles(CryptoCallback callback) {
-        String url = DATA_SERVER + "/news/?lang=EN";
+        String url = DATA_SERVER + "/news/?lang=EN" +  "&extraParams=" + EXTRA_PARAM;
 
         getArray(url, FileUtility.CURRENT_MINUTE, callback);
     }
