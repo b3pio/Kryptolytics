@@ -3,23 +3,20 @@ package com.fproject.cryptolitycs.cryptoapi;
 import java.util.Comparator;
 
 /**
- * Created by chamu on 4/15/2018.
+ * A Crypto currency related news article.
  */
-
-public class CryptoNews {
+public class CryptoNewsArticle {
 
     private String title;
     private String body;
     private String url;
     private String imageUrl;
-    private String  source;
-
-
+    private String source;
 
     private Long    date;
     private Integer sortOrder;
 
-    public CryptoNews( String title, String body,  String url, String imageUrl, String source, Long date, Integer sortOrder) {
+    public CryptoNewsArticle(String title, String body, String url, String imageUrl, String source, Long date, Integer sortOrder) {
 
         this.title = title;
         this.body = body;
@@ -59,9 +56,9 @@ public class CryptoNews {
         return sortOrder;
     }
 
-    public static Comparator<CryptoNews> SortOrderComparator = new Comparator<CryptoNews>() {
+    public static Comparator<CryptoNewsArticle> SortOrderComparator = new Comparator<CryptoNewsArticle>() {
 
-        public int compare(CryptoNews cryptoCoin1, CryptoNews cryptoCoin2) {
+        public int compare(CryptoNewsArticle cryptoCoin1, CryptoNewsArticle cryptoCoin2) {
             Integer sortOrder1 = cryptoCoin1.getSortOrder();
             Integer sortOrder2 = cryptoCoin2.getSortOrder();
 

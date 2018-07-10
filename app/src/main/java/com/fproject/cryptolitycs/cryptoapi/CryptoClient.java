@@ -91,18 +91,18 @@ public class CryptoClient {
 
 
     /**
-     * Requests the {@link CryptoHistory}.
+     * Requests the {@link CryptoHistoryPoint} list.
      */
-    public void getCryptoHistories(String fromSymbol, String toSymbol, CryptoCallback callback) {
+    public void getCryptoHistoryPoints(String fromSymbol, String toSymbol, CryptoCallback callback) {
         String url = DATA_SERVER + "/histoday?fsym="+ fromSymbol + "&tsym=" + toSymbol + "&limit=30";
 
         getObject(url, FileUtility.CURRENT_HOUR, callback);
     }
 
     /**
-     * Requests the {@link CryptoHistory}.
+     * Requests the {@link CryptoNewsArticle} list.
      */
-    public void getCryptoNewsList(CryptoCallback callback) {
+    public void getCryptoNewsArticles(CryptoCallback callback) {
         String url = DATA_SERVER + "/news/?lang=EN";
 
         getArray(url, FileUtility.CURRENT_MINUTE, callback);

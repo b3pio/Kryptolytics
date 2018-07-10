@@ -164,7 +164,7 @@ public class TopCoinsActivity extends AppCompatActivity
             @Override
             public void onSuccess(CryptoData cryptoData) {
 
-                cryptoCoins = cryptoData.getAsTopCoins();
+                cryptoCoins = cryptoData.asTopCoins();
                 getCryptoCurrenciesCallback();
             }
 
@@ -184,7 +184,7 @@ public class TopCoinsActivity extends AppCompatActivity
                 @Override
                 public void onSuccess(CryptoData cryptoData) {
 
-                    cryptoCurrencies.put(cryptoCoin.getSortOrder(), cryptoData.getAsCryptoCurrency());
+                    cryptoCurrencies.put(cryptoCoin.getSortOrder(), cryptoData.asCryptoCurrency());
                     onCryptoCurrencyReceived();
                 }
 

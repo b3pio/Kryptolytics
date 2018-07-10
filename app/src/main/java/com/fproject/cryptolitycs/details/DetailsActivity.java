@@ -98,7 +98,7 @@ public class DetailsActivity extends AppCompatActivity {
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCoin = cryptoData.getAsCryptoCoins().get(fromSymbol);
+                cryptoCoin = cryptoData.asCryptoCoins().get(fromSymbol);
                 updateActivityData();
              }
 
@@ -116,7 +116,7 @@ public class DetailsActivity extends AppCompatActivity {
         cryptoClient.getCryptoCurrency(fromSymbol, toSymbol, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCurrency =  cryptoData.getAsCryptoCurrency();
+                cryptoCurrency =  cryptoData.asCryptoCurrency();
                 updateActivityData();
             }
 

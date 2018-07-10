@@ -220,7 +220,7 @@ public class WatchListActivity extends AppCompatActivity
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCoins = cryptoData.getAsCryptoCoins();
+                cryptoCoins = cryptoData.asCryptoCoins();
                 onCryptoDataReceived();
             }
 
@@ -241,11 +241,11 @@ public class WatchListActivity extends AppCompatActivity
                 public void onSuccess(CryptoData cryptoData) {
 
                     if (cryptoData.isErrorMessage()) {
-                        displayMessage(cryptoData.getAsCryptoMessage());
+                        displayMessage(cryptoData.asCryptoMessage());
                     }
 
                     // Put a null even if we received an error message.
-                    cryptoCurrencies.put(item.getItemId(), cryptoData.getAsCryptoCurrency());
+                    cryptoCurrencies.put(item.getItemId(), cryptoData.asCryptoCurrency());
                     onCryptoDataReceived();
                 }
 

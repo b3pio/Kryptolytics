@@ -22,7 +22,7 @@ public class CryptoData {
 
     // The JSON that contains the actual data; that will be parsed.
     private JSONObject cryptoObject;
-    private JSONArray   cryptoArray;
+    private JSONArray  cryptoArray;
 
     // --------------------------------------------------------------------------------------------
     //region  Constructor
@@ -46,7 +46,7 @@ public class CryptoData {
     /**
      * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
      */
-    public List<CryptoCoin> getAsTopCoins(){
+    public List<CryptoCoin> asTopCoins(){
         List<CryptoCoin> topCoins = new ArrayList<>();
 
         try {
@@ -55,13 +55,13 @@ public class CryptoData {
             for (Integer index = 0; index < jsonData.length(); index ++)   {
 
                 JSONObject jsonIndex  = jsonData.getJSONObject(index);
-                CryptoCoin cryptoCoin = getTopCryptoCoin(jsonIndex, index);
+                CryptoCoin cryptoCoin = asTopCryptoCoin(jsonIndex, index);
 
                 topCoins.add(cryptoCoin);
             }
         }
         catch (JSONException ex) {
-            Log.d(MODULE_TAG, "getAsTopCoinsByVolume(): " +  ex.toString());
+            Log.d(MODULE_TAG, "asTopCoins(): " +  ex.toString());
         }
 
         Collections.sort(topCoins,CryptoCoin.SortOrderComparator);
@@ -70,9 +70,9 @@ public class CryptoData {
     }
 
     /**
-     * Parses the {@link CryptoData} as {@link CryptoCoin} collection.
+     * Parses the {@link CryptoData} as a {@link CryptoCoin} collection.
      */
-    public Map<String,CryptoCoin> getAsCryptoCoins() {
+    public Map<String,CryptoCoin> asCryptoCoins() {
         Map<String,CryptoCoin> cryptoCoinList = new HashMap<String,CryptoCoin>();
 
         try {
@@ -83,12 +83,12 @@ public class CryptoData {
             while (keys.hasNext()) {
                 JSONObject jsonCoin = jsonCoins.getJSONObject(keys.next());
 
-                CryptoCoin cryptoCoin = getCryptoCoin(jsonCoin);
+                CryptoCoin cryptoCoin = asCryptoCoin(jsonCoin);
                 cryptoCoinList.put(cryptoCoin.getSymbol(), cryptoCoin);
             }
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoCoins(): " +  exception.toString());
         }
 
         return cryptoCoinList;
@@ -97,7 +97,7 @@ public class CryptoData {
     /**
      * Parses the {@link CryptoData} as a {@link CryptoRate} collection.
      */
-    public Map<String,CryptoRate>  getAsCryptoRates(){
+    public Map<String,CryptoRate> asCryptoRates(){
         Map<String,CryptoRate> cryptoRates = new HashMap();
 
         try {
@@ -115,7 +115,7 @@ public class CryptoData {
             }
         }
         catch (JSONException exception) {
-                Log.d(MODULE_TAG, "getAsCryptoRates(): " + exception.toString());
+                Log.d(MODULE_TAG, "asCryptoRates(): " + exception.toString());
         }
 
         return cryptoRates;
@@ -124,7 +124,7 @@ public class CryptoData {
     /**
      * Parses the {@link CryptoData} as a {@link CryptoCurrency}.
      */
-    public CryptoCurrency getAsCryptoCurrency() {
+    public CryptoCurrency asCryptoCurrency() {
         CryptoCurrency cryptoCurrency = null;
 
         try {
@@ -164,7 +164,7 @@ public class CryptoData {
                     lastUpdate, open, high, low, change, changePct,supply, volume, marketCap);
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoCurrency(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoCurrency(): " +  exception.toString());
         }
 
         return cryptoCurrency;
@@ -173,8 +173,8 @@ public class CryptoData {
     /**
      * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
      */
-    public List<CryptoHistory> getAsCryptoHistories(){
-        List<CryptoHistory> cryptoHistories = new ArrayList<>();
+    public List<CryptoHistoryPoint> asCryptoHistoryPoints(){
+        List<CryptoHistoryPoint> cryptoHistoryPoints = new ArrayList<>();
 
         try {
             JSONArray jsonData = cryptoObject.getJSONArray("Data");
@@ -182,25 +182,25 @@ public class CryptoData {
             for (Integer index = 0; index < jsonData.length(); index ++)   {
 
                 JSONObject jsonIndex  = jsonData.getJSONObject(index);
-                CryptoHistory cryptoHistory = getCryptoHistory(jsonIndex,index);
+                CryptoHistoryPoint cryptoHistoryPoint = asCryptoHistoryPoint(jsonIndex,index);
 
-                cryptoHistories.add(cryptoHistory);
+                cryptoHistoryPoints.add(cryptoHistoryPoint);
             }
         }
         catch (JSONException ex) {
-            Log.d(MODULE_TAG, "getAsCryptoHistories(): " +  ex.toString());
+            Log.d(MODULE_TAG, "asCryptoHistoryPoints(): " +  ex.toString());
         }
 
-        Collections.sort(cryptoHistories, CryptoHistory.SortOrderComparator);
+        Collections.sort(cryptoHistoryPoints, CryptoHistoryPoint.SortOrderComparator);
 
-        return cryptoHistories;
+        return cryptoHistoryPoints;
     }
 
     /**
-     * Parses the {@link CryptoData} as top {@link CryptoCoin} collection. (Top 10 List)
+     * Parses the {@link CryptoData} as a {@link CryptoNewsArticle} collection.
      */
-    public List<CryptoNews> getAsCryptoNewsList(){
-        List<CryptoNews> cryptoNewsList = new ArrayList<>();
+    public List<CryptoNewsArticle> asCryptoNewsArticles(){
+        List<CryptoNewsArticle> cryptoNewsArticles = new ArrayList<>();
 
         try {
 
@@ -215,18 +215,18 @@ public class CryptoData {
                 String source    = jsonIndex.getString("source");
                 Long   date      = jsonIndex.getLong("published_on");
 
-                CryptoNews cryptoNews = new CryptoNews(title, body, url, imageUrl, source, date, index);
-                cryptoNewsList.add(cryptoNews);
+                CryptoNewsArticle cryptoNewsArticle = new CryptoNewsArticle(title, body, url, imageUrl, source, date, index);
+                cryptoNewsArticles.add(cryptoNewsArticle);
             }
 
         }
         catch (JSONException ex) {
-            Log.d(MODULE_TAG, "getAsCryptoNewsList(): " +  ex.toString());
+            Log.d(MODULE_TAG, "asCryptoNewsArticles(): " +  ex.toString());
         }
 
-        Collections.sort(cryptoNewsList, CryptoNews.SortOrderComparator);
+        Collections.sort(cryptoNewsArticles, CryptoNewsArticle.SortOrderComparator);
 
-        return cryptoNewsList;
+        return cryptoNewsArticles;
     }
 
 
@@ -235,13 +235,13 @@ public class CryptoData {
     // --------------------------------------------------------------------------------------------
 
     // --------------------------------------------------------------------------------------------
-    //region  Parsing Methods
+    //region Error Parsing Methods
     // --------------------------------------------------------------------------------------------
 
     /**
      * Parses the {@link CryptoData} as a {@link String} message.
      */
-    public String getAsCryptoMessage(){
+    public String asCryptoMessage(){
         String message = null;
 
         try {
@@ -250,7 +250,7 @@ public class CryptoData {
 
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoMessage(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoMessage(): " +  exception.toString());
         }
 
         return message;
@@ -270,7 +270,7 @@ public class CryptoData {
 
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoMessage(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoMessage(): " +  exception.toString());
         }
 
         return response.contains("Error");
@@ -287,7 +287,7 @@ public class CryptoData {
     /**
      * Parses a {@link CryptoCoin} from the specified {@link JSONObject}.
      */
-    private CryptoCoin getCryptoCoin(JSONObject jsonCoin) {
+    private CryptoCoin asCryptoCoin(JSONObject jsonCoin) {
         CryptoCoin cryptoCoin = null;
 
         try {
@@ -310,7 +310,7 @@ public class CryptoData {
                     algorithm, proofType, coinSupply, sortOrder);
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getAsCryptoCoins(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoCoins(): " +  exception.toString());
         }
 
         return cryptoCoin;
@@ -319,7 +319,7 @@ public class CryptoData {
     /**
      * Parses a {@link CryptoCoin} from the specified {@link JSONObject}.
      */
-    private CryptoCoin getTopCryptoCoin(JSONObject jsonObject, Integer sortOrder) {
+    private CryptoCoin asTopCryptoCoin(JSONObject jsonObject, Integer sortOrder) {
         CryptoCoin cryptoCoin = null;
 
         try {
@@ -347,17 +347,17 @@ public class CryptoData {
                     algorithm, proofType, coinSupply, sortOrder);
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getTopCryptoCoin(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asTopCryptoCoin(): " +  exception.toString());
         }
 
         return cryptoCoin;
     }
 
     /**
-     * Parses a {@link CryptoHistory} from the specified {@link JSONObject}.
+     * Parses a {@link CryptoHistoryPoint} from the specified {@link JSONObject}.
      */
-    private CryptoHistory getCryptoHistory(JSONObject jsonObject, Integer sortOrder) {
-        CryptoHistory cryptoHistory = null;
+    private CryptoHistoryPoint asCryptoHistoryPoint(JSONObject jsonObject, Integer sortOrder) {
+        CryptoHistoryPoint cryptoHistoryPoint = null;
 
         try {
 
@@ -382,15 +382,15 @@ public class CryptoData {
             String volumeToStr = jsonObject.getString("volumeto");
             float volumeTo = Float.valueOf(volumeToStr);
 
-            cryptoHistory = new CryptoHistory(time, close, high, low, open,
+            cryptoHistoryPoint = new CryptoHistoryPoint(time, close, high, low, open,
                     volumeFrom, volumeTo, sortOrder);
 
         }
         catch (JSONException exception) {
-            Log.d(MODULE_TAG, "getCryptoHistory(): " +  exception.toString());
+            Log.d(MODULE_TAG, "asCryptoHistoryPoint(): " +  exception.toString());
         }
 
-        return cryptoHistory;
+        return cryptoHistoryPoint;
     }
 
     /**

@@ -85,7 +85,7 @@ public class SearchCoinActivity extends AppCompatActivity {
             @Override
             public void onSuccess(CryptoData cryptoData) {
 
-                cryptoCoins = new ArrayList<>(cryptoData.getAsCryptoCoins().values());
+                cryptoCoins = new ArrayList<>(cryptoData.asCryptoCoins().values());
                 Collections.sort(cryptoCoins, CryptoCoin.SortOrderComparator);
 
                 onCryptoDataReceived();

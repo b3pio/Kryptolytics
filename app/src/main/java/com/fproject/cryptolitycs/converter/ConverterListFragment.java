@@ -267,7 +267,7 @@ public class ConverterListFragment extends Fragment {
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCoins = cryptoData.getAsCryptoCoins();
+                cryptoCoins = cryptoData.asCryptoCoins();
                 onCryptoDataReceived();
             }
 
@@ -286,7 +286,7 @@ public class ConverterListFragment extends Fragment {
         cryptoClient.getCryptoRates(fromSymbol, toSymbols, new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoRates = cryptoData.getAsCryptoRates();
+                cryptoRates = cryptoData.asCryptoRates();
                 onCryptoDataReceived();
             }
 

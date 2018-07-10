@@ -21,7 +21,7 @@ import com.fproject.cryptolitycs.AboutActivity;
 import com.fproject.cryptolitycs.converter.ConverterActivity;
 import com.fproject.cryptolitycs.cryptoapi.CryptoClient;
 import com.fproject.cryptolitycs.cryptoapi.CryptoData;
-import com.fproject.cryptolitycs.cryptoapi.CryptoNews;
+import com.fproject.cryptolitycs.cryptoapi.CryptoNewsArticle;
 import com.fproject.cryptolitycs.topCoins.TopCoinsActivity;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCallback;
@@ -37,9 +37,9 @@ public class NewsActivity extends AppCompatActivity
     private CryptoClient cryptoClient;
 
     // List of item displayed in the activity;
-    private List<CryptoNews> cryptoNewsList;
+    private List<CryptoNewsArticle> cryptoNewsArticles;
 
-    private List<CryptoNews> newsItems;
+    private List<CryptoNewsArticle> newsItems;
     private NewsListAdapter  newsListAdapter;
 
     @Override
@@ -78,7 +78,7 @@ public class NewsActivity extends AppCompatActivity
      */
     private void setupActivity() {
         newsItems = new ArrayList<>();
-        cryptoNewsList = new ArrayList<>();
+        cryptoNewsArticles = new ArrayList<>();
         //
         // Toolbar
         //
@@ -126,8 +126,8 @@ public class NewsActivity extends AppCompatActivity
         newsListAdapter.setOnClickListener(new NewsListAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position) {
-                CryptoNews cryptoNews = newsListAdapter.getNewsItem(position);
-                openWebSite(cryptoNews.getUrl());
+                CryptoNewsArticle cryptoNewsArticle = newsListAdapter.getNewsItem(position);
+                openWebSite(cryptoNewsArticle.getUrl());
             }
         });
         //
@@ -146,18 +146,18 @@ public class NewsActivity extends AppCompatActivity
      * Populate the activity with data.
      */
     private void updateActivity() {
-        cryptoNewsList.clear();
+        cryptoNewsArticles.clear();
         getCryptoNewsListCallback();
     }
 
     /**
-     * Obtain the {@link CryptoNews} data.
+     * Obtain the {@link CryptoNewsArticle} data.
      */
     private void getCryptoNewsListCallback(){
-        cryptoClient.getCryptoNewsList(new CryptoCallback() {
+        cryptoClient.getCryptoNewsArticles(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoNewsList = cryptoData.getAsCryptoNewsList();
+                cryptoNewsArticles = cryptoData.asCryptoNewsArticles();
                 onCryptoDataReceived();
             }
 
@@ -173,7 +173,7 @@ public class NewsActivity extends AppCompatActivity
      */
     private void onCryptoDataReceived() {
         newsItems.clear();
-        newsItems.addAll(cryptoNewsList);
+        newsItems.addAll(cryptoNewsArticles);
 
         newsListAdapter.notifyDataSetChanged();
         hideSwipeRefresh();

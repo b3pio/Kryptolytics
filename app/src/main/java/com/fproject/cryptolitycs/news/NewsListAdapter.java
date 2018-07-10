@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fproject.cryptolitycs.cryptoapi.CryptoNews;
+import com.fproject.cryptolitycs.cryptoapi.CryptoNewsArticle;
 import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
 
@@ -21,13 +21,13 @@ import java.util.concurrent.TimeUnit;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
     private OnClickListener     ocListener;
-    private List<CryptoNews>    cryptoNewsList;
+    private List<CryptoNewsArticle> cryptoNewsArticles;
 
     // Context for accessing the application assets and resources.
     private Context context;
 
-    public NewsListAdapter(Context context, List<CryptoNews> newsItems) {
-        this.cryptoNewsList = newsItems;
+    public NewsListAdapter(Context context, List<CryptoNewsArticle> newsItems) {
+        this.cryptoNewsArticles = newsItems;
         this.context = context;
     }
 
@@ -37,11 +37,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return cryptoNewsList.size();
+        return cryptoNewsArticles.size();
     }
 
-    public CryptoNews getNewsItem(int position){
-        return cryptoNewsList.get(position);
+    public CryptoNewsArticle getNewsItem(int position){
+        return cryptoNewsArticles.get(position);
     }
 
     @Override
@@ -54,13 +54,13 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        CryptoNews cryptoNews = getNewsItem(position);
+        CryptoNewsArticle cryptoNewsArticle = getNewsItem(position);
 
-        viewHolder.tvTitle.setText(cryptoNews.getTitle());
-        viewHolder.tvSource.setText(cryptoNews.getSource());
-        viewHolder.tvDate.setText(getRelativeDateString(cryptoNews.getDate()));
+        viewHolder.tvTitle.setText(cryptoNewsArticle.getTitle());
+        viewHolder.tvSource.setText(cryptoNewsArticle.getSource());
+        viewHolder.tvDate.setText(getRelativeDateString(cryptoNewsArticle.getDate()));
 
-        bindImage(viewHolder,cryptoNews.getImageUrl());
+        bindImage(viewHolder, cryptoNewsArticle.getImageUrl());
     }
 
     private void bindImage(ViewHolder viewHolder, String imageUrl){

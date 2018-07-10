@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * The values of a {@link CryptoCurrency} at one point in time.
  */
-public class CryptoHistory {
+public class CryptoHistoryPoint {
 
     public float time;
 
@@ -19,8 +19,8 @@ public class CryptoHistory {
 
     private Integer sortOrder;
 
-    public CryptoHistory(float time, float close, float high, float low, float open,
-                         float volumeFrom, float volumeTo, Integer sortOrder) {
+    public CryptoHistoryPoint(float time, float close, float high, float low, float open,
+                              float volumeFrom, float volumeTo, Integer sortOrder) {
 
         this.time = time;
         this.close = close;
@@ -68,11 +68,11 @@ public class CryptoHistory {
         return sortOrder;
     }
 
-    public static Comparator<CryptoHistory> SortOrderComparator = new Comparator<CryptoHistory>() {
+    public static Comparator<CryptoHistoryPoint> SortOrderComparator = new Comparator<CryptoHistoryPoint>() {
 
-        public int compare(CryptoHistory cryptoHistory1, CryptoHistory cryptoHistory2) {
-            Integer sortOrder1 = cryptoHistory1.getSortOrder();
-            Integer sortOrder2 = cryptoHistory2.getSortOrder();
+        public int compare(CryptoHistoryPoint cryptoHistoryPoint1, CryptoHistoryPoint cryptoHistoryPoint2) {
+            Integer sortOrder1 = cryptoHistoryPoint1.getSortOrder();
+            Integer sortOrder2 = cryptoHistoryPoint2.getSortOrder();
 
             // Ascending order
             return sortOrder1.compareTo(sortOrder2);

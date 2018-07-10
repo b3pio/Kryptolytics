@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.fproject.cryptolitycs.cryptoapi.CryptoClient;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCoin;
 import com.fproject.cryptolitycs.cryptoapi.CryptoData;
-import com.fproject.cryptolitycs.cryptoapi.CryptoHistory;
+import com.fproject.cryptolitycs.cryptoapi.CryptoHistoryPoint;
 import com.fproject.cryptolitycs.utility.DecimalFormatter;
 import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
@@ -40,7 +40,7 @@ public class ChartActivity extends AppCompatActivity {
     private String toSymbol   = null;
 
     // The data that will displayed by the activity.
-    private List<CryptoHistory> cryptoHistories;
+    private List<CryptoHistoryPoint> cryptoHistoryPoints;
     private CryptoCoin cryptoCoin;
 
     private TextView  tvPrice;
@@ -159,8 +159,8 @@ public class ChartActivity extends AppCompatActivity {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
 
-                CryptoHistory cryptoHistory = (CryptoHistory) e.getData();
-                selectedPointChanged(cryptoHistory);
+                CryptoHistoryPoint cryptoHistoryPoint = (CryptoHistoryPoint) e.getData();
+                selectedPointChanged(cryptoHistoryPoint);
             }
 
             @Override
@@ -179,13 +179,13 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     /**
-     * Obtain the {@link CryptoHistory} data.
+     * Obtain the {@link CryptoHistoryPoint} data.
      */
     private void getCryptoHistoryCallback(){
-       cryptoClient.getCryptoHistories(fromSymbol, toSymbol, new CryptoCallback() {
+       cryptoClient.getCryptoHistoryPoints(fromSymbol, toSymbol, new CryptoCallback() {
            @Override
            public void onSuccess(CryptoData cryptoData) {
-                cryptoHistories = cryptoData.getAsCryptoHistories();
+                cryptoHistoryPoints = cryptoData.asCryptoHistoryPoints();
                 updateChart();
            }
 
@@ -203,7 +203,7 @@ public class ChartActivity extends AppCompatActivity {
         cryptoClient.getCryptoCoins(new CryptoCallback() {
             @Override
             public void onSuccess(CryptoData cryptoData) {
-                cryptoCoin = cryptoData.getAsCryptoCoins().get(fromSymbol);
+                cryptoCoin = cryptoData.asCryptoCoins().get(fromSymbol);
                 updateHeader();
             }
 
@@ -233,16 +233,16 @@ public class ChartActivity extends AppCompatActivity {
      * Populate the chart with data.
      */
     private void updateChart(){
-        if ((cryptoHistories == null) || cryptoHistories.isEmpty()) return;
+        if ((cryptoHistoryPoints == null) || cryptoHistoryPoints.isEmpty()) return;
 
         List<Entry> entries = new ArrayList<Entry>();
 
-        for (CryptoHistory cryptoHistory : cryptoHistories) {
+        for (CryptoHistoryPoint cryptoHistoryPoint : cryptoHistoryPoints) {
             Entry entry = new Entry();
 
-            entry.setX(cryptoHistory.getTime());
-            entry.setY(cryptoHistory.getClose());
-            entry.setData(cryptoHistory);
+            entry.setX(cryptoHistoryPoint.getTime());
+            entry.setY(cryptoHistoryPoint.getClose());
+            entry.setData(cryptoHistoryPoint);
 
             entries.add(entry);
         }
@@ -268,17 +268,17 @@ public class ChartActivity extends AppCompatActivity {
     /**
      * This method has to be called when the selected value on the chart has changed.
      */
-    private void selectedPointChanged(CryptoHistory cryptoHistory) {
-        String timeStr = DateFormatter.format(cryptoHistory.getTime());
+    private void selectedPointChanged(CryptoHistoryPoint cryptoHistoryPoint) {
+        String timeStr = DateFormatter.format(cryptoHistoryPoint.getTime());
         tvTime.setText(timeStr);
 
-        String highStr = DecimalFormatter.formatFloat(cryptoHistory.getHigh());
+        String highStr = DecimalFormatter.formatFloat(cryptoHistoryPoint.getHigh());
         tvHigh.setText(highStr);
 
-        String lowStr = DecimalFormatter.formatFloat(cryptoHistory.getLow());
+        String lowStr = DecimalFormatter.formatFloat(cryptoHistoryPoint.getLow());
         tvLow.setText(lowStr);
 
-        String priceStr = DecimalFormatter.formatFloat(cryptoHistory.getClose()) + " " + toSymbol;
+        String priceStr = DecimalFormatter.formatFloat(cryptoHistoryPoint.getClose()) + " " + toSymbol;
         tvPrice.setText(priceStr);
     }
 
@@ -286,8 +286,8 @@ public class ChartActivity extends AppCompatActivity {
      * Select the last point on the chart.
      */
     private void selectLastPoint(){
-        if ((cryptoHistories != null) && (!cryptoHistories.isEmpty()) ) {
-            selectedPointChanged(cryptoHistories.get(cryptoHistories.size() - 1));
+        if ((cryptoHistoryPoints != null) && (!cryptoHistoryPoints.isEmpty()) ) {
+            selectedPointChanged(cryptoHistoryPoints.get(cryptoHistoryPoints.size() - 1));
         }
     }
 
