@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fproject.cryptolitycs.AboutActivity;
+import com.fproject.cryptolitycs.SettingsActivity;
 import com.fproject.cryptolitycs.converter.ConverterActivity;
 import com.fproject.cryptolitycs.cryptoapi.CryptoClient;
 import com.fproject.cryptolitycs.cryptoapi.CryptoData;
@@ -25,6 +26,7 @@ import com.fproject.cryptolitycs.cryptoapi.CryptoNewsArticle;
 import com.fproject.cryptolitycs.topCoins.TopCoinsActivity;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCallback;
+import com.fproject.cryptolitycs.utility.Settings;
 import com.fproject.cryptolitycs.watchlist.WatchListActivity;
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class NewsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_news);
         //
         // Components
@@ -255,6 +258,10 @@ public class NewsActivity extends AppCompatActivity
         } else if (id == R.id.nav_converter) {
 
             switchToActivity(ConverterActivity.class);
+
+        } else if (id == R.id.nav_settings) {
+
+            switchToActivity(SettingsActivity.class);
 
         } else if (id == R.id.nav_about) {
 

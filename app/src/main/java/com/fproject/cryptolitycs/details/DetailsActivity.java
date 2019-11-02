@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCallback;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCurrency;
+import com.fproject.cryptolitycs.utility.ResourceHelper;
+import com.fproject.cryptolitycs.utility.Settings;
 
 /**
  * Displays information about an item in the WatchList.
@@ -37,6 +40,7 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.content_details);
         //
         //  Components
@@ -78,6 +82,8 @@ public class DetailsActivity extends AppCompatActivity {
      * Configure the Action Bar.
      */
     private void setupActionBar(){
+        Toolbar myToolbar =  findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
     }
@@ -155,14 +161,14 @@ public class DetailsActivity extends AppCompatActivity {
         TextView tvHigh = findViewById(R.id.tv_high);
         String highStr = cryptoCurrency.getHigh()+ " " + cryptoCurrency.getToSymbol();
         tvHigh.setText(highStr);
-        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
+        tvHigh.setTextColor( ResourceHelper.getThemeColor(this,R.attr.colorPositiveValue));
         //
         //  Low
         //
         TextView tvLow = findViewById(R.id.tv_low);
         String lowStr = cryptoCurrency.getLow() + " " + cryptoCurrency.getToSymbol();
         tvLow.setText(lowStr);
-        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
+        tvLow.setTextColor( ResourceHelper.getThemeColor(this,R.attr.colorNegativeValue));
         //
         //  Open
         //
@@ -222,10 +228,10 @@ public class DetailsActivity extends AppCompatActivity {
     private int getChangeColor(boolean positive) {
 
         if (positive) {
-            return ContextCompat.getColor(this, R.color.colorPositive);
+            return  ResourceHelper.getThemeColor(this,R.attr.colorPositiveValue);
         }
         else {
-            return ContextCompat.getColor(this, R.color.colorNegative);
+            return  ResourceHelper.getThemeColor(this,R.attr.colorNegativeValue);
         }
     }
 

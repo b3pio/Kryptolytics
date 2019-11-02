@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <color name="colorRowSelectorDark">#f1f1f1</color>
+    <color name="colorRowSelectorLight">#ffffff</color>
+
+
+    <!-- Blue Theme Colors -->
+    <color name="colorPrimaryBlue">#2B547E</color>
+    <color name="colorSecondaryBlue">#ffffff</color>
+    <color name="colorAccent">#ff8c40</color>
+
+    <color name="colorOnPrimaryBlue">#ffffff</color>
+    <color name="colorOnSecondaryBlue">#2B547E</color>
+    <color name="colorOnSecondaryLightBlue">#696767</color>
+
+    <color name="colorChartMain">#f47f19</color>
+    <color name="colorChartBorder">#979393</color>
+    <color name="colorChartHighLight">#979393</color>
+
+    <color name="colorPositiveBlue">#85f900</color>
+    <color name="colorNegativeBlue">#ff732d</color>
+
+    <color name="colorPressedButtonBlue">#bcb8b8</color>
+
+    <color name="colorRowPrimaryBlue">#f1f1f1</color>
+    <color name="colorRowSecondaryBlue">#ffffff</color>
+    <!-- -->
+
+
+    <!-- Grey Theme Colors -->
+    <color name="colorPrimaryGrey">#28333b</color>
+    <color name="colorSecondaryGrey">#ffffff</color>
+    <color name="colorAccentGrey">#e40400</color>
+
+    <color name="colorOnPrimaryGrey">#ffffff</color>
+    <color name="colorOnSecondaryGrey">#28333b</color>
+    <color name="colorOnSecondaryLightGrey">#696767</color>
+
+    <color name="colorChartMainGrey">#e40400</color>
+    <color name="colorChartBorderGrey">#979393</color>
+    <color name="colorChartHighLightGrey">#979393</color>
+
+    <color name="colorPositiveGrey">#09c70f</color>
+    <color name="colorNegativeGrey">#e40400</color>
+
+    <color name="colorRowPrimaryGrey">#f1f1f1</color>
+    <color name="colorRowSecondaryGrey">#ffffff</color>
+
+    <color name="colorPressedButtonGrey">#bcb8b8</color>
+
+    <!-- -->
+
+    <!-- Debug -->
+    <color name="colorPrimaryDebug">#FF1493</color>
+    <!-- -->
+
+</resources>
+
     <!-- [BLUE] -->
+
+    <!--
     <color name="colorPrimary">#2B547E</color>
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="colorPrimaryDark">#000000</color>
@@ -16,6 +76,7 @@
     <color name="colorNegative">#ff732d</color>
     <color name="colorChartMain">#f47f19</color>
     <color name="colorChartBorder">#979393</color>
+    -->
 
     <!--[GREY]-->
     <!--
@@ -35,4 +96,4 @@
     <color name="colorChartMain">#e40400</color>
     <color name="colorChartBorder">#979393</color>
     -->
-</resources>
+

@@ -25,7 +25,7 @@
         android:layout_marginTop="21dp"
         android:layout_marginStart="15dp"
         android:text=" - "
-        android:textColor="@color/colorPrimaryText"
+        android:textColor="?attr/colorOnSecondary"
         android:textSize="14sp"/>
 
     <TextView
@@ -39,7 +39,7 @@
         android:layout_marginTop="21dp"
         android:text=" - "
         android:inputType="numberDecimal"
-        android:textColor="@color/colorPrimaryText"
+        android:textColor="?attr/colorOnSecondary"
         android:background="@android:color/transparent"
         android:textSize="14sp"/>
 

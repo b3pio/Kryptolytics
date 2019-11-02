@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fproject.cryptolitycs.SettingsActivity;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCoin;
 import com.fproject.cryptolitycs.AboutActivity;
 import com.fproject.cryptolitycs.R;
@@ -26,6 +27,7 @@ import com.fproject.cryptolitycs.cryptoapi.CryptoData;
 import com.fproject.cryptolitycs.details.DetailsActivity;
 import com.fproject.cryptolitycs.news.NewsActivity;
 import com.fproject.cryptolitycs.searchCurrency.SearchCurrencyActivity;
+import com.fproject.cryptolitycs.utility.Settings;
 import com.fproject.cryptolitycs.watchlist.WatchListActivity;
 
 import java.util.ArrayList;
@@ -56,9 +58,8 @@ public class TopCoinsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_top_coins);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         //
         //
         //
@@ -86,6 +87,14 @@ public class TopCoinsActivity extends AppCompatActivity
      * Setup the components of the activity.
      */
     private void setupActivity(){
+        //
+        //
+        //
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //
+        //
+        //
         RecyclerView recyclerView = findViewById(R.id.rv_top_coins);
         recyclerView.setHasFixedSize(true);
         //
@@ -288,6 +297,10 @@ public class TopCoinsActivity extends AppCompatActivity
         } else if (id == R.id.nav_converter) {
 
             switchToActivity(ConverterActivity.class);
+
+        } else if (id == R.id.nav_settings) {
+
+            switchToActivity(SettingsActivity.class);
 
         } else if (id == R.id.nav_about) {
 

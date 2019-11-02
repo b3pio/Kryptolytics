@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +19,8 @@ import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCallback;
 import com.fproject.cryptolitycs.utility.DateFormatter;
+import com.fproject.cryptolitycs.utility.ResourceHelper;
+import com.fproject.cryptolitycs.utility.Settings;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -52,6 +55,7 @@ public class ChartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_chart);
         //
         //  Components
@@ -65,6 +69,7 @@ public class ChartActivity extends AppCompatActivity {
         //  Listeners
         //
         setupListeners();
+        //this.setTheme(R.style.AppTheme2);
     }
 
     @Override
@@ -94,9 +99,9 @@ public class ChartActivity extends AppCompatActivity {
         //
         tvPrice = findViewById(R.id.tv_price);
         tvHigh  = findViewById(R.id.tv_high);
-        tvHigh.setTextColor(ContextCompat.getColor(this, R.color.colorPositive));
+        tvHigh.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorPositiveValue));
         tvLow   = findViewById(R.id.tv_low);
-        tvLow.setTextColor(ContextCompat.getColor(this, R.color.colorNegative));
+        tvLow.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorNegativeValue));
         tvTime  = findViewById(R.id.tv_time);
         //
         // ActionBar
@@ -112,6 +117,8 @@ public class ChartActivity extends AppCompatActivity {
      * Configure the Action Bar.
      */
     private void setupActionBar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setElevation(0);
     }
@@ -127,14 +134,15 @@ public class ChartActivity extends AppCompatActivity {
         lineChart.setExtraRightOffset(5.0f);
         lineChart.setDrawBorders(true);
         lineChart.setBorderWidth(0.5f);
-        lineChart.setBorderColor(ContextCompat.getColor(this, R.color.colorChartBorder));
+        lineChart.setBorderColor(ResourceHelper.getThemeColor(this,R.attr.colorChartBorder));
         //
         // X Axis
         //
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new ChartDateFormatter());
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
+        // xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
+        xAxis.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorOnSecondary));
         xAxis.setDrawGridLines(true);
         xAxis.setDrawAxisLine(false);
         //
@@ -145,7 +153,8 @@ public class ChartActivity extends AppCompatActivity {
         // Left Axis
         //
         YAxis leftRight = lineChart.getAxisRight();
-        leftRight.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
+        //leftRight.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
+        leftRight.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorOnSecondary));
         leftRight.setDrawGridLines(true);
         leftRight.setDrawAxisLine(false);
     }
@@ -248,13 +257,13 @@ public class ChartActivity extends AppCompatActivity {
         }
 
         LineDataSet dataSet = new LineDataSet(entries, "");
-        dataSet.setColor(ContextCompat.getColor(this, R.color.colorChartMain));
+        dataSet.setColor(ResourceHelper.getThemeColor(this,R.attr.colorChartMain));
         dataSet.setDrawCircles(false);
         dataSet.setDrawFilled(true);
-        dataSet.setFillColor(ContextCompat.getColor(this, R.color.colorChartMain));
+        dataSet.setFillColor(ResourceHelper.getThemeColor(this,R.attr.colorChartMain));
         dataSet.setFillAlpha(200);
         dataSet.setDrawValues(false);
-        dataSet.setHighLightColor(ContextCompat.getColor(this, R.color.colorChartBorder));
+        dataSet.setHighLightColor(ResourceHelper.getThemeColor(this,R.attr.colorChartHighLight));
         dataSet.setHighlightEnabled(true);
 
         LineData lineData = new LineData(dataSet);

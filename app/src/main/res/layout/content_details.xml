@@ -3,14 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.details.DetailsActivity" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.details.DetailsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
+        app:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:id="@+id/rl_header"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary">
+        android:layout_below="@+id/appbar"
+        android:background="?attr/colorPrimary">
 
         <ImageView
             android:id="@+id/iv_image"
@@ -30,7 +47,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="16sp" />
 
         <TextView
@@ -42,7 +59,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -54,7 +71,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="20dp"
             android:text= " - "
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="14sp" />
 
     </RelativeLayout>
@@ -83,12 +100,12 @@
                 android:layout_height="wrap_content" >
 
                 <TableRow
-                    android:background="@color/colorRowSelectorDark">
+                    android:background="?attr/colorRowPrimary">
                     <TextView
                         android:text="Change:"
 
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -97,17 +114,17 @@
                         android:id="@+id/tv_changeValue"
                         android:text= " - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorLight">
+                    android:background="?attr/colorRowSecondary">
 
                     <TextView
                         android:text="Volume:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -115,7 +132,7 @@
                         android:id="@+id/tv_volume"
                         android:text= " - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
@@ -126,12 +143,12 @@
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorDark">
+                    android:background="?attr/colorRowPrimary">
 
                     <TextView
                         android:text="High:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -139,16 +156,16 @@
                         android:id="@+id/tv_high"
                         android:text= " - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp"/>
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorLight">
+                    android:background="?attr/colorRowSecondary">
                     <TextView
                         android:text="Low:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp"/>
 
                     <TextView
@@ -156,16 +173,16 @@
                         android:text= " - "
                         android:textAlignment="textEnd"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorDark">
+                    android:background="?attr/colorRowPrimary">
                     <TextView
                         android:text="Open:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -173,7 +190,7 @@
                         android:textAlignment="textEnd"
                         android:text= " - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
@@ -184,13 +201,13 @@
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorLight">
+                    android:background="?attr/colorRowSecondary">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Market Cap:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -200,18 +217,18 @@
                         android:layout_height="wrap_content"
                         android:text=" - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorDark">
+                    android:background="?attr/colorRowPrimary">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ProofType:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -221,18 +238,18 @@
                         android:layout_height="wrap_content"
                         android:text=" - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorLight">
+                    android:background="?attr/colorRowSecondary">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Algorithm:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -242,18 +259,18 @@
                         android:layout_height="wrap_content"
                         android:text=" - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
                 <TableRow
-                    android:background="@color/colorRowSelectorDark">
+                    android:background="?attr/colorRowPrimary">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Supply:"
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
 
                     <TextView
@@ -263,7 +280,7 @@
                         android:layout_height="wrap_content"
                         android:text=" - "
                         android:padding="5dp"
-                        android:textColor="@color/colorPrimaryText"
+                        android:textColor="?attr/colorOnSecondary"
                         android:textSize="14sp" />
                 </TableRow>
 
@@ -278,13 +295,13 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:gravity="center">
 
         <TextView
             android:id="@+id/tv_lastUpdate"
             android:layout_margin="10dp"
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>

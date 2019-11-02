@@ -15,6 +15,7 @@ import com.fproject.cryptolitycs.cryptoapi.CryptoCoin;
 import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCurrency;
+import com.fproject.cryptolitycs.utility.ResourceHelper;
 
 import java.util.List;
 
@@ -70,11 +71,13 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
         new ImageDownloader(getIconPlaceHolder(), viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
     }
 
-    private int getChangeColor(boolean positive) {
+
+     private int getChangeColor(boolean positive) {
         if (positive) {
-            return ContextCompat.getColor(context, R.color.colorPositive);
-        } else {
-            return ContextCompat.getColor(context, R.color.colorNegative);
+            return  ResourceHelper.getThemeColor(context,R.attr.colorPositiveValue);
+        }
+        else {
+            return  ResourceHelper.getThemeColor(context,R.attr.colorNegativeValue);
         }
     }
 

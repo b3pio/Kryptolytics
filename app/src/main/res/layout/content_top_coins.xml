@@ -31,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -40,7 +40,7 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:text="@string/top_coins_description"
             android:textSize="12sp"/>
 

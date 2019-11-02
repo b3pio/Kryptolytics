@@ -15,6 +15,7 @@ import com.fproject.cryptolitycs.cryptoapi.CryptoCoin;
 import com.fproject.cryptolitycs.utility.ImageDownloader;
 import com.fproject.cryptolitycs.R;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCurrency;
+import com.fproject.cryptolitycs.utility.ResourceHelper;
 
 import java.util.List;
 
@@ -127,10 +128,10 @@ public class WatchListAdapter extends RecyclerView.Adapter<WatchListAdapter.View
     private int getChangeColor(boolean positive) {
 
         if (positive) {
-           return ContextCompat.getColor(context, R.color.colorPositive);
+            return  ResourceHelper.getThemeColor(context,R.attr.colorPositiveValue);
         }
         else {
-            return ContextCompat.getColor(context, R.color.colorNegative);
+            return  ResourceHelper.getThemeColor(context,R.attr.colorNegativeValue);
         }
     }
 

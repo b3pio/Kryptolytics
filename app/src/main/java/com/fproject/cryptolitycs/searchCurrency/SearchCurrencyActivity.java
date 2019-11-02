@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.support.v7.widget.SearchView;
 
 import com.fproject.cryptolitycs.utility.ResourceHelper;
 import com.fproject.cryptolitycs.R;
+import com.fproject.cryptolitycs.utility.Settings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +32,7 @@ public class SearchCurrencyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.content_search_currency);
         //
         // Activity
@@ -53,6 +56,9 @@ public class SearchCurrencyActivity extends AppCompatActivity {
      * Configure the activity.
      */
     private void setupActivity() {
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
         Boolean showBackButton = getIntent().getBooleanExtra("showBackButton", false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton);
     }

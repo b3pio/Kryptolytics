@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.fproject.cryptolitycs.converter.ConverterActivity;
 import com.fproject.cryptolitycs.topCoins.TopCoinsActivity;
 import com.fproject.cryptolitycs.news.NewsActivity;
+import com.fproject.cryptolitycs.utility.Settings;
 import com.fproject.cryptolitycs.watchlist.WatchListActivity;
 
 public class AboutActivity extends AppCompatActivity
@@ -27,6 +28,7 @@ public class AboutActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_about);
         //
         // Activity
@@ -147,6 +149,10 @@ public class AboutActivity extends AppCompatActivity
         } else if (id == R.id.nav_converter) {
 
             switchToActivity(ConverterActivity.class);
+
+        } else if (id == R.id.nav_settings) {
+
+            switchToActivity(SettingsActivity.class);
 
         } else if (id == R.id.nav_about) {
 

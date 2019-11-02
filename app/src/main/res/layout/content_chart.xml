@@ -8,13 +8,33 @@
     tools:context="com.fproject.cryptolitycs.com.fproject.cryptolitycs.details.ChartActivity"
     tools:showIn="@layout/activity_chart">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/appbar"
+        app:elevation="0dp"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <RelativeLayout
         android:id="@+id/rl_description"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
         android:paddingBottom="10dp">
 
         <ImageView
@@ -35,7 +55,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="16sp" />
 
         <TextView
@@ -47,7 +67,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginStart="20dp"
             android:text= " - "
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="14sp" />
 
         <TableLayout
@@ -62,7 +82,7 @@
             <TableRow>
                 <TextView
                     android:text="High:"
-                    android:textColor="@color/colorPrimaryLightText"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp" />
 
                 <Space
@@ -72,7 +92,7 @@
                     android:id="@+id/tv_high"
                     android:textAlignment="textEnd"
                     android:text= " - "
-                    android:textColor="@color/colorPrimaryLightText"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -80,7 +100,7 @@
                 android:paddingTop="5dp">
                 <TextView
                     android:text="Low:"
-                    android:textColor="@color/colorPrimaryLightText"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp" />
 
                 <Space
@@ -90,7 +110,7 @@
                     android:textAlignment="viewEnd"
                     android:id="@+id/tv_low"
                     android:text= " - "
-                    android:textColor="@color/colorPrimaryLightText"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -113,17 +133,20 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:gravity="center">
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_margin="10dp"
-            android:textColor="@color/colorPrimaryLightText"
+            android:textColor="?attr/colorOnPrimary"
             android:textSize="14sp"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
     </RelativeLayout>
 
+
 </android.support.constraint.ConstraintLayout>
+
+

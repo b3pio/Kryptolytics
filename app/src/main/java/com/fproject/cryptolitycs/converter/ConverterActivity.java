@@ -11,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fproject.cryptolitycs.SettingsActivity;
 import com.fproject.cryptolitycs.topCoins.TopCoinsActivity;
 import com.fproject.cryptolitycs.AboutActivity;
 import com.fproject.cryptolitycs.news.NewsActivity;
 import com.fproject.cryptolitycs.R;
+import com.fproject.cryptolitycs.utility.Settings;
 import com.fproject.cryptolitycs.watchlist.WatchListActivity;
 
 public class ConverterActivity extends AppCompatActivity
@@ -33,6 +35,7 @@ public class ConverterActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_converter);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -144,6 +147,10 @@ public class ConverterActivity extends AppCompatActivity
         } else if (id == R.id.nav_converter) {
 
             // already there
+
+        } else if (id == R.id.nav_settings) {
+
+            switchToActivity(SettingsActivity.class);
 
         } else if (id == R.id.nav_about) {
 

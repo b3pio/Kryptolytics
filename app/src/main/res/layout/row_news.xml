@@ -40,7 +40,7 @@
                 android:layout_above="@id/tv_date"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="14sp"
                 android:text=" - "/>
 
@@ -52,7 +52,7 @@
                 android:layout_alignBottom="@id/iv_thumbnail"
                 android:layout_marginStart="10dp"
                 android:paddingBottom="5dp"
-                android:textColor="@color/colorAccentLight"
+                android:textColor="?attr/colorOnSecondaryLight"
                 android:textSize="14sp"
                 android:text=" - "/>
 
@@ -64,7 +64,7 @@
                 android:layout_alignBottom="@id/iv_thumbnail"
                 android:paddingEnd="5dp"
                 android:paddingBottom="5dp"
-                android:textColor="@color/colorAccentLight"
+                android:textColor="?attr/colorOnSecondaryLight"
                 android:textSize="14sp"
                 android:text =" - "/>
 

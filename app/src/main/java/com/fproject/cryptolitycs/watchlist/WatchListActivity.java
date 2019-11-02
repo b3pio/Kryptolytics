@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.fproject.cryptolitycs.AboutActivity;
+import com.fproject.cryptolitycs.SettingsActivity;
 import com.fproject.cryptolitycs.converter.ConverterActivity;
 import com.fproject.cryptolitycs.cryptoapi.CryptoClient;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCoin;
@@ -34,6 +35,7 @@ import com.fproject.cryptolitycs.cryptoapi.CryptoCurrency;
 import com.fproject.cryptolitycs.cryptoapi.CryptoCallback;
 import com.fproject.cryptolitycs.details.DetailsActivity;
 import com.fproject.cryptolitycs.searchCurrency.SearchCurrencyActivity;
+import com.fproject.cryptolitycs.utility.Settings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +68,7 @@ public class WatchListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_activity_watch_list);
+        setTheme(Settings.getTheme(this));
         setContentView(R.layout.activity_watch_list);
         //
         // Components
@@ -436,6 +439,10 @@ public class WatchListActivity extends AppCompatActivity
         } else if (id == R.id.nav_converter) {
 
             switchToActivity(ConverterActivity.class);
+
+        } else if (id == R.id.nav_settings) {
+
+            switchToActivity(SettingsActivity.class);
 
         } else if (id == R.id.nav_about) {
 

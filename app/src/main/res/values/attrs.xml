@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorOnPrimary" format="reference"/>
+    <attr name="colorSecondary" format="reference"/>
+    <attr name="colorOnSecondary" format="reference"/>
+    <attr name="colorOnSecondaryLight" format="reference"/>
+    <attr name="colorChartMain" format="reference"/>
+    <attr name="colorChartBorder" format="reference"/>
+    <attr name="colorChartHighLight" format="reference"/>
+    <attr name="colorPositiveValue" format="reference"/>
+    <attr name="colorNegativeValue" format="reference"/>
+    <attr name="colorPressedButton" format="color"/>
+    <attr name="colorRowPrimary" format="color"/>
+    <attr name="colorRowSecondary" format="color"/>
+</resources>

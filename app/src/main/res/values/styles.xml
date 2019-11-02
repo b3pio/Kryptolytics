@@ -1,29 +1,67 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <!-- Base Theme -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <!-- Default App Theme -->
+    <style name="AppTheme" parent="BaseTheme">
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Base Theme -->
+    <style name="BlueTheme" parent="AppTheme">
+        <!-- Changes the status bar color of the OS -->
+        <item name="colorPrimaryDark">@color/colorPrimaryBlue</item>
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorSecondary">@color/colorSecondaryBlue</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorOnPrimary">@color/colorOnPrimaryBlue</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryBlue</item>
+        <item name="colorOnSecondaryLight">@color/colorOnSecondaryLightBlue</item>
+
+        <item name="colorChartMain">@color/colorChartMain</item>
+        <item name="colorChartBorder">@color/colorChartBorder</item>
+        <item name="colorChartHighLight">@color/colorChartHighLight</item>
+
+        <item name="colorPositiveValue">@color/colorPositiveBlue</item>
+        <item name="colorNegativeValue">@color/colorNegativeBlue</item>
+
+        <item name="colorPressedButton">@color/colorPressedButtonBlue</item>
+        <item name="colorRowPrimary">@color/colorRowPrimaryBlue</item>
+        <item name="colorRowSecondary">@color/colorRowSecondaryBlue</item>
 
     </style>
 
+    <!-- Grey Theme -->
+    <style name="GreyTheme" parent="AppTheme">
+        <!-- Changes the status bar color of the OS -->
+        <item name="colorPrimaryDark">@color/colorPrimaryGrey</item>
+        <item name="colorPrimary">@color/colorPrimaryGrey</item>
+        <item name="colorSecondary">@color/colorSecondaryGrey</item>
+        <item name="colorAccent">@color/colorAccentGrey</item>
 
-    <style name="AppTheme.ActionBar">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
+        <item name="colorOnPrimary">@color/colorOnPrimaryGrey</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryGrey</item>
+        <item name="colorOnSecondaryLight">@color/colorOnSecondaryLightGrey</item>
+
+        <item name="colorChartMain">@color/colorChartMainGrey</item>
+        <item name="colorChartBorder">@color/colorChartBorderGrey</item>
+        <item name="colorChartHighLight">@color/colorChartHighLightGrey</item>
+
+        <item name="colorPositiveValue">@color/colorPositiveGrey</item>
+        <item name="colorNegativeValue">@color/colorNegativeGrey</item>
+
+        <item name="colorPressedButton">@color/colorPressedButtonGrey</item>
+        <item name="colorRowPrimary">@color/colorRowPrimaryGrey</item>
+        <item name="colorRowSecondary">@color/colorRowSecondaryGrey</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionModeOverlay">true</item>
-    </style>
+    <!-- Light App Bar Theme -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
+    <!-- Light Overlay Theme -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
