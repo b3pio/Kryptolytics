@@ -6,7 +6,10 @@
 
     <!-- Default App Theme -->
     <style name="AppTheme" parent="BaseTheme">
+        <!--
+        <item name="android:windowDisablePreview">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        -->
     </style>
 
     <!-- Base Theme -->
@@ -56,6 +59,32 @@
         <item name="colorPressedButton">@color/colorPressedButtonGrey</item>
         <item name="colorRowPrimary">@color/colorRowPrimaryGrey</item>
         <item name="colorRowSecondary">@color/colorRowSecondaryGrey</item>
+    </style>
+
+
+    <!-- Purple Theme -->
+    <style name="PurpleTheme" parent="AppTheme">
+        <!-- Changes the status bar color of the OS -->
+        <item name="colorPrimaryDark">@color/colorPrimaryPurple</item>
+        <item name="colorPrimary">@color/colorPrimaryPurple</item>
+        <item name="colorSecondary">@color/colorSecondaryPurple</item>
+        <item name="colorAccent">@color/colorAccentPurple</item>
+
+        <item name="colorOnPrimary">@color/colorOnPrimaryPurple</item>
+        <item name="colorOnSecondary">@color/colorOnSecondaryPurple</item>
+        <item name="colorOnSecondaryLight">@color/colorOnSecondaryLightPurple</item>
+
+        <item name="colorChartMain">@color/colorChartMainPurple</item>
+        <item name="colorChartBorder">@color/colorChartBorderPurple</item>
+        <item name="colorChartHighLight">@color/colorChartHighLightPurple</item>
+
+        <item name="colorPositiveValue">@color/colorPositivePurple</item>
+        <item name="colorNegativeValue">@color/colorNegativePurple</item>
+
+        <item name="colorPressedButton">@color/colorPressedButtonPurple</item>
+        <item name="colorRowPrimary">@color/colorRowPrimaryPurple</item>
+        <item name="colorRowSecondary">@color/colorRowSecondaryPurple</item>
+
     </style>
 
     <!-- Light App Bar Theme -->

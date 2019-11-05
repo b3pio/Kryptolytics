@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="@string/title_activity_settings"/>
+                android:text="@string/settings_field_theme"/>
 
             <RadioGroup
                 android:id="@+id/rg_theme"
@@ -50,7 +50,8 @@
                     android:textSize="14sp"
                     android:layoutDirection="rtl"
                     android:textAlignment="textStart"
-                    android:text="Blue"/>
+                    android:text="@string/theme_blue"
+                    android:tag ="@style/BlueTheme"/>
 
                 <RadioButton
                     android:id="@+id/rb_purple"
@@ -62,7 +63,8 @@
                     android:textSize="14sp"
                     android:layoutDirection="rtl"
                     android:textAlignment="textStart"
-                    android:text="Purple" />
+                    android:text="@string/theme_purple"
+                    android:tag ="@style/PurpleTheme"/>
 
                 <RadioButton
                     android:id="@+id/rb_grey"
@@ -74,7 +76,8 @@
                     android:textSize="14sp"
                     android:layoutDirection="rtl"
                     android:textAlignment="textStart"
-                    android:text="Grey" />
+                    android:text="@string/theme_grey"
+                    android:tag ="@style/GreyTheme"/>
 
             </RadioGroup>
         </LinearLayout>

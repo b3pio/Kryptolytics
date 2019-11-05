@@ -35,53 +35,84 @@ import com.fproject.cryptolitycs.watchlist.WatchListActivity;
         setupListeners();
     }
 
+     // --------------------------------------------------------------------------------------------
+     //region Private Methods
+     // --------------------------------------------------------------------------------------------
+
      /**
       * Configure the activity.
       */
      private void setupActivity(){
-         Toolbar toolbar = findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
          //
-         //  Theme Radio Group
+         // Action Bar
          //
-         RadioGroup rgTheme = findViewById(R.id.rg_theme);
-         this.setCheckedRadioButton(rgTheme);
-         rgTheme.setOnCheckedChangeListener((radioGroup, id) ->
-             changeTheme(id)
-         );
+         this.setupActionBar();
+         //
+         // Radio Group
+         //
+         this.setupRadioGroup();
      }
 
-     private void setCheckedRadioButton(RadioGroup rgTheme){
-         int themeId = Settings.getTheme(this);
+     /**
+      * Configure the Action Bar.
+      */
+     private void setupActionBar(){
+         Toolbar toolbar = findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
+     }
 
-         switch (themeId) {
-             case R.style.BlueTheme:
-                 rgTheme.check(R.id.rb_blue);
+     /**
+      * Configure the Radio Button.
+      */
+     private void setupRadioGroup(){
+         RadioGroup rgTheme = findViewById(R.id.rg_theme);
+
+         // Check the radio button to indicate in order to
+         // the currently active theme.
+
+         switch (Settings.getTheme(this)) {
+             case R.style.PurpleTheme:
+                 rgTheme.check(R.id.rb_purple);
                  break;
 
              case R.style.GreyTheme:
                  rgTheme.check(R.id.rb_grey);
                  break;
+
+             default:
+                 rgTheme.check(R.id.rb_blue);
+                 break;
          }
      }
 
-     private void changeTheme(int radioButtonId){
-         switch (radioButtonId) {
-             case R.id.rb_blue:
-                 this.restartWithTheme(R.style.BlueTheme);
+     /**
+      * Executed when the checked radio button changes.
+      */
+     private void onCheckedRadioButtonChanged(int id){
+         switch (id) {
+             case R.id.rb_purple:
+                 this.restartActivity(R.style.PurpleTheme);
                  break;
 
              case R.id.rb_grey:
-                 this.restartWithTheme(R.style.GreyTheme);
+                 this.restartActivity(R.style.GreyTheme);
+                 break;
+
+             default:
+                 this.restartActivity(R.style.BlueTheme);
                  break;
          }
      }
 
-     private void restartWithTheme(int themeId){
+     /**
+      * Restart the activity with the specified theme.
+      */
+     private void restartActivity(int themeId){
          Settings.setTheme(this, themeId);
 
          startActivity(getIntent());
          finish();
+
          overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
      }
 
@@ -103,7 +134,19 @@ import com.fproject.cryptolitycs.watchlist.WatchListActivity;
          //
          NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
          navigationView.setNavigationItemSelectedListener(this);
+         //
+         // Radio Button
+         //
+         RadioGroup rgTheme = findViewById(R.id.rg_theme);
+         rgTheme.setOnCheckedChangeListener((radioGroup, id) ->
+                 onCheckedRadioButtonChanged(id)
+         );
      }
+
+     // --------------------------------------------------------------------------------------------
+     //endregion
+     // --------------------------------------------------------------------------------------------
+
 
      // --------------------------------------------------------------------------------------------
      //region Override Methods

@@ -28,10 +28,13 @@
     <string name="about_crypto_compare">Powered by CryptoCompare</string>
     <string name="common_just_now">Just now</string>
 
-    <string name="top_coins_description">Coins sorted by their total volume across all markets in the last 24 hours. </string>
+    <string name="theme_grey">Grey</string>
+    <string name="theme_purple">Purple</string>
+    <string name="theme_blue">Blue</string>
 
+    <string name="settings_field_theme">Theme</string>
 
-
-
-
+    <string name="top_coins_description">
+        Coins sorted by their total volume across all markets in the last 24 hours.
+    </string>
 </resources>

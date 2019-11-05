@@ -69,7 +69,6 @@ public class ChartActivity extends AppCompatActivity {
         //  Listeners
         //
         setupListeners();
-        //this.setTheme(R.style.AppTheme2);
     }
 
     @Override
@@ -128,6 +127,7 @@ public class ChartActivity extends AppCompatActivity {
      */
     private void setupChart() {
         lineChart = findViewById(R.id.lineChart);
+        lineChart.setNoDataTextColor(ResourceHelper.getThemeColor(this, R.attr.colorAccent));
         lineChart.getLegend().setEnabled(false);
         lineChart.getDescription().setEnabled(false);
         lineChart.setExtraBottomOffset(10.0f);
@@ -141,7 +141,6 @@ public class ChartActivity extends AppCompatActivity {
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setValueFormatter(new ChartDateFormatter());
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        // xAxis.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
         xAxis.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorOnSecondary));
         xAxis.setDrawGridLines(true);
         xAxis.setDrawAxisLine(false);
@@ -153,7 +152,6 @@ public class ChartActivity extends AppCompatActivity {
         // Left Axis
         //
         YAxis leftRight = lineChart.getAxisRight();
-        //leftRight.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText));
         leftRight.setTextColor(ResourceHelper.getThemeColor(this,R.attr.colorOnSecondary));
         leftRight.setDrawGridLines(true);
         leftRight.setDrawAxisLine(false);

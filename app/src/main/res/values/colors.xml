@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+    <!-- Common -->
+    <color name="colorPrimaryDebug">#FF1493</color>
     <color name="colorRowSelectorDark">#f1f1f1</color>
     <color name="colorRowSelectorLight">#ffffff</color>
-
+    <!-- -->
 
     <!-- Blue Theme Colors -->
     <color name="colorPrimaryBlue">#2B547E</color>
@@ -28,7 +29,6 @@
     <color name="colorRowSecondaryBlue">#ffffff</color>
     <!-- -->
 
-
     <!-- Grey Theme Colors -->
     <color name="colorPrimaryGrey">#28333b</color>
     <color name="colorSecondaryGrey">#ffffff</color>
@@ -45,55 +45,30 @@
     <color name="colorPositiveGrey">#09c70f</color>
     <color name="colorNegativeGrey">#e40400</color>
 
+    <color name="colorPressedButtonGrey">#bcb8b8</color>
     <color name="colorRowPrimaryGrey">#f1f1f1</color>
     <color name="colorRowSecondaryGrey">#ffffff</color>
-
-    <color name="colorPressedButtonGrey">#bcb8b8</color>
-
     <!-- -->
 
-    <!-- Debug -->
-    <color name="colorPrimaryDebug">#FF1493</color>
+    <!-- Purple Theme Colors -->
+    <color name="colorPrimaryPurple"> #4a148c</color>
+    <color name="colorSecondaryPurple">#ffffff</color>
+    <color name="colorAccentPurple">#4db6ac</color>
+
+    <color name="colorOnPrimaryPurple">#ffffff</color>
+    <color name="colorOnSecondaryPurple">#000000</color>
+    <color name="colorOnSecondaryLightPurple">#696767</color>
+
+    <color name="colorChartMainPurple">#4a148c</color>
+    <color name="colorChartBorderPurple">#979393</color>
+    <color name="colorChartHighLightPurple">#979393</color>
+
+    <color name="colorPositivePurple">#4db6ac</color>
+    <color name="colorNegativePurple">#ff1744</color>
+
+    <color name="colorPressedButtonPurple">#bcb8b8</color>
+    <color name="colorRowPrimaryPurple">#f1f1f1</color>
+    <color name="colorRowSecondaryPurple">#ffffff</color>
     <!-- -->
 
 </resources>
-
-    <!-- [BLUE] -->
-
-    <!--
-    <color name="colorPrimary">#2B547E</color>
-    <color name="colorPrimaryLight">#ffffff</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#ff8c40</color>
-    <color name="colorAccentLight">#696767</color>
-    <color name="colorPrimaryLightText">#ffffff</color>
-    <color name="colorPrimaryText">#2B547E</color>
-    <color name="colorPressedButton">#bcb8b8</color>
-    <color name="colorBorder">#bcb8b8</color>
-    <color name="colorRowSelectorDark">#f1f1f1</color>
-    <color name="colorRowSelectorLight">#ffffff</color>
-    <color name="colorPositive">#85f900</color>
-    <color name="colorNegative">#ff732d</color>
-    <color name="colorChartMain">#f47f19</color>
-    <color name="colorChartBorder">#979393</color>
-    -->
-
-    <!--[GREY]-->
-    <!--
-    <color name="colorPrimary">#28333b</color>
-    <color name="colorPrimaryLight">#ffffff</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#e40400</color>
-    <color name="colorAccentLight">#696767</color>
-    <color name="colorPrimaryLightText">#ffffff</color>
-    <color name="colorPrimaryText">#28333b</color>
-    <color name="colorPressedButton">#bcb8b8</color>
-    <color name="colorBorder">#bcb8b8</color>
-    <color name="colorRowSelectorDark">#f1f1f1</color>
-    <color name="colorRowSelectorLight">#ffffff</color>
-    <color name="colorPositive">#09c70f</color>
-    <color name="colorNegative">#e40400</color>
-    <color name="colorChartMain">#e40400</color>
-    <color name="colorChartBorder">#979393</color>
-    -->
-
