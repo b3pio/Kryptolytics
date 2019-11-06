@@ -68,7 +68,7 @@ import com.fproject.cryptolitycs.watchlist.WatchListActivity;
          RadioGroup rgTheme = findViewById(R.id.rg_theme);
 
          // Check the radio button to indicate in order to
-         // the currently active theme.
+         // indicate the currently active theme.
 
          switch (Settings.getTheme(this)) {
              case R.style.PurpleTheme:

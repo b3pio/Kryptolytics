@@ -6,10 +6,8 @@
 
     <!-- Default App Theme -->
     <style name="AppTheme" parent="BaseTheme">
-        <!--
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        -->
     </style>
 
     <!-- Base Theme -->
