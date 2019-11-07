@@ -206,7 +206,7 @@ public class TopCoinsActivity extends AppCompatActivity
     }
 
     /**
-     * Determines weather all the requested data has arrived and updates the WatchList.
+     * Determines weather all the requested data has arrived and updates the  top list.
      */
     private void onCryptoCurrencyReceived(){
         if (cryptoCurrencies.size() != cryptoCoins.size())

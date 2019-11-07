@@ -60,22 +60,65 @@ public class TopCoin {
         this.cryptoCurrency = cryptoCurrency;
     }
 
-    public CryptoCurrency getCryptoCurrency() {
+    public CryptoCurrency getCryptoCurrency(){
         return cryptoCurrency;
+    }
+
+    public String getCoinSymbol(){
+        if (cryptoCoin == null)
+            return " - ";
+
+        return cryptoCoin.getSymbol();
+    }
+
+    public String getCoinName(){
+        if (cryptoCoin == null)
+            return " - ";
+
+        return cryptoCoin.getCoinName();
     }
 
     public  String getPriceStr() {
         if ((cryptoCurrency == null) || (cryptoCoin == null))
-                return  null;
+            return " - ";
 
         return cryptoCurrency.getPrice() + " " + cryptoCurrency.getToSymbol();
     }
 
     public  String getChangePercentStr(){
         if ((cryptoCurrency == null) || (cryptoCoin == null))
-            return  null;
+            return " - ";
 
         return cryptoCurrency.getChangePercent() + "%";
+    }
+
+    public boolean isChangePositive(){
+        if (cryptoCurrency == null)
+            return true;
+
+        return cryptoCurrency.isChangePositive();
+    }
+
+
+    public String getAlgorithm(){
+        if (cryptoCoin == null)
+            return " - ";
+
+        return cryptoCoin.getAlgorithm();
+    }
+
+    public String getProofType(){
+        if (cryptoCoin == null)
+            return " - ";
+
+        return cryptoCoin.getProofType();
+    }
+
+    public String getImageUrl(){
+        if (cryptoCoin == null)
+            return null;
+
+        return cryptoCoin.getImageUrl();
     }
 
     public String toString() {

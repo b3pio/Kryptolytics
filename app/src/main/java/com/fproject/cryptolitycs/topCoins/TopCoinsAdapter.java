@@ -55,24 +55,20 @@ public class TopCoinsAdapter extends RecyclerView.Adapter<TopCoinsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         TopCoin topCoin = topCoins.get(position);
 
-        CryptoCoin cryptoCoin = topCoin.getCryptoCoin();
-        CryptoCurrency cryptoCurrency = topCoin.getCryptoCurrency();
-
-        viewHolder.tvSymbol.setText(cryptoCoin.getSymbol());
-        viewHolder.tvName.setText(cryptoCoin.getCoinName());
+        viewHolder.tvSymbol.setText(topCoin.getCoinSymbol());
+        viewHolder.tvName.setText(topCoin.getCoinName());
         viewHolder.tvPrice.setText(topCoin.getPriceStr());
 
         viewHolder.tvChange.setText(topCoin.getChangePercentStr());
-        viewHolder.tvChange.setTextColor(getChangeColor(cryptoCurrency.isChangePositive()));
+        viewHolder.tvChange.setTextColor(getChangeColor(topCoin.isChangePositive()));
 
-        viewHolder.tvAlgorithm.setText(cryptoCoin.getAlgorithm());
-        viewHolder.tvProofType.setText(cryptoCoin.getProofType());
+        viewHolder.tvAlgorithm.setText(topCoin.getAlgorithm());
+        viewHolder.tvProofType.setText(topCoin.getProofType());
 
-        new ImageDownloader(getIconPlaceHolder(), viewHolder.ivImage).execute(cryptoCoin.getImageUrl());
+        new ImageDownloader(getIconPlaceHolder(), viewHolder.ivImage).execute(topCoin.getImageUrl());
     }
 
-
-     private int getChangeColor(boolean positive) {
+    private int getChangeColor(boolean positive) {
         if (positive) {
             return  ResourceHelper.getThemeColor(context,R.attr.colorPositiveValue);
         }
