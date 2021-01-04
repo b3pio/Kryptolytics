@@ -1,5 +1,11 @@
 # Cryptolitycs
 
+## Update
+
+**This application no longer works, since the free public API that was provided by CryptoCompare is no longer availabe.**
+
+## Description
+
 Cryptolitycs is a cryptocurrency tracker developed for the Android platform.
 It gives you quick and easy access to information about cryptocurrencies like
 Bitcoin and many others. 
