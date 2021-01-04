@@ -2,7 +2,7 @@
 
 ## Update
 
-**This application no longer works, since the free public API that was provided by CryptoCompare is no longer availabe.**
+**This application no longer works, since the free public API that was provided by cryptocompare.com is no longer available.**
 
 ## Description
 
