@@ -1,8 +1,8 @@
 # Kryptolytics
 
-## Update
+## Update (2022)
 
-**This application is a fork of the abandoned Gitlab project 'Cryptolitycs' by Szathmary Levente (lszathmary), the free public API that was provided by cryptocompare.com in CryptoLitycs is no longer available. I will update this to a working API once commencing further development on this project.**
+**This application is a fork of the *seemingly* abandoned Gitlab project 'Cryptolitycs' by Szathmary Levente (lszathmary), the free public API that was provided by cryptocompare.com in CryptoLitycs is no longer available. I will update this to a working API once commencing further development on this project.**
 
 ## Description
 
